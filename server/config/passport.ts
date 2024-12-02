@@ -2,28 +2,54 @@ import { Strategy as GoogleStrategy, Profile as GoogleProfile } from 'passport-g
 import { Strategy as GitHubStrategy, Profile as GitHubProfile } from 'passport-github2';
 import passport from 'passport';
 import { findUserByEmail, createUser, findOrCreateUserByGoogle } from '../services/userService';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+dotenv.config();
 
 
 passport.use(
    
     new GoogleStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID || '772312802467-c2mo9nr0rc5jffjeu4jpq6jt4drpor2u.apps.googleusercontent.com',
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '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',
+        clientID: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
         callbackURL: 'http://localhost:3000/user/google/callback',
       },
-      async (accessToken, refreshToken, profile, done) => {
-        try {
-            const email = profile.emails?.[0]?.value || ''; 
-          let user = await findOrCreateUserByGoogle({
-          email,
-          username: profile.displayName,
-          googleId: profile.id,
-        });
-          done(null, user);
-        } catch (error) {
-          done(error);
-        }
+     
+        
+        
+          async (accessToken, refreshToken, profile, done) => {
+            try {  
+              
+           
+              console.log('Google profile received:', profile); // Logga hela profilen
+              console.log('Google email:', profile.emails?.[0]?.value);
+      
+              const email = profile.emails?.[0]?.value || '';
+              let user = await findOrCreateUserByGoogle({
+                email,
+                username: profile.displayName,
+                googleId: profile.id,
+              });
+
+              const token = jwt.sign(
+                {
+                  id: user.id,
+                  email: user.email,
+                  role: user.role,
+                },
+                process.env.JWT_SECRET || 'your_jwt_secret', // Hämta från miljövariabler
+                { expiresIn: '1h' } // Token gäller i 1 timme
+              );
+      
+              console.log('Generated Token:', token); // Logga token för debugging
+      
+              console.log('User after findOrCreate:', user); // Logga användarens data
+              done(null, user);
+            } catch (error) {
+              console.error('Error in GoogleStrategy:', error);
+              done(error);
+            }
       }
     )
   );

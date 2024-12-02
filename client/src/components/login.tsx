@@ -19,7 +19,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal, setIsAuthen
   const [isCreatingAccount, setIsCreatingAccount] = useState(false); // För att växla mellan login och skapa konto
   const navigate = useNavigate(); // För att kunna omdirigera
   const auth = useContext(AuthContext);
+
+  const [isLoading, setIsLoading] = useState(false);
   const handleGoogleLogin = () => {
+    setIsLoading(true);
     // Omdirigera användaren till Google OAuth-flödet via backend
     window.location.href = 'http://localhost:3000/user/google';
     console.log('google login');

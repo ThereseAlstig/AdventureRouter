@@ -1,4 +1,4 @@
-import { console } from "inspector";
+
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 

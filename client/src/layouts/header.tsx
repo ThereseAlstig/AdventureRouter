@@ -1,9 +1,9 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink,  } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '../styles/_header.scss'
 import '../styles/_navigation.scss'
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faBars, faLock, faLockOpen, faShoppingCart, faSignOutAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faLock, faLockOpen, faShoppingCart,faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
 import LoginModal from "../components/login";
 import { AuthContext } from "../context/authContext";
@@ -17,7 +17,7 @@ export const Header = () => {
       throw new Error('AuthContext must be used within an AuthProvider');
     }
     
-     const { isAuthenticated,  logout } = auth;
+     const { isAuthenticated  } = auth;
   
 
 console.log(isAuthenticated);

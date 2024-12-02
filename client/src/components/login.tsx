@@ -20,9 +20,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal, setIsAuthen
   const navigate = useNavigate(); // För att kunna omdirigera
   const auth = useContext(AuthContext);
 
-  const [isLoading, setIsLoading] = useState(false);
+ 
   const handleGoogleLogin = () => {
-    setIsLoading(true);
+  
     // Omdirigera användaren till Google OAuth-flödet via backend
     window.location.href = 'http://localhost:3000/user/google';
     console.log('google login');
@@ -31,7 +31,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal, setIsAuthen
     throw new Error('AuthContext must be used within an AuthProvider');
   }  
   
-  const { login, isAuthenticated } = auth;
+  const { login} = auth;
   // Hantera inloggning
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

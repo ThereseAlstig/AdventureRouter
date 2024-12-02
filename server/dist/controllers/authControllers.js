@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProtectedResource = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userService_1 = require("../services/userService");
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,7 +28,7 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             res.status(400).json({ message: 'User already exists' });
             return;
         }
-        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const user = yield (0, userService_1.createUser)({ email, password: hashedPassword, username: username || email.split('@')[0], });
         // Logik för att hantera registrering
         res.status(201).json({ message: 'User registered successfully', user });
@@ -50,7 +50,7 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             res.status(401).json({ message: 'Invalid credentials' });
             return; // Avsluta här
         }
-        const isMatch = yield bcrypt_1.default.compare(password, user.password);
+        const isMatch = yield bcryptjs_1.default.compare(password, user.password);
         if (!isMatch) {
             res.status(401).json({ message: 'Invalid credentials' });
             return; // Avsluta här

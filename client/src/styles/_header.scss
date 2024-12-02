@@ -1,0 +1,141 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding: 10px;
+    
+}
+
+.topNavigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;     
+    padding: 0 20px;
+  
+}
+
+.cart-icon {
+    font-size: 2.8em;
+    color: black; /* Se till att ikonen har en färg */
+    display: none; /* Dölj ikonen som standard */
+}
+    .logo-img {
+        display: inline; /* Visa ikonen på små skärmar */
+        font-size: 1.5em; /* Justera storleken på ikonen */
+        position: absolute; /* Gör det möjligt att positionera ikonen absolut */
+        bottom: 20px; /* Flytta ikonen ner */
+        right: 20px; /* Flytta ikonen åt höger */
+    }
+
+.left, .right {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.logo {
+    position: absolute;
+    top: 50%;  /* Centrera vertikalt */
+    left: 50%; /* Centrera horisontellt */
+    transform: translate(-50%, -50%); /* Flytta logotypen tillbaka så den är exakt centrerad */
+
+    /* Responsiv storlek */
+    width: 45vw; /* Använd viewportbredd för att göra logotypen responsiv */
+    max-width: 250px; /* Max storlek för logotypen */
+    height: auto;
+    margin-top: 25px;
+     /* Behåll proportionerna */
+}
+
+.active-link {
+    text-decoration: underline !important; 
+/* Understrykning för aktiva länkar */
+}
+
+
+
+/* För att säkerställa att logotypen inte växer för stor på väldigt stora skärmar */
+@media (max-width: 1200px) {
+    .logo {
+        width: 250px;  /* Maximal bredd på stora skärmar */
+        height: auto;  /* Behåll proportionerna */
+    }
+}
+
+/* För mindre skärmar kan vi minska storleken ytterligare */
+@media (max-width: 800px) {
+    .logo {
+        width: 45vw; /* Gör logotypen större på små skärmar */
+        max-width: 355px;
+        margin-top: 275px;
+    }
+}
+
+.logo-text {
+    display: block;
+}
+
+.logo-img {
+    display: none;
+    margin-right: 10px;
+    color: black; /* Logga visas inte på större skärmar */
+}
+
+/* För mobilversionen */
+@media (max-width: 768px) {
+   .left  h1{
+        font-size: 2.3rem;
+        text-align: center;
+    }
+
+   
+    .right-icons{
+        margin-top: 85px;
+        width: 10px;
+        height: auto;
+    }
+
+    .left{
+        font-size: medium;
+        margin-left: 85px;
+   
+    }
+  
+    .logo-text {
+        display: none; /* Dölj texten på små skärmar */
+    }
+
+    .logo-img {
+        display: block; /* Visa loggan istället */
+        width: 45px; /* Justera storleken på loggan */
+        height: auto; 
+        margin-top: 15px;
+    }
+
+      .cart-icon {
+        display: block; /* Visa ikonen i mobilläge */
+       margin-left: 25px;
+       /* Justera positionen om nödvändigt */
+    }
+   
+}
+.logo-user {
+    margin-right: 5px;
+    width: 55px;
+    height: auto;
+  }
+ 
+  .lock-icon{
+    margin-left: 0;
+  }
+
+  .right-icons{
+    margin-right: 0;
+    display: flex;
+   margin-right: 5px;
+   
+  }

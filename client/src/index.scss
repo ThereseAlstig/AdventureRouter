@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box; /* Inkludera padding och border i elementets bredd */
+  overflow-x: hidden; /* Förhindra horisontell scrollning */
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #FFFBFB;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 100%;
+  --font-body: 'Oswald', sans-serif; 
+}
+
+a {
+  font-weight: 500;
+  color: black;
+  text-decoration: inherit;
+}
+
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h2{
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+button {
+font-family: 'Oswald', sans-serif;
+  
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: black;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+li{
+  list-style-type: none;
+}
+

@@ -1,0 +1,61 @@
+POST http://localhost:3000/products HTTP/1.1
+Content-Type: application/json
+
+{
+    "weather_ids": [1, 2, 3],
+    "productCategories": [1, 2, 3],
+    "name": "Test Product",
+    "price": 10.99,
+    "description": "A product description",
+    "travel_option_id": 1,
+    "image_url": "image.jpg",
+    "in_stock": true
+}
+
+###
+POST http://localhost:3000/auth/register HTTP/1.1
+Content-Type: application/json
+
+
+{
+  "email": "therese.alstig@gmail.com",
+  "password": "123",
+  "username": "Jag",
+  "role": "admin"
+}
+
+### Login User
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "therese.alstig@gmail.com",
+  "password": "123"
+}
+### Login User
+POST http://localhost:3000/auth/logout
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+
+###
+GET http://localhost:3000/products/filtered?categoryTwo=2
+###
+
+
+
+
+GET http://localhost:3000/products/categories
+
+
+###
+GET http://localhost:3000/user/google
+
+###
+GET http://localhost:3000/user/google/callback
+Content-Type: application/x-www-form-urlencoded
+

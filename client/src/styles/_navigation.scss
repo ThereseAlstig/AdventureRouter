@@ -1,0 +1,319 @@
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding: 10px;
+    
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    background-color: #FFF5F5; 
+    padding: 10px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; 
+    color: inherit; 
+    margin: 0 10px;
+}
+
+.nav-links h2 {
+    margin: 0; 
+    padding: 10px 20px; 
+    text-align: center; 
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.nav-links .cart-icon {
+    font-size: 1.5em;
+    margin-right: 5px;
+}
+
+.topNavigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;     
+    padding: 0 20px;
+  
+}
+
+.left, .right {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.logo {
+    position: absolute;
+    top: 50%;  /* Centrera vertikalt */
+    left: 50%; /* Centrera horisontellt */
+    transform: translate(-50%, -50%); /* Flytta logotypen tillbaka så den är exakt centrerad */
+
+    /* Responsiv storlek */
+    width: 45vw; /* Använd viewportbredd för att göra logotypen responsiv */
+    max-width: 250px; /* Max storlek för logotypen */
+    height: auto;
+    margin-top: 25px;
+     /* Behåll proportionerna */
+}
+
+.navigation a.active {
+    text-decoration: underline;
+  
+   
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: black;
+    padding: 25px;
+}
+
+.meny-toggle a:hover {
+    text-decoration: underline;
+}
+
+/* För att säkerställa att logotypen inte växer för stor på väldigt stora skärmar */
+@media (max-width: 1200px) {
+    .logo {
+        width: 250px;  /* Maximal bredd på stora skärmar */
+        height: auto;  /* Behåll proportionerna */
+    }
+}
+
+/* För mindre skärmar kan vi minska storleken ytterligare */
+@media (max-width: 800px) {
+    .logo {
+        width: 45vw; /* Gör logotypen större på små skärmar */
+        max-width: 355px;
+        margin-top: 175px;
+    }
+}
+
+.logo-text {
+    display: block;
+}
+
+
+
+/* För mobilversionen */
+@media (max-width: 768px) {
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin-top: 95px;
+        transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out;
+        transform: translateX(-100%); 
+        opacity: 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+        transform: translateX(0); /* Visar menyn */
+        opacity: 1;
+
+    }
+
+    .menu-toggle {
+        display: block;
+        margin-top: 20px;
+        color:black
+    }
+
+
+    .logo-text {
+        display: none; /* Dölj texten på små skärmar */
+    }
+
+    .logo-img {
+        display: block; /* Visa loggan istället */
+        width: 45px; /* Justera storleken på loggan */
+        height: auto; /* Bevara proportionerna */
+    }
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: black;
+}
+
+
+
+/* För mobilversionen */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Visa hamburgermenyn på små skärmar */
+        position: absolute;
+        top: 0px;
+        right: 30px;
+        z-index: 11;
+    }
+
+    .logo-img {
+        display: inline; /* Visa ikonen på små skärmar */
+        font-size: 1.5em; /* Justera storleken på ikonen */
+        position: absolute; /* Gör det möjligt att positionera ikonen absolut */
+        bottom: -62px; /* Flytta ikonen ner */
+        right: 20px; /* Flytta ikonen åt höger */
+    }
+
+    .topNavigation {
+        flex-direction: row;
+        margin-top: 45px;/* Justera layouten */
+    }
+
+    .logo {
+    /* Håll logotypen centrerad */
+    margin-top: 180px;
+    }
+}
+
+
+.navigation {
+    display: flex;
+    justify-content: space-around;
+ position: relative;
+    color: rgb(15, 12, 12);
+    padding: 10px 0;
+    width: 100%;
+
+    h2 {
+        cursor: pointer;
+        margin: 0;
+        padding: 10px;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        width: auto;
+        position: absolute;
+        top: 100%; /* Placera undermenyn direkt under huvudmenyn */
+        left: 0px; /* Justera undermenyn till vänsterkanten */
+        z-index: 10;
+       
+     
+        
+    
+        li {
+            padding-right: 50px;
+            margin-left: 80px;
+            flex-grow: 1; /* Se till att varje undermenypunkt tar lika mycket plats */
+            text-align: center;
+            font-size: x-large;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+// styuling mobil navigaation produkter 
+
+@media (max-width: 768px) {
+    .navigation {
+      display: flex;
+      flex-direction: column;
+      background-color: #f9f9f9; /* Anpassa färg om behövs */
+      padding: 10px;
+      margin-top: 155px;
+      margin-bottom: 155px;
+    }
+  
+    .navigation h2 {
+      font-size: 1.2rem;
+      margin: 4px 0;
+    }
+  
+    .navigation ul {
+    flex-direction: column;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 15px;
+    }
+  
+    .navigation li {
+      margin: 5px 0;
+    }
+  
+    .navigation .active {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  
+    .navigation ul ul {
+      margin-left: 10px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        top: 100%; /* Placera undermenyn direkt under huvudmenyn */
+        left: 0px; /* Justera undermenyn till vänsterkanten */
+        z-index: 10;
+       
+     
+        
+  
+    
+        li {
+            padding-right: 50px;
+            margin-left: 80px;
+            flex-grow: 1; /* Se till att varje undermenypunkt tar lika mycket plats */
+            text-align: center;
+            font-size: x-large;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    
+        .subcategory {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Mellanrum mellan listobjekt */
+            list-style: none; /* Tar bort standardpunkter */
+            padding: 0;
+            margin: 0;
+          }
+          
+          .subcategory li {
+            font-size: 0,1rem;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd; /* Valfri avgränsning */
+          }
+    }}

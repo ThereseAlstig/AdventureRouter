@@ -1,0 +1,62 @@
+/* Modal - bakgrund */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    
+  }
+  
+  /* Modal innehåll */
+  .modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    border: 2px solid black;
+  }
+  
+  button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #F1FEED;
+    color: black;
+    border: none;
+    border-radius: 2px;
+    border: 2px solid black;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    width: 80%;
+   border: 2px solid black;
+    text-transform: uppercase; 
+  }
+  
+  button:hover {
+    text-decoration: underline;
+  }
+
+  label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2em;
+  }
+
+  input {
+    margin-top: 10px;
+    padding: 10px;
+    width: 85%;
+    border: 2px solid black;
+    border-radius: 2px;
+    background-color: #F1FEED;
+    font-family: 'Oswald', sans-serif;
+    margin-left: 0 auto;
+    margin-right: 0 auto;
+
+  }
+  
+ 

@@ -1,0 +1,94 @@
+.product-carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 85px;
+    
+  }
+  
+  .product-slider {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    transition: transform 0.5s ease-in-out;
+    
+   
+  }
+  
+  .product-item {
+    flex: 0 0 calc(95% / 3); /* För 3 produkter per rad */
+    max-width: calc(100% / 3);
+    padding: 10px;
+    box-sizing: border-box;
+ 
+  
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: cover;
+     
+    }
+  }
+  
+  .carousel-button {
+    position: absolute;
+    top: 30%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10; 
+  
+    &.prev-button {
+      left: 0px;
+    }
+  
+    &.next-button {
+      right: 0px;
+    }
+  
+    svg {
+      width: 25px;
+      height: 25px;
+      fill: black;
+    }
+  
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .product-carousel{
+        width: 100%;
+     
+        margin-right: 5px;
+    }
+    .product-item {
+      flex: 0 0 100%; /* En produkt per rad */
+    }
+
+    .product-slider {
+        justify-content: center; /* Centrera produkterna */
+    gap: 0; 
+       
+      }
+
+    .product-item {
+        flex: 0 0 100%; 
+        max-width: 100%; /* En produkt per rad */
+        margin-left: 0;
+      }
+   
+  }
+  

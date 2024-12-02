@@ -7,6 +7,7 @@ import cors from 'cors';
 import pool from './config/db'; // Importera databaskonfigurationen
 import productRouter from './routes/productRouter';
 import session from 'express-session';
+
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import authRoutes from './routes/authRouter';

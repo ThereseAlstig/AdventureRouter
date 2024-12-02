@@ -8,10 +8,10 @@ import { AuthContext } from '../context/authContext';
 interface LoginModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal, setIsAuthenticated }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

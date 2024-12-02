@@ -33,14 +33,7 @@ console.log(isAuthenticated);
         setIsModalOpen(false); // Stäng modalen när användaren trycker på "stäng"
       };
     
-      // const Logout = () => {
-      //   // Ta bort token från sessionStorage
-      //   sessionStorage.removeItem('token');
-      //   setIsAuthenticated(false);  // Uppdatera användartillståndet till utloggad
     
-      //   // Omdirigera användaren till inloggningssidan
-      //   navigate('/');  // Byt ut '/login' med den aktuella inloggningssidan
-      // };
 
       const handleCloseMenu = () => {
         setIsOpen(false);
@@ -77,9 +70,7 @@ console.log(isAuthenticated);
         </NavLink>
       )}
 
-<LoginModal isOpen={isModalOpen} closeModal={closeModal} setIsAuthenticated={function (isAuthenticated: boolean): void {
-              throw new Error("Function not implemented.");
-            } }/>
+<LoginModal isOpen={isModalOpen} closeModal={closeModal} />
             <FontAwesomeIcon
   icon={isAuthenticated ? faLock : faLockOpen}
   className="lock-icon"

@@ -15,7 +15,7 @@ export const Navigation = () => {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
         const [openCategory, setOpenCategory] = useState<number | null>(null);
-        const { categoryId, subcategoryId } = useParams<{ categoryId: string; subcategoryId?:string }>();
+        const { categoryId} = useParams<{ categoryId: string; subcategoryId?:string }>();
         // Hämta alla kategorier när komponenten laddas
 
       

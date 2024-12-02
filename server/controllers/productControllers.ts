@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import * as productService from '../services/productService';
 import pool from '../config/db';
-import { ResultSetHeader } from 'mysql2';
 import { createProduct } from '../services/productService';
 
 export const getProducts = async (req: Request, res: Response) => {

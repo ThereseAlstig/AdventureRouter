@@ -1,3 +1,4 @@
+import { console } from "inspector";
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 
@@ -25,8 +26,12 @@ export const Navigation = () => {
         useEffect(() => {
             const fetchCategories = async () => {
                 try {
+
+                   
+                    const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+                    console.log(key);
                     // Hämtar huvudkategorier och underkategorier
-                    const response = await fetch('http://localhost:3000/products/categories');
+                    const response = await fetch(`${key}/products/categories`);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }

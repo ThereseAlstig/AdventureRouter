@@ -1,29 +1,48 @@
 .product-carousel {
-    position: relative;
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0;
     margin-top: 85px;
+    position: relative;
+    overflow: hidden;
     
   }
   
   .product-slider {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     gap: 20px;
     transition: transform 0.5s ease-in-out;
-    
-   
+    will-change: transform;
+    margin-left: 0;
+    p{
+      padding: 10px;
+    }
+
+    h3{
+      padding: 10px;
+      margin-top: 45px;
+    }
+
+    .button-cart{
+      margin: 10px;
+    }
+ 
+
   }
   
   .product-item {
-    flex: 0 0 calc(95% / 3); /* För 3 produkter per rad */
-    max-width: calc(100% / 3);
-    padding: 10px;
+    flex: 0 0 calc((100% - ( 3 - 1 ) * 20px) /3); /* För 3 produkter per rad */
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
- 
+
   
     img {
       width: 100%;
@@ -36,12 +55,12 @@
   
   .carousel-button {
     position: absolute;
-    top: 30%;
+    top: 29%;
     transform: translateY(-50%);
     background-color: transparent;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -50,11 +69,13 @@
     z-index: 10; 
   
     &.prev-button {
-      left: 0px;
+      left: -15px;
+  
     }
   
     &.next-button {
-      right: 0px;
+      right: -15px;
+
     }
   
     svg {
@@ -79,8 +100,13 @@
     }
 
     .product-slider {
-        justify-content: center; /* Centrera produkterna */
-    gap: 0; 
+         /* Centrera produkterna */
+    gap: 20; 
+    text-align: center;
+
+    p {
+      margin: 0;
+    }
        
       }
 

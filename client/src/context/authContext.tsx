@@ -17,7 +17,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 
-
+  const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:3000/auth/login', {
+    const response = await fetch(`${key}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('logout');
     try {
         // Skicka en POST-begäran till backend för att logga ut användaren
-        const response = await fetch('http://localhost:3000/auth/logout', {
+        const response = await fetch(`${key}/auth/logout`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

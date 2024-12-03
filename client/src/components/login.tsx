@@ -22,9 +22,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
 
  
   const handleGoogleLogin = () => {
-  
+    const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+    console.log(key);
     // Omdirigera användaren till Google OAuth-flödet via backend
-    window.location.href = 'http://localhost:3000/user/google';
+    window.location.href = `${key}/user/google`;
     console.log('google login');
   };
   if (!auth) {

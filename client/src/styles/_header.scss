@@ -94,7 +94,7 @@
 
    
     .right-icons{
-        margin-top: 85px;
+        margin-top: 5px;
         width: 10px;
         height: auto;
     }
@@ -108,6 +108,9 @@
     .logo-text {
         display: none; /* Dölj texten på små skärmar */
     }
+    .logo-user{
+        margin-top: 25px;
+    }
 
     .logo-img {
         display: block; /* Visa loggan istället */
@@ -119,12 +122,13 @@
       .cart-icon {
         display: block; /* Visa ikonen i mobilläge */
        margin-left: 25px;
+       margin-top: 55px;
        /* Justera positionen om nödvändigt */
     }
    
 }
 .logo-user {
-    margin-right: 5px;
+    margin-right: 15px;
     width: 55px;
     height: auto;
   }
@@ -134,8 +138,8 @@
   }
 
   .right-icons{
-    margin-right: 0;
+
     display: flex;
-   margin-right: 5px;
+   margin-right: 45px;
    
   }

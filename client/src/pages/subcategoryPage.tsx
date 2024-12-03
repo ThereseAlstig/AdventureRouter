@@ -20,10 +20,11 @@ export const SubcategoryPage = () => {
         console.log('categoir', subcategoryId);
         const fetchFilteredProducts = async () => {
             try {
-
+                const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+              
                 
                 const response = await fetch(
-                    `http://localhost:3000/products/filtered?categoryTwo=${subcategoryId}`
+                    `${key}/products/filtered?categoryTwo=${subcategoryId}`
                 );
                 if (!response.ok) {
                     throw new Error("Failed to fetch products");

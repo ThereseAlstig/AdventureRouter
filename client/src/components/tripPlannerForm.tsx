@@ -37,52 +37,64 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="tripPlanerForm__input">
+        <div className="tripPlanerForm__row">
       <label>
         Start:
-        <input
+        </label><input
           type="text"
           value={start}
           onChange={(e) => setStart(e.target.value)}
           placeholder="Start location"
         />
-      </label>
+      
+      </div>
+
+      <div className="tripPlanerForm__row">
       <label>
-        Destination:
+        Destination:</label>
         <input
           type="text"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           placeholder="Destination"
         />
-      </label>
+      </div>
+      <div className="tripPlanerForm__row tripPlanerForm__row--wide">
       <label>
-        Waypoints (comma-separated):
+        Waypoints:</label>
+        <div className="tripPlanerForm__inputWrapper">
         <input
           type="text"
           value={waypoints}
           onChange={(e) => setWaypoints(e.target.value)}
           placeholder="Optional waypoints"
         />
-      </label>
+        <p>(optional, separated by commas)</p>
+        </div>
+      </div>
+      <div className="tripPlanerForm__row">
       <label>
-        Start Date:
+        Start Date: </label>
         <input
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
-      </label>
+     </div>
+     <div className="tripPlanerForm__row">
       <label>
-        Arrival Date:
+        Arrival Date:</label>
         <input
           type="date"
           value={arrivalDate}
           onChange={(e) => setArrivalDate(e.target.value)}
         />
-      </label>
+      </div>
+
+      <div className="tripPlanerForm__row">
       <label>
-        Travel Mode:
+        Travel Mode: </label>
         <select value={mode} onChange={(e) => setMode(e.target.value)}>
           <option value="DRIVING">Driving</option>
           <option value="DRIVING">Motorcykle</option>
@@ -90,8 +102,8 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
           <option value="BICYCLING">Bicycling</option>
           <option value="TRANSIT">Transit</option>
         </select>
-      </label>
-      <button type="submit">Search</button>
+     </div>
+      <button className="tripPlanerForm__button" type="submit">Search</button>
     </form>
   );
 };

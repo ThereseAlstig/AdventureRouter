@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import TripPlannerForm from "../components/tripPlannerForm";
 import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { getWeather } from "../api/weatherApi"; // Din väderfunktion
+import { ProductCarusellTips } from "../components/productCarusellTips";
 
 export const TripPlanner = () => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
@@ -111,9 +112,15 @@ const [duration, setDuration] = useState<string | null>(null);
   };
 
   return (
+
+    
     <div>
-      <h1>Trip Planner</h1>
+      <div className="journrey__container">
+      <div className ="tripPlanerForm">
+      <h1>Plan youre trip</h1>
       <TripPlannerForm onSubmit={handleSubmit} />
+      </div>
+      <div className="googleMapContainer">
       <LoadScript googleMapsApiKey={apiKey} language="en">
         <GoogleMap
           mapContainerStyle={{ width: "100%", height: "500px" }}
@@ -140,18 +147,41 @@ const [duration, setDuration] = useState<string | null>(null);
     <p>Distance: {distance}</p>
     <p>Estimated Time: {duration}</p>
   </div>
-)}
+)}</div></div>
+
+<div className="result_container">
+  <div className="weather_containter">
       {tripWeather && (
         <div>
-          <h2>Weather Information</h2>
-          <p>Start: {tripWeather.start?.description || "N/A"}</p>
-          <p>Destination: {tripWeather.destination?.description || "N/A"}</p>
-          {tripWeather.midpoint && (
-            <p>Midpoint: {tripWeather.midpoint?.description || "N/A"}</p>
-          )}
+          <h2>Weather Forecast:</h2>
+          <h3>{tripWeather.start?.cityName || "N/A"}</h3>
+          <p>Departure temperature: {tripWeather.start?.temperature || "N/A"}C</p>
+          <p>{tripWeather.start?.description || "N/A"}</p>
+          <p>Wind: {tripWeather.start?.windSpeed || "N/A"}m/s</p>
+         
+          {tripWeather.midpoint && 
+          <>
+            <h3>{tripWeather.midpoint?.cityName}</h3>
+            <p>{tripWeather.midpoint?.date} temperature {tripWeather.midpoint?.temperature || ""}C</p>
+            <p>{tripWeather.midpoint?.description || "N/A"}</p>
+            <p>Wind: {tripWeather.midpoint?.windSpeed || "N/A"}m/s</p>
+          </>
+          } 
+          <h3>{tripWeather.destination?.cityName || "N/A"}</h3>
+          <p>Arrival temperature: {tripWeather.destination?.temperature || "N/A"}C</p>
+          <p>{tripWeather.destination?.description || "N/A"}</p>
+          <p>Wind: {tripWeather.destination?.windSpeed || "N/A"}m/s</p>
+          <label htmlFor="">Title: </label>
+          <input type="text" /><br></br>
+          <button className="centered-button">Save and share</button>
         </div>
       )}
-    </div>
+      </div>
+
+      <div className= "tips_trips">
+        <ProductCarusellTips />
+        </div></div>   
+         </div>
   );
 };
 

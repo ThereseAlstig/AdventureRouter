@@ -1,0 +1,163 @@
+.tripPlanerForm{
+
+    flex: 1;
+    min-width: 300px;
+    margin-left: 100px;
+
+    .tripPlanerForm__input{
+        margin-bottom: 20px;
+        max-width: 500px;
+        display:flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .tripPlanerForm__row {
+        display: flex;
+        align-items: center; 
+        gap: 0.5rem;
+      }
+      
+      .tripPlanerForm__row label {
+        flex: 0 0 150px; 
+      }
+      
+      .tripPlanerForm__row input,
+      .tripPlanerForm__row select {
+        flex: 1; 
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      
+     
+      
+      .tripPlanerForm__button {
+    
+        padding: 0.5rem 1rem;
+    
+        cursor: pointer;
+      }
+     
+}
+      .tripPlanerForm__row--wide input {
+       flex: 2; 
+       width: 500px !important;
+      
+      }
+
+      .journrey__container{
+        display: flex;
+        flex-direction: wrap;
+        gap: 1rem;
+        margin-top: 20px;
+      }
+
+      .googleMapContainer {
+     
+        min-width: 50%; 
+        margin-top: 100px;
+        margin-left: 50px;
+        padding-right: 20px;
+      }
+
+
+
+
+      @media (max-width: 768px) {
+        .journrey__container {
+          flex-direction: column; 
+          align-items: center; 
+        }
+        .tripPlanerForm {
+            width: 100%;
+            margin: 0 auto;
+            flex: none; 
+          }
+          .tripPlanerForm__row label {
+            width: auto;
+            flex: none!important; 
+            margin-bottom: 2.0rem; 
+          }
+          .middle-footer {
+            order: -1; 
+            text-align: center; 
+          }
+     
+      
+          .tripPlanerForm__row--wide input {
+            flex: none; 
+            width: 100% !important;
+            margin-bottom: 2.0rem; 
+          }
+        .tripPlanerForm,
+        .googleMapContainer {
+          width: 100%; 
+          margin-left: 0;
+         
+          padding: 0;
+        }
+        .tripPlanerForm__row{
+          
+            flex-direction: column;
+            align-items: flex-start;
+           gap: 0.2rem;
+           justify-content: center;
+        }
+        .tripPlanerForm__button {
+            width: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+            text-align: center;
+         
+             /* Knappen tar full bredd */
+          }
+
+          .weather_containter{
+            margin-left: 10px!important;
+            margin-top: 20px;
+            min-width: none;
+
+            font-size: large;
+            input{
+                width: 90%!important;
+                
+            }
+           
+            .centered-button {
+                display: block; /* Gör knappen till ett blockelement */
+                margin: 0 auto; /* Centrerar horisontellt */
+                padding: 0.7rem 1.5rem; /* Lägg till lite padding för bättre utseende */
+               margin-top: 20px;
+               margin-left: 10px;
+               width: 90%!important;
+                border-radius:  4px;
+                font-size: 1rem;
+                cursor: pointer;
+              }
+          }
+      }
+
+.result_container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 20px;
+}
+
+.weather_containter{
+   flex: 2;
+    gap: 1rem;
+    margin-left: 100px;
+    min-width: 40%;
+    font-family: 'poppins', sans-serif;
+    font-size: x-large;
+    input{
+        width: 20%;
+    }
+    button{
+        width: 25%;
+    }
+    
+}
+

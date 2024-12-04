@@ -13,7 +13,7 @@ passport.use(
       {
         clientID: process.env.GOOGLE_CLIENT_ID || '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-        callbackURL: 'http://localhost:3000/user/google/callback',
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || '',
       },
      
         
@@ -42,9 +42,9 @@ passport.use(
                 { expiresIn: '1h' } // Token gäller i 1 timme
               );
       
-              console.log('Generated Token:', token); // Logga token för debugging
+             // Logga token för debugging
       
-              console.log('User after findOrCreate:', user); // Logga användarens data
+             // Logga användarens data
               done(null, user);
             } catch (error) {
               console.error('Error in GoogleStrategy:', error);

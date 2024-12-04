@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import TripPlannerForm from "../components/tripPlannerForm";
 import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { getWeather } from "../api/weatherApi"; // Din väderfunktion

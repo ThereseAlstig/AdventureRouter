@@ -3,6 +3,7 @@ import TripPlannerForm from "../components/tripPlannerForm";
 import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { getWeather } from "../api/weatherApi"; // Din väderfunktion
 import { ProductCarusellTips } from "../components/productCarusellTips";
+import { getFilteredProducts } from "../api/filterProductsApi";
 
 export const TripPlanner = () => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
@@ -31,6 +32,8 @@ const [duration, setDuration] = useState<string | null>(null);
       }
     });
   };
+
+
 
   useEffect(() => {
     if (directions && directions.routes.length > 0) {
@@ -80,6 +83,11 @@ const [duration, setDuration] = useState<string | null>(null);
         destination: destinationWeather,
         midpoint: midpointWeather,
       });
+console.log("startWeather", startWeather);
+if (startWeather) {
+  console.log("startWeather", startWeather);
+  getFilteredProducts(startWeather);
+}
 
       // Hämta rutt från Google Maps
       const directionsService = new google.maps.DirectionsService();

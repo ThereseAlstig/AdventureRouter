@@ -1,6 +1,6 @@
 import express from 'express';
 import { getProducts, addProduct, getFilteredProducts, getCategories, getAllWeatherOptions, getAllWeatherTemperatures, getAllTravelOptions, getAllCategoriesTwo } from '../controllers/productControllers';
-import { getAllCategories } from '../services/productService';
+
 
 const router = express.Router();
 

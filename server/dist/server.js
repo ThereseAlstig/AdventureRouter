@@ -24,6 +24,8 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const authRouter_1 = __importDefault(require("./routes/authRouter"));
 require("./config/passport");
 const googleRoutes_1 = __importDefault(require("./routes/googleRoutes")); // Import googleRoutes
+const orderRouter_1 = __importDefault(require("./routes/orderRouter")); // Import ordersRoutes
+const travelRouter_1 = __importDefault(require("./routes/travelRouter"));
 // Importera produktens router
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -45,14 +47,15 @@ app.use(passport_1.default.session());
         process.exit(1); // Om anslutningen misslyckas, stäng av servern
     }
 }))();
-// API-rutter
+// API-rutter - kolla av databasanslutningen
 app.get('/', (req, res) => {
     res.send('Welcome to AdventureRouter backend!');
 });
-// Använd produktens router för /products
 app.use('/products', productRouter_1.default);
 app.use('/auth', authRouter_1.default);
 app.use('/user', googleRoutes_1.default);
+app.use('/orders', orderRouter_1.default);
+app.use('/api', travelRouter_1.default);
 // Starta servern
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

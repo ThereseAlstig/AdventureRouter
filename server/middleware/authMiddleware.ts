@@ -2,6 +2,8 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
 export const ensureAuthenticated: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+  
+  console.log('ensureAuthenticated middleware hit');
   const token = req.headers.authorization?.split(' ')[1];
   
   if (!token) {

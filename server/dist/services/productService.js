@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCategories = exports.createProduct = exports.getFilteredProducts = exports.getAllProducts = void 0;
+exports.getAllCategories = exports.createProduct = exports.getFilteredProductsBY = exports.getAllProducts = void 0;
 const db_1 = __importDefault(require("../config/db"));
 //getting all products
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,11 +24,13 @@ const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
             p.description,
             p.image_url,
             p.in_stock,
+            p.travel_option_id,
 
                 c1.name AS category_one_name,
                 c2.name AS category_two_name,
                 w.name AS weather_name,
-                wt.name AS weather_temperature_name
+                wt.name AS weather_temperature_name,
+                t.name AS travel_option_name
 
         FROM 
             Products p
@@ -36,7 +38,6 @@ const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
             
 LEFT JOIN 
     CategoryProduct cp ON p.id = cp.product_id
-
 LEFT JOIN 
     CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
   LEFT JOIN 
@@ -49,7 +50,9 @@ LEFT JOIN
          LEFT JOIN 
         ProductWeatherTemperature pwt ON p.id = pwt.product_id
     LEFT JOIN 
-        WeatherTemperature wt ON pwt.temperature_id = wt.id;
+        WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN
+        TravelOptions t on p.travel_option_id = t.id;
      `;
     try {
         const [rows] = yield db_1.default.query(query);
@@ -62,36 +65,41 @@ LEFT JOIN
     }
 });
 exports.getAllProducts = getAllProducts;
-const getFilteredProducts = (filters) => __awaiter(void 0, void 0, void 0, function* () {
+const getFilteredProductsBY = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     // Grundläggande SQL-fråga
     let query = `
-        SELECT 
-            p.id AS id,
-            p.name AS name,
-            p.price,
-            p.description,
-            p.image_url,
-            p.in_stock,
-            c1.name AS category_one_name,
-            c2.name AS category_two_name,
-            w.name AS weather_name,
-            wt.name AS weather_temperature_name
-        FROM 
-            Products p
-        LEFT JOIN 
-            CategoryProduct cp ON p.id = cp.product_id
-        LEFT JOIN 
-            CategoryTwo c2 ON cp.category_id = c2.id
-        LEFT JOIN 
-            CategoryOne c1 ON c2.category_one_id = c1.id  -- Korrekt join med CategoryOne baserat på CategoryTwo
-        LEFT JOIN 
-            ProductWeather pw ON p.id = pw.product_id
-        LEFT JOIN 
-            Weather w ON pw.weather_id = w.id
-        LEFT JOIN 
-            ProductWeatherTemperature pwt ON p.id = pwt.product_id
-        LEFT JOIN 
-            WeatherTemperature wt ON pwt.temperature_id = wt.id
+     SELECT 
+        p.id AS id,
+        p.name AS name,
+        p.price,
+        p.description,
+        p.image_url,
+        p.travel_option_id,
+        t.name AS travel_option_name, 
+        p.in_stock,
+        c1.name AS category_one_name,
+        c2.name AS category_two_name,
+        w.name AS weather_name,
+        wt.name AS weather_temperature_name
+    FROM 
+        Products p
+    LEFT JOIN 
+        TravelOptions t on p.travel_option_id = t.id
+    LEFT JOIN 
+        CategoryProduct cp ON p.id = cp.product_id
+    LEFT JOIN 
+        CategoryTwo c2 ON cp.category_id = c2.id
+    LEFT JOIN 
+        CategoryOne c1 ON c2.category_one_id = c1.id
+    LEFT JOIN 
+        ProductWeather pw ON p.id = pw.product_id
+    LEFT JOIN 
+        Weather w ON pw.weather_id = w.id
+    LEFT JOIN 
+        ProductWeatherTemperature pwt ON p.id = pwt.product_id
+    LEFT JOIN 
+        WeatherTemperature wt ON pwt.temperature_id = wt.id
+   
     `;
     // Förbered WHERE-klausuler baserat på filtren
     let whereClauses = [];
@@ -108,12 +116,14 @@ const getFilteredProducts = (filters) => __awaiter(void 0, void 0, void 0, funct
     if (filters.temperature) {
         whereClauses.push(`wt.name = ?`);
     }
+    if (filters.travelOptionId) {
+        whereClauses.push(`p.travel_option_id = ?`);
+    }
     // Om några filter är angivna, lägg till en WHERE-klasul
     if (whereClauses.length > 0) {
         query += ' WHERE ' + whereClauses.join(' AND ');
     }
     try {
-        // Förbered parametrarna för frågan
         const params = [];
         if (filters.categoryOne)
             params.push(filters.categoryOne);
@@ -123,17 +133,16 @@ const getFilteredProducts = (filters) => __awaiter(void 0, void 0, void 0, funct
             params.push(filters.weather);
         if (filters.temperature)
             params.push(filters.temperature);
-        // Kör SQL-frågan
         const [rows] = yield db_1.default.query(query, params);
-        console.log('Filtered products fetched:', rows); // Logga resultatet för felsökning
-        return rows;
+        console.log('Filtered products fetched:', rows);
+        return rows; // Returnera matchande produkter
     }
     catch (error) {
-        console.error('Error fetching filtered products:', error); // Logga eventuella fel
-        throw error; // Släng felet för vidare hantering
+        console.error('Error in getFilteredProducts:', error);
+        throw new Error('Failed to fetch filtered products.');
     }
 });
-exports.getFilteredProducts = getFilteredProducts;
+exports.getFilteredProductsBY = getFilteredProductsBY;
 //function to create a product
 const createProduct = (productData) => __awaiter(void 0, void 0, void 0, function* () {
     try {

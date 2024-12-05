@@ -21,7 +21,7 @@ dotenv_1.default.config();
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackURL: 'http://localhost:3000/user/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || '',
 }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     try {
@@ -40,8 +40,8 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
         }, process.env.JWT_SECRET || 'your_jwt_secret', // Hämta från miljövariabler
         { expiresIn: '1h' } // Token gäller i 1 timme
         );
-        console.log('Generated Token:', token); // Logga token för debugging
-        console.log('User after findOrCreate:', user); // Logga användarens data
+        // Logga token för debugging
+        // Logga användarens data
         done(null, user);
     }
     catch (error) {

@@ -7,6 +7,7 @@ exports.ensureAuthenticated = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const ensureAuthenticated = (req, res, next) => {
     var _a;
+    console.log('ensureAuthenticated middleware hit');
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
     if (!token) {
         res.status(401).json({ message: 'Access denied, no token provided' });

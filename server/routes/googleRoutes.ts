@@ -11,7 +11,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     console.log('User authenticated:', req.user);
 
     // Omdirigera användaren till frontend
-    res.redirect('https://adventure-router.vercel.app/'); // Ändra till din frontend-URL
+    res.redirect(callback); // Ändra till din frontend-URL
 });
 
 export default router;

@@ -15,13 +15,15 @@ export const getProducts = async (req: Request, res: Response) => {
 export const getFilteredProducts = async (req: Request, res: Response) => {
 try {
     const filters = {
-        categoryOne: req.query.categoryOne || null,  // Om parameter saknas, sätt till null
-        categoryTwo: req.query.categoryTwo || null,
-        weather: req.query.weather || null,
-        temperature: req.query.temperature || null
-    };
+        categoryOne: req.query.categoryOne ? String(req.query.categoryOne) : null,
+        categoryTwo: req.query.categoryTwo ? String(req.query.categoryTwo) : null,
+        weather: req.query.weather ? String(req.query.weather) : null,
+        temperature: req.query.temperature ? String(req.query.temperature) : null,
+        travelOptionId: req.query.travelOptionId ? Number(req.query.travelOptionId) : null,
+      };
 
-    const products = await productService.getFilteredProducts(filters);
+    const products = await productService.getFilteredProductsBY(filters);
+    console.log('Filtered products fetchedjljlkjlkjl:', products);
     res.status(200).json(products);
 } catch (error) {
     res.status(500).json({ message: 'Failed to fetch products' });

@@ -11,11 +11,13 @@ export const getAllProducts = async () => {
             p.description,
             p.image_url,
             p.in_stock,
+            p.travel_option_id,
 
                 c1.name AS category_one_name,
                 c2.name AS category_two_name,
                 w.name AS weather_name,
-                wt.name AS weather_temperature_name
+                wt.name AS weather_temperature_name,
+                t.name AS travel_option_name
 
         FROM 
             Products p
@@ -23,7 +25,6 @@ export const getAllProducts = async () => {
             
 LEFT JOIN 
     CategoryProduct cp ON p.id = cp.product_id
-
 LEFT JOIN 
     CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
   LEFT JOIN 
@@ -36,7 +37,9 @@ LEFT JOIN
          LEFT JOIN 
         ProductWeatherTemperature pwt ON p.id = pwt.product_id
     LEFT JOIN 
-        WeatherTemperature wt ON pwt.temperature_id = wt.id;
+        WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN
+        TravelOptions t on p.travel_option_id = t.id;
      `;
 
     try {
@@ -50,36 +53,48 @@ LEFT JOIN
 };
 
 
-export const getFilteredProducts = async (filters: { categoryOne: any; categoryTwo: any; weather: any; temperature: any; }) => {
+export const getFilteredProductsBY = async (filters: {   
+    categoryOne?: string | null;
+    categoryTwo?: string | null;
+    weather?: string | null;
+    temperature?: string | null;
+    travelOptionId?: number | null;}) => {
+
+
     // Grundläggande SQL-fråga
     let query = `
-        SELECT 
-            p.id AS id,
-            p.name AS name,
-            p.price,
-            p.description,
-            p.image_url,
-            p.in_stock,
-            c1.name AS category_one_name,
-            c2.name AS category_two_name,
-            w.name AS weather_name,
-            wt.name AS weather_temperature_name
-        FROM 
-            Products p
-        LEFT JOIN 
-            CategoryProduct cp ON p.id = cp.product_id
-        LEFT JOIN 
-            CategoryTwo c2 ON cp.category_id = c2.id
-        LEFT JOIN 
-            CategoryOne c1 ON c2.category_one_id = c1.id  -- Korrekt join med CategoryOne baserat på CategoryTwo
-        LEFT JOIN 
-            ProductWeather pw ON p.id = pw.product_id
-        LEFT JOIN 
-            Weather w ON pw.weather_id = w.id
-        LEFT JOIN 
-            ProductWeatherTemperature pwt ON p.id = pwt.product_id
-        LEFT JOIN 
-            WeatherTemperature wt ON pwt.temperature_id = wt.id
+     SELECT 
+        p.id AS id,
+        p.name AS name,
+        p.price,
+        p.description,
+        p.image_url,
+        p.travel_option_id,
+        t.name AS travel_option_name, 
+        p.in_stock,
+        c1.name AS category_one_name,
+        c2.name AS category_two_name,
+        w.name AS weather_name,
+        wt.name AS weather_temperature_name
+    FROM 
+        Products p
+    LEFT JOIN 
+        TravelOptions t on p.travel_option_id = t.id
+    LEFT JOIN 
+        CategoryProduct cp ON p.id = cp.product_id
+    LEFT JOIN 
+        CategoryTwo c2 ON cp.category_id = c2.id
+    LEFT JOIN 
+        CategoryOne c1 ON c2.category_one_id = c1.id
+    LEFT JOIN 
+        ProductWeather pw ON p.id = pw.product_id
+    LEFT JOIN 
+        Weather w ON pw.weather_id = w.id
+    LEFT JOIN 
+        ProductWeatherTemperature pwt ON p.id = pwt.product_id
+    LEFT JOIN 
+        WeatherTemperature wt ON pwt.temperature_id = wt.id
+   
     `;
 
     // Förbered WHERE-klausuler baserat på filtren
@@ -98,6 +113,9 @@ export const getFilteredProducts = async (filters: { categoryOne: any; categoryT
     if (filters.temperature) {
         whereClauses.push(`wt.name = ?`);
     }
+    if (filters.travelOptionId) {
+        whereClauses.push(`p.travel_option_id = ?`);
+    }
 
     // Om några filter är angivna, lägg till en WHERE-klasul
     if (whereClauses.length > 0) {
@@ -105,20 +123,20 @@ export const getFilteredProducts = async (filters: { categoryOne: any; categoryT
     }
 
     try {
-        // Förbered parametrarna för frågan
         const params: any[] = [];
         if (filters.categoryOne) params.push(filters.categoryOne);
         if (filters.categoryTwo) params.push(filters.categoryTwo);
         if (filters.weather) params.push(filters.weather);
         if (filters.temperature) params.push(filters.temperature);
 
-        // Kör SQL-frågan
+        
+
         const [rows] = await pool.query(query, params);
-        console.log('Filtered products fetched:', rows);  // Logga resultatet för felsökning
-        return rows;
+        console.log('Filtered products fetched:', rows);
+        return rows; // Returnera matchande produkter
     } catch (error) {
-        console.error('Error fetching filtered products:', error);  // Logga eventuella fel
-        throw error;  // Släng felet för vidare hantering
+        console.error('Error in getFilteredProducts:', error);
+        throw new Error('Failed to fetch filtered products.');
     }
 };
 

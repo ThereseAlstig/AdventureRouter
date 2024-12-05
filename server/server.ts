@@ -13,7 +13,8 @@ import bodyParser from 'body-parser';
 import authRoutes from './routes/authRouter';
 import './config/passport'; 
 import googleRoutes from './routes/googleRoutes'; // Import googleRoutes
-
+import orderRouter from './routes/orderRouter'; // Import ordersRoutes
+import travelRoutes from './routes/travelRouter';
 
 
 
@@ -44,15 +45,17 @@ app.use(passport.session());
     }
 })();
 
-// API-rutter
+// API-rutter - kolla av databasanslutningen
 app.get('/', (req: Request, res: Response) => {
     res.send('Welcome to AdventureRouter backend!');
 });
 
-// Använd produktens router för /products
+
 app.use('/products', productRouter);
 app.use('/auth', authRoutes);
 app.use('/user', googleRoutes);
+app.use('/orders', orderRouter);
+app.use('/api', travelRoutes);
 
 // Starta servern
 app.listen(PORT, () => {

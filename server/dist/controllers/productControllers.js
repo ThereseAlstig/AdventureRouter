@@ -52,12 +52,14 @@ exports.getProducts = getProducts;
 const getFilteredProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filters = {
-            categoryOne: req.query.categoryOne || null, // Om parameter saknas, sätt till null
-            categoryTwo: req.query.categoryTwo || null,
-            weather: req.query.weather || null,
-            temperature: req.query.temperature || null
+            categoryOne: req.query.categoryOne ? String(req.query.categoryOne) : null,
+            categoryTwo: req.query.categoryTwo ? String(req.query.categoryTwo) : null,
+            weather: req.query.weather ? String(req.query.weather) : null,
+            temperature: req.query.temperature ? String(req.query.temperature) : null,
+            travelOptionId: req.query.travelOptionId ? Number(req.query.travelOptionId) : null,
         };
-        const products = yield productService.getFilteredProducts(filters);
+        const products = yield productService.getFilteredProductsBY(filters);
+        console.log('Filtered products fetchedjljlkjlkjl:', products);
         res.status(200).json(products);
     }
     catch (error) {

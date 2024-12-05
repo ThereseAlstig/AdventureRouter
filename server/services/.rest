@@ -43,7 +43,10 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/products/filtered?categoryTwo=2
+GET http://localhost:3000/products/filtered?travelOptionId=cykel
+###
+GET http://localhost:3000/products/
+
 ###
 
 
@@ -58,4 +61,12 @@ GET http://localhost:3000/user/google
 ###
 GET http://localhost:3000/user/google/callback
 Content-Type: application/x-www-form-urlencoded
+
+###
+
+POST  http://localhost:3000/orders/createOrders
+
+Content-Type: application/json
+
+
 

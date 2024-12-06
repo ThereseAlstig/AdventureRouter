@@ -21,6 +21,9 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
           destination: destination,
           waypoints: waypoints.map((wp) => ({ location: wp, stopover: true } as google.maps.DirectionsWaypoint)),
           travelMode: mode,
+          transitOptions: {
+            modes: [google.maps.TransitMode.BUS], // Prioritera BUS
+          },
         },
         (result, status) => {
           if (status === "OK") {

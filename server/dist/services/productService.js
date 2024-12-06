@@ -116,8 +116,8 @@ const getFilteredProductsBY = (filters) => __awaiter(void 0, void 0, void 0, fun
     if (filters.temperature) {
         whereClauses.push(`wt.name = ?`);
     }
-    if (filters.travelOptionId) {
-        whereClauses.push(`p.travel_option_id = ?`);
+    if (filters.travelOptionName) {
+        whereClauses.push(`t.name = ?`);
     }
     // Om några filter är angivna, lägg till en WHERE-klasul
     if (whereClauses.length > 0) {
@@ -133,6 +133,8 @@ const getFilteredProductsBY = (filters) => __awaiter(void 0, void 0, void 0, fun
             params.push(filters.weather);
         if (filters.temperature)
             params.push(filters.temperature);
+        if (filters.travelOptionName)
+            params.push(filters.travelOptionName);
         const [rows] = yield db_1.default.query(query, params);
         console.log('Filtered products fetched:', rows);
         return rows; // Returnera matchande produkter

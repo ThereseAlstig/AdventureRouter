@@ -43,9 +43,9 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/products/filtered?travelOptionId=cykel
+GET http://localhost:3000/products/filtered?travelOptionName=motorcycle
 ###
-GET http://localhost:3000/products/
+GET http://localhost:3000/products/travel-options
 
 ###
 

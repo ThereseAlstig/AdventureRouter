@@ -1,15 +1,24 @@
-export async function  getFilteredProducts(weatherData: any) {
+export async function  getFilteredProducts(weatherData?: any, mode?: any) {
     const website = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-   console.log(weatherData);
-    const temperatureCategory = getTemperatureCategory(weatherData.temperature);
-    const weatherCategory = getWeatherCategory(weatherData.description);
-    const filters = {
-        weather: weatherCategory,
-        temperature: temperatureCategory,
-    };
+  
+    const filters: any = {};
 
-    // Bygg querystring med filter
-    const params = new URLSearchParams(filters);
+  if (weatherData?.temperature) {
+    filters.temperature = getTemperatureCategory(weatherData.temperature);
+  }
+
+  if (weatherData?.description) {
+    filters.weather = getWeatherCategory(weatherData.description);
+  }
+
+  if (mode) {
+    filters.travelOptionName = mode;
+  }
+
+  console.log("Filters skickade till API:", filters);
+  console.log('mpde', mode);
+
+  const params = new URLSearchParams(filters);
     try{
         const response = await fetch(`${website}/products/filtered?${params.toString()}`,{
             method: 'GET',
@@ -19,8 +28,13 @@ export async function  getFilteredProducts(weatherData: any) {
         });
         if(response.ok){
             const data = await response.json();
-          
-            console.log(data);
+            const uniqueProducts = data.filter(
+                (product: any, index: number, self: any[]) =>
+                    index === self.findIndex((p) => p.id === product.id)
+            );
+        
+            console.log("Filtered products (unique):", uniqueProducts);
+            return uniqueProducts;
         }
     } catch(error){
         console.error('Failed to fetch products:', error);
@@ -63,3 +77,4 @@ function getWeatherCategory(description: string) {
         return 'cloudy'; // Standardkategori
     }
 }
+

@@ -1,0 +1,117 @@
+.vertical-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 85px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 50px;
+}
+  
+  .vertical-slider {
+    display: flex;
+    flex-direction: column; /* Gör layouten vertikal */
+    gap: 20px;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+    width: 100%;
+  }
+  
+  .vertical-item {
+    display: flex; /* Gör layouten horisontell för varje produkt */
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* Valfritt: Bakgrundsfärg */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .vertical-item .content {
+    flex: 1; /* Tar upp hela vänstra sidan */
+  }
+  
+  .vertical-item .content h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+  }
+  
+  .vertical-item .content p {
+    margin: 0 0 10px;
+  }
+  
+  .vertical-item .content .button-cart {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .vertical-item .image {
+    flex: 0 0 350px; /* Fixerad bredd för bilden */
+    margin-left: 20px;
+  }
+  
+  .vertical-item .image img {
+    width: 100%;
+    max-height: 350px;
+    height: auto;
+   
+    object-fit: cover;
+  }
+  
+  .vertical-carousel-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .vertical-carousel-button.prev-button {
+    top: -15px;
+  }
+  
+  .vertical-carousel-button.next-button {
+    bottom: -15px;
+  }
+  
+  .vertical-carousel-button svg {
+    width: 25px;
+    height: 25px;
+    fill: black;
+  }
+
+  .product-description {
+    margin-top: 20px;
+    max-width: 340px;
+    margin-left:10px
+  }
+
+
+  @media (max-width: 768px) {
+    .vertical-carousel {
+      max-width: 100%;
+    }
+  
+    .vertical-item {
+      width: 100%; /* Full bredd på mindre skärmar */
+    }
+  }
+  

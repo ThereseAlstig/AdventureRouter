@@ -58,7 +58,7 @@ export const getFilteredProductsBY = async (filters: {
     categoryTwo?: string | null;
     weather?: string | null;
     temperature?: string | null;
-    travelOptionId?: number | null;}) => {
+    travelOptionName?: string | null;}) => {
 
 
     // Grundläggande SQL-fråga
@@ -113,8 +113,8 @@ export const getFilteredProductsBY = async (filters: {
     if (filters.temperature) {
         whereClauses.push(`wt.name = ?`);
     }
-    if (filters.travelOptionId) {
-        whereClauses.push(`p.travel_option_id = ?`);
+    if (filters.travelOptionName) {
+        whereClauses.push(`t.name = ?`);
     }
 
     // Om några filter är angivna, lägg till en WHERE-klasul
@@ -128,6 +128,7 @@ export const getFilteredProductsBY = async (filters: {
         if (filters.categoryTwo) params.push(filters.categoryTwo);
         if (filters.weather) params.push(filters.weather);
         if (filters.temperature) params.push(filters.temperature);
+        if(filters.travelOptionName) params.push(filters.travelOptionName);
 
         
 

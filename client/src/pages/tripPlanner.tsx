@@ -4,6 +4,7 @@ import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from "@react-google
 import { getWeather } from "../api/weatherApi"; // Din väderfunktion
 import { ProductCarusellTips } from "../components/productCarusellTips";
 import { getFilteredProducts } from "../api/filterProductsApi";
+import { Product } from "../types/product";
 
 export const TripPlanner = () => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
@@ -13,6 +14,8 @@ export const TripPlanner = () => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const [distance, setDistance] = useState<string | null>(null);
 const [duration, setDuration] = useState<string | null>(null);
+const [modeTravelOptions, setModeTravelOptions] = useState<google.maps.TravelMode | null>(null);
+const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const fetchNearbyPlaces = (location: google.maps.LatLng) => {
     if (!mapRef.current) return;
 
@@ -50,6 +53,7 @@ const [duration, setDuration] = useState<string | null>(null);
     startDate,
     arrivalDate,
     mode,
+    modeTravel,
   }: {
     start: string;
     destination: string;
@@ -57,6 +61,7 @@ const [duration, setDuration] = useState<string | null>(null);
     startDate: string;
     arrivalDate: string;
     mode: google.maps.TravelMode;
+    modeTravel: string;
   }) => {
     if (!start || !destination) {
       alert("Start and destination are required.");
@@ -65,6 +70,7 @@ const [duration, setDuration] = useState<string | null>(null);
 
     try {
       // Hämta väder för start och destination
+      setModeTravelOptions(mode); 
       const startWeather = await getWeather(start, startDate);
       const destinationWeather = await getWeather(destination, arrivalDate);
 
@@ -83,11 +89,12 @@ const [duration, setDuration] = useState<string | null>(null);
         destination: destinationWeather,
         midpoint: midpointWeather,
       });
-console.log("startWeather", startWeather);
-if (startWeather) {
-  console.log("startWeather", startWeather);
-  getFilteredProducts(startWeather);
+
+if (startWeather || modeTravelOptions) {
+console.log("Fetching products for weather and travel mode", modeTravel);
+handleFetchFilteredProducts(startWeather, modeTravel);
 }
+
 
       // Hämta rutt från Google Maps
       const directionsService = new google.maps.DirectionsService();
@@ -116,6 +123,16 @@ if (startWeather) {
     } catch (error) {
       console.error("Error:", error);
       alert("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleFetchFilteredProducts = async (startWeather: any, modeTravel: any) => {
+    try {
+      const products = await getFilteredProducts(startWeather, modeTravel);
+      setFilteredProducts(products); 
+      console.log('filtered produkts', products)// Spara produkterna i state
+    } catch (error) {
+      console.error("Failed to fetch filtered products:", error);
     }
   };
 
@@ -187,7 +204,7 @@ if (startWeather) {
       </div>
 
       <div className= "tips_trips">
-        <ProductCarusellTips />
+        <ProductCarusellTips products={filteredProducts} />
         </div></div>   
          </div>
   );

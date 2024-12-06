@@ -19,7 +19,7 @@ try {
         categoryTwo: req.query.categoryTwo ? String(req.query.categoryTwo) : null,
         weather: req.query.weather ? String(req.query.weather) : null,
         temperature: req.query.temperature ? String(req.query.temperature) : null,
-        travelOptionId: req.query.travelOptionId ? Number(req.query.travelOptionId) : null,
+        travelOptionName: req.query.travelOptionName ? String(req.query.travelOptionName) : null,
       };
 
     const products = await productService.getFilteredProductsBY(filters);

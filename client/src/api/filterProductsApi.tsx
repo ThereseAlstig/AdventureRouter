@@ -60,7 +60,7 @@ function getTemperatureCategory(temperature: number) {
     } else if (temperature >= 20 && temperature < 30) {
         return 'Very warmly';
     } else {
-        return 'Very hot';
+        return '';
     }
 }
 
@@ -74,7 +74,7 @@ function getWeatherCategory(description: string) {
     } else if (description.toLowerCase().includes('clear') || description.toLowerCase().includes('sun')) {
         return 'sunny'; // Matchar sol
     } else {
-        return 'cloudy'; // Standardkategori
+        return ''; // Standardkategori
     }
 }
 

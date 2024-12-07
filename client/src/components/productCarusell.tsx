@@ -51,27 +51,9 @@ const [isMobile, setIsMobile] = useState(false);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-    // const settings = {
-    //     dots: false, // Visa inte pagination-punkter
-    //     infinite: true, // Oändlig scroll
-    //     speed: 500, // Hastighet för scroll i ms
-    //     slidesToShow: 3, // Antal produkter att visa
-    //     slidesToScroll: 1, // Antal produkter att scrolla åt gången
-    //     responsive: [
-    //         {
-    //             breakpoint: 768, // För skärmar mindre än 768px
-    //             settings: {
-    //                 slidesToShow: 1, // Visa en produkt åt gången
-    //                 slidesToScroll: 1,
-    //             },
-    //         },
-    //     ],
-    //     nextArrow: <NextArrow />,
-    //     prevArrow: <PrevArrow />,
-    // };
 
     const productsToShow = isMobile ? 1 : productsPerPage;
-
+//slider för mobile
     const swipeHandlers = useSwipeable({
         onSwipedLeft: () => {
           if (currentIndex < products.length - productsToShow) {
@@ -101,25 +83,7 @@ const [isMobile, setIsMobile] = useState(false);
       currentIndex,
       translateX: (currentIndex * (100 / productsToShow)),
     });
-    // console.log({
-    //   currentIndex,
-    //   productsToShow,
-    //   totalProducts: products.length,
-    //   translateX: (currentIndex * 100) / productsToShow,
-    // });
-
-    // const calculateTranslateX = () => {
-    //   const isLastSlide =
-    //     currentIndex === Math.ceil(products.length / productsToShow) - 1;
-    //   const remainingProducts = products.length % productsToShow;
-    
-    //   // Om det är sista raden och den inte fyller hela raden
-    //   if (isLastSlide && remainingProducts !== 0) {
-    //     return (currentIndex * 100) / productsToShow - (100 - (remainingProducts / productsToShow) * 100);
-    //   }
-    
-    //   return (currentIndex * 100) / productsToShow;
-    // };
+   
     const calculateTranslateX = () => {
       if (!sliderRef.current) {
         console.warn("Slider ref not available"); // Om referensen saknas

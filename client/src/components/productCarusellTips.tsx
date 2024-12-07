@@ -14,7 +14,7 @@ interface ProductCarusellProps {
 export const ProductCarusellTips: React.FC<ProductCarusellProps> = ({ products }) => {
 
 const [isMobile, setIsMobile] = useState(false);
-  const productsPerPage = 1;
+  const productsPerPage = 3;
   // const sliderRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,7 +35,7 @@ const [isMobile, setIsMobile] = useState(false);
     }
   
     // Hitta det första elementet i slidern
-    const productElement = sliderRef.current.querySelector(".product-item") as HTMLElement | null;
+    const productElement = sliderRef.current.querySelector(".vertical-item") as HTMLElement | null;
   
     if (!productElement) {
       console.warn("Product item not found in slider");
@@ -56,21 +56,22 @@ const [isMobile, setIsMobile] = useState(false);
  
 
     const productsToShow = isMobile ? 1 : productsPerPage;
+//slider för mobile
+const swipeHandlers = useSwipeable({
+  onSwipedUp: () => {
+    if (currentIndex < products.length - productsToShow) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  },
+  onSwipedDown: () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  },
+  preventScrollOnSwipe: true,
+  trackMouse: true,
+});
 
-    const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => {
-          if (currentIndex < products.length - productsToShow) {
-            setCurrentIndex(currentIndex + 1);
-          }
-        },
-        onSwipedRight: () => {
-          if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-          }
-        },
-        preventScrollOnSwipe: true,
-        trackMouse: true,
-      });
     const nextSlide = () => {
    
       if (currentIndex < products.length - productsToShow) {
@@ -82,19 +83,22 @@ const [isMobile, setIsMobile] = useState(false);
           setCurrentIndex(currentIndex - 1);
         }
       };
-    console.log({
-      currentIndex,
-      translateX: (currentIndex * (100 / productsToShow)),
-    });
-   
+ 
+
     const calculateTranslateX = () => {
+      if (!sliderRef.current) return 0;
+      const productWidth = sliderRef.current.offsetWidth; // Full bredd
+      return currentIndex * (productWidth + 20); // 20px mellanrum
+    };
+   
+    const calculateTranslateY = () => {
       if (!sliderRef.current) {
         console.warn("Slider ref not available"); // Om referensen saknas
         return 0;
       }
     
       // Hitta det första produkt-elementet
-      const productElement = sliderRef.current.querySelector(".product-item") as HTMLElement | null;
+      const productElement = sliderRef.current.querySelector(".vertical-item") as HTMLElement | null;
     
       if (!productElement) {
         console.warn("Product item not found in slider"); // Om det inte finns några produkter
@@ -102,25 +106,20 @@ const [isMobile, setIsMobile] = useState(false);
       }
     
       // Bredden på en produkt (inklusive margin eller padding)
-      const productWidth = productElement.offsetWidth;
+      const productHeight = 350;
       const gap = 20;
     
-      const translateX = currentIndex * (productWidth + gap);
+      const translateY = currentIndex * (productHeight + gap);
     
-      console.log({
-        currentIndex,
-        productWidth,
-        gap,
-        translateX,
-      });
-    
-      return translateX;
+      return translateY;
     };
     
 
     return (
-      
+      <>
+       <h1>Recomended products:</h1>
             <div className="vertical-carousel">
+             
               <div    ref={(node) => {
     if (node) {
       sliderRef.current = node; // Koppla ref manuellt
@@ -131,20 +130,22 @@ const [isMobile, setIsMobile] = useState(false);
   }}
                 className="vertical-slider"
                 style={{
-                  transform: `translateX(-${calculateTranslateX()}px)`,
-              
+                  transform: isMobile
+                    ? `translateX(-${calculateTranslateX()}px)` // Horisontellt i mobil
+                    : `translateY(-${calculateTranslateY()}px)`, // Vertikalt annars
                 }}
               >
                 {products.map((product) => (
                   <div key={product.id} className="vertical-item"  style={{
-                    flex: `0 0 calc((100% - (${productsToShow} - 1) * 20px) / ${productsToShow})`, // Dynamisk bredd
+                    height: `calc((100% - (${productsToShow} - 1) * 20px) / ${productsToShow})`,
+                   // Dynamisk bredd
                   }}>
                      <div className="image">
         <img src={product.image_url} alt={product.name}/>
       </div>
       <div className="product-description">
                     <h3>{product.name}</h3>
-                    <p>{product.description}</p>
+                
                     <p>{product.price} kr</p>
                     <button className="button-cart">PUT IN CART</button>
                  </div> </div>
@@ -176,7 +177,7 @@ const [isMobile, setIsMobile] = useState(false);
                   </button>
                 </>
               )}
-            </div>
+            </div></>
           );
         
 };

@@ -91,7 +91,7 @@ const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
       });
 
 if (startWeather || modeTravelOptions) {
-console.log("Fetching products for weather and travel mode", modeTravel);
+console.log("Fetching products for weather and travel mode", modeTravel, startWeather);
 handleFetchFilteredProducts(startWeather, modeTravel);
 }
 

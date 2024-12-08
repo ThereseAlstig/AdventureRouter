@@ -10,6 +10,7 @@ import { MyPage } from '../pages/myPage';
 import { Admin } from '../pages/admin';
 import { CategoryPage } from '../pages/categoryPage';
 import { SubcategoryPage } from '../pages/subcategoryPage';
+import GoogleCallbackHandler from '../api/googleCallbackHandler';
 
 const Router = createBrowserRouter([
 
@@ -53,7 +54,10 @@ element: <MyPage/>
 {
     path: "/categories/:categoryId/subcategories/:subcategoryId",
     element: <SubcategoryPage />,
-},
+},{
+    path: "/google/callback",
+    element: <GoogleCallbackHandler/>,
+}
 
 ]
 

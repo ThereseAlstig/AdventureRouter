@@ -6,6 +6,7 @@ interface AuthContextType {
     isAuthenticated: boolean;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
+    googleLogin: (token: string) => void;
   }
 
 
@@ -43,6 +44,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(true);
   };
 
+
+  const googleLogin = (token: string) => {
+    if (token) {
+      sessionStorage.setItem('token', token);
+      setIsAuthenticated(true);
+    } else {
+      throw new Error('Google login failed: Missing token');
+    }
+  };
+
   const logout = async () => {
     console.log('logout');
     try {
@@ -73,7 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, googleLogin }}>
       {children}
     </AuthContext.Provider>
   );

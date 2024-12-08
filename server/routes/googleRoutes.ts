@@ -19,7 +19,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     );
 
     
-    res.status(200).json({ token, email: user.email });
+    res.redirect(`${callback}?token=${token}&email=${user.email}`);// Ändra till din frontend-URL
 });
 
 

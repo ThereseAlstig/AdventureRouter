@@ -17,7 +17,6 @@ const passport_github2_1 = require("passport-github2");
 const passport_1 = __importDefault(require("passport"));
 const userService_1 = require("../services/userService");
 const dotenv_1 = __importDefault(require("dotenv"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 dotenv_1.default.config();
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID || '',
@@ -33,13 +32,6 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
             username: profile.displayName,
             googleId: profile.id,
         });
-        const token = jsonwebtoken_1.default.sign({
-            id: user.id,
-            email: user.email,
-            role: user.role,
-        }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-        console.log('Generated token:', token); // Kontrollera att token genereras korrekt
-        // Logga token för debugging
         // Logga användarens data
         done(null, user);
     }

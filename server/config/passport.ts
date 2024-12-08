@@ -32,20 +32,7 @@ passport.use(
                 googleId: profile.id,
               });
 
-              const token = jwt.sign(
-                {
-                    id: user.id,
-                    email: user.email,
-                    role: user.role,
-                },
-                process.env.JWT_SECRET || 'your_jwt_secret',
-                { expiresIn: '1h' }
-            );
-
-            console.log('Generated token:', token); // Kontrollera att token genereras korrekt
       
-      
-             // Logga token för debugging
       
              // Logga användarens data
               done(null, user);

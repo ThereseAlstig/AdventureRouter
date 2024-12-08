@@ -76,17 +76,6 @@ const logoutUser = (req, res) => {
         secure: isProduction,
     });
     console.log('Cleared userEmail cookie');
-    res.cookie('authToken', '', {
-        httpOnly: true,
-        secure: isProduction,
-        expires: new Date(0),
-        path: '/',
-    });
-    res.cookie('userEmail', '', {
-        secure: isProduction,
-        expires: new Date(0),
-        path: '/',
-    });
     res.status(200).json({ message: 'User logged out' });
 };
 exports.logoutUser = logoutUser;

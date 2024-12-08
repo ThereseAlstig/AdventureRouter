@@ -19,6 +19,15 @@ router.get('/github/callback', passport_1.default.authenticate('github', { sessi
         id: user.id,
         email: user.email,
     }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-    res.redirect(`${callback}?token=${token}`);
+    res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600000,
+    });
+    res.cookie('userEmail', user.email, {
+        secure: true,
+        maxAge: 3600000,
+    });
+    res.redirect(`${callback}`);
 });
 exports.default = router;

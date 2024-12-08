@@ -54,7 +54,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       const token = jwt.sign({ id: user.id, email: user.email, role: user.role  }, process.env.JWT_SECRET!, {
         expiresIn: '1h',
       });
-  
+     
       res.status(200).json({ token, email:user.email, username: user.username, role: user.role });
     } catch (error) {
       next(error); // Skicka vidare fel till Express error-handler
@@ -63,6 +63,25 @@ export const loginUser: RequestHandler = async (req, res, next) => {
 
 
 export const logoutUser: RequestHandler = (req: Request, res: Response) => {
+
+  const isProduction = process.env.NODE_ENV === 'production';
+
+res.clearCookie('authToken', {
+    httpOnly: true,
+    secure: isProduction,
+
+});
+
+console.log('Cleared authToken cookie');
+
+res.clearCookie('userEmail', {
+    secure: isProduction,
+   
+});
+
+console.log('Cleared userEmail cookie');
+
+
   res.status(200).json({ message: 'User logged out' });
 };
 

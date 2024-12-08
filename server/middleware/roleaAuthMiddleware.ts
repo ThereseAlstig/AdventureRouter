@@ -1,13 +1,6 @@
 import { IUser } from '../models/userModel'; // Importera din IUser-typ
 import { Request, Response, NextFunction } from 'express';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser; // Egenskapen 'user' som du vill använda
-    }
-  }
-}
 
 export const requireRole = (role: string) => {
     return (req: Request, res: Response, next: NextFunction) => {

@@ -64,9 +64,27 @@ Content-Type: application/x-www-form-urlencoded
 
 ###
 
-POST  http://localhost:3000/orders/createOrders
-
+POST http://localhost:3000/orders/createOrders HTTP/1.1:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzU3NDA1NCwiZXhwIjoxNzMzNTc3NjU0fQ.NqZ_dnSccDcLE8l1RsoMwMd47wGOcNsN_Vfg2zW8Kdk
 Content-Type: application/json
+
+{
+  "userEmail": "therese.alsig@gmail.com",
+  "address": "123 Example Street, City, Country",
+  "items": [
+    {
+      "productId": 56,
+      "quantity": 2,
+      "price": 50.00
+    },
+    {
+      "productId": 57,
+      "quantity": 1,
+      "price": 100.00
+    }
+  ]
+}
+
 
 
 

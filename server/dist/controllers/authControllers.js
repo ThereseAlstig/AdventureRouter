@@ -55,10 +55,10 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             res.status(401).json({ message: 'Invalid credentials' });
             return; // Avsluta här
         }
-        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
-        res.status(200).json({ token, email: user.email, username: user.username });
+        res.status(200).json({ token, email: user.email, username: user.username, role: user.role });
     }
     catch (error) {
         next(error); // Skicka vidare fel till Express error-handler

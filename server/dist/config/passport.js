@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_google_oauth20_1 = require("passport-google-oauth20");
+const passport_github2_1 = require("passport-github2");
 const passport_1 = __importDefault(require("passport"));
 const userService_1 = require("../services/userService");
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -27,9 +28,8 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
     try {
         console.log('Google profile received:', profile); // Logga hela profilen
         console.log('Google email:', (_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value);
-        const email = ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value) || '';
         let user = yield (0, userService_1.findOrCreateUserByGoogle)({
-            email,
+            email: ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value) || '',
             username: profile.displayName,
             googleId: profile.id,
         });
@@ -37,9 +37,8 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
             id: user.id,
             email: user.email,
             role: user.role,
-        }, process.env.JWT_SECRET || 'your_jwt_secret', // Hämta från miljövariabler
-        { expiresIn: '1h' } // Token gäller i 1 timme
-        );
+        }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
+        console.log('Generated token:', token); // Kontrollera att token genereras korrekt
         // Logga token för debugging
         // Logga användarens data
         done(null, user);
@@ -49,3 +48,34 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
         done(error);
     }
 })));
+passport_1.default.use(new passport_github2_1.Strategy({
+    clientID: process.env.GITHUB_CLIENT_ID || '',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+    callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+}, (profile, done) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const user = yield (0, userService_1.findOrCreateUserByGithub)({
+            email: ((_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value) || '',
+        });
+        // Skicka användaren till req.user
+        done(null, {
+            id: user.id,
+            email: user.email,
+        });
+    }
+    catch (error) {
+        done(error);
+    }
+})));
+passport_1.default.serializeUser((user, done) => done(null, user.email));
+passport_1.default.deserializeUser((email, done) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield (0, userService_1.findUserByEmail)(email); // Implementera denna funktion
+        done(null, user);
+    }
+    catch (error) {
+        done(error);
+    }
+}));
+exports.default = passport_1.default;

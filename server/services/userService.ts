@@ -63,3 +63,24 @@ export const findOrCreateUserByGoogle = async (data: {
 
   return user;
 };
+export const findOrCreateUserByGithub = async (data: {
+  email: string;
+  username?: string;
+  
+ 
+}): Promise<IUser> => {
+  // Kontrollera om användaren redan finns baserat på e-post
+  let user = await findUserByEmail(data.email);
+
+  if (!user) {
+    // Skapa en ny användare om ingen hittas
+    user = await createUser({
+      email: data.email,
+      role: 'user', // Standardroll för nya användare
+    });
+  }
+
+  return user;
+  
+  
+};

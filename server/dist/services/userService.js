@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = void 0;
+exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = __importDefault(require("../config/db"));
 // Din databasanslutning
@@ -60,3 +60,16 @@ const findOrCreateUserByGoogle = (data) => __awaiter(void 0, void 0, void 0, fun
     return user;
 });
 exports.findOrCreateUserByGoogle = findOrCreateUserByGoogle;
+const findOrCreateUserByGithub = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    // Kontrollera om användaren redan finns baserat på e-post
+    let user = yield (0, exports.findUserByEmail)(data.email);
+    if (!user) {
+        // Skapa en ny användare om ingen hittas
+        user = yield (0, exports.createUser)({
+            email: data.email,
+            role: 'user', // Standardroll för nya användare
+        });
+    }
+    return user;
+});
+exports.findOrCreateUserByGithub = findOrCreateUserByGithub;

@@ -13,32 +13,29 @@ exports.createOrderService = void 0;
 const createOrderService = (pool, orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const { userEmail, items, address } = orderData;
     // 1. Beräkna totalpris
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const connection = yield pool.getConnection();
     try {
-        // Starta en transaktion
         yield connection.beginTransaction();
-        // 2. Infoga order i Orders-tabellen
-        const [orderResult] = yield connection.query('INSERT INTO Orders (user_email, total_price, address) VALUES (?, ?)', [userEmail, totalPrice, address]);
-        const orderId = orderResult.insertId; // ID för den nya ordern
-        // 3. Infoga varje produkt i OrderItems-tabellen
+        // 1. Skapa order
+        const [orderResult] = yield connection.query('INSERT INTO Orders (user_email, address, is_paid) VALUES (?, ?, ?)', [userEmail, address, false]);
+        const orderId = orderResult.insertId;
+        let totalPrice = 0;
+        // 2. Lägg till produkter och beräkna totalpris
         for (const item of items) {
-            yield connection.query('INSERT INTO OrderItems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)', [orderId, item.productId, item.quantity, item.price]);
+            const [productRows] = yield connection.query('SELECT price FROM Products WHERE id = ?', [item.productId]);
+            if (productRows.length === 0) {
+                throw new Error(`Product with ID ${item.productId} not found`);
+            }
+            const productPrice = productRows[0].price;
+            totalPrice += productPrice * item.quantity;
+            yield connection.query('INSERT INTO OrderItems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)', [orderId, item.productId, item.quantity, productPrice]);
         }
-        // Bekräfta transaktionen
+        // 3. Uppdatera totalpris i Orders
+        yield connection.query('UPDATE Orders SET total_price = ? WHERE id = ?', [totalPrice, orderId]);
         yield connection.commit();
-        // Returnera orderns information
-        return {
-            orderId,
-            userEmail,
-            totalPrice,
-            address,
-            items,
-            createdAt: new Date(),
-        };
+        return { orderId, totalPrice };
     }
     catch (err) {
-        // Återställ transaktionen vid fel
         yield connection.rollback();
         throw err;
     }

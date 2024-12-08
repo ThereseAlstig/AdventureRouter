@@ -66,16 +66,6 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 });
 exports.loginUser = loginUser;
 const logoutUser = (req, res) => {
-    const isProduction = process.env.NODE_ENV === 'production';
-    res.clearCookie('authToken', {
-        httpOnly: true,
-        secure: isProduction,
-    });
-    console.log('Cleared authToken cookie');
-    res.clearCookie('userEmail', {
-        secure: isProduction,
-    });
-    console.log('Cleared userEmail cookie');
     res.status(200).json({ message: 'User logged out' });
 };
 exports.logoutUser = logoutUser;

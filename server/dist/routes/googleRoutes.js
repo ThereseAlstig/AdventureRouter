@@ -13,18 +13,6 @@ router.get('/google/callback', passport_1.default.authenticate('google', { sessi
     console.log('User authenticated:', req.user);
     const user = req.user;
     const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-    const isProduction = process.env.NODE_ENV === 'true';
-    // Omdirigera användaren till frontend
-    res.cookie('authToken', token, {
-        httpOnly: true, // Gör cookien otillgänglig för JavaScript
-        secure: isProduction,
-        path: '/', // Använd bara över HTTPS
-    });
-    res.cookie('userEmail', user.email, {
-        httpOnly: true, // Gör cookien otillgänglig för JavaScript
-        secure: true, // Använd bara över HTTPS
-        path: '/', // Använd bara över HTTPS
-    });
-    res.redirect(callback); // Ändra till din frontend-URL
+    res.status(200).json({ token, email: user.email });
 });
 exports.default = router;

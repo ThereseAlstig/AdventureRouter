@@ -21,13 +21,43 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   const auth = useContext(AuthContext);
 
  
-  const handleGoogleLogin = () => {
+  // const handleGoogleLogin = () => {
+  //   const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+  //   console.log(key);
+  //   // Omdirigera användaren till Google OAuth-flödet via backend
+  //   window.location.href = `${key}/user/google`;
+  //   console.log('google login');
+  // };
+
+  const handleGoogleLogin = async () => {
     const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-    console.log(key);
-    // Omdirigera användaren till Google OAuth-flödet via backend
-    window.location.href = `${key}/user/google`;
-    console.log('google login');
-  };
+  try {
+      const response = await fetch(`${key}/user/google/callback`, {
+          method: 'GET',
+          credentials: 'include', // Om cookies används
+      });
+
+      if (!response.ok) {
+          throw new Error('Authentication failed');
+      }
+
+      const data = await response.json();
+
+      if (data.token && data.email) {
+          // Spara token och email
+          await login(data.email, data.password); 
+
+      
+      } else {
+          throw new Error('Missing token or email');
+      }
+  } catch (err: any) {
+      console.error('Error:', err.message || 'Failed to authenticate');
+      // Navigera till inloggningssidan vid fel
+      navigate('/login?error=AuthenticationFailed');
+  }
+};
+
   if (!auth) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }  

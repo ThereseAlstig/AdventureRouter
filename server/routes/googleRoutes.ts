@@ -18,24 +18,8 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
         { expiresIn: '1h' }
     );
 
-    const isProduction = process.env.NODE_ENV === 'true';
-    // Omdirigera användaren till frontend
-    res.cookie('authToken', token, {
-        httpOnly: true, // Gör cookien otillgänglig för JavaScript
-        secure: isProduction,
-        path: '/', // Använd bara över HTTPS
-        
-      
-    });
-
-    res.cookie('userEmail', user.email, {
-        httpOnly: true, // Gör cookien otillgänglig för JavaScript
-        secure: true, // Använd bara över HTTPS
-        path: '/', // Använd bara över HTTPS
-      
-       
-    });
-    res.redirect(callback); // Ändra till din frontend-URL
+    
+    res.status(200).json({ token, email: user.email });
 });
 
 

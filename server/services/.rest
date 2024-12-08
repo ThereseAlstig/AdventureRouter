@@ -59,7 +59,7 @@ GET http://localhost:3000/products/categories
 GET http://localhost:3000/user/google
 
 ###
-GET http://localhost:3000/user/google/callback
+GET http://localhost:3000/user/github/callback
 Content-Type: application/x-www-form-urlencoded
 
 ###

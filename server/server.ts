@@ -14,6 +14,7 @@ import authRoutes from './routes/authRouter';
 import './config/passport'; 
 import googleRoutes from './routes/googleRoutes'; // Import googleRoutes
 import orderRouter from './routes/orderRouter'; // Import ordersRoutes
+import githubRoutes from './routes/githubRouter'; // Import githubRoutes
 import travelRoutes from './routes/travelRouter';
 
 
@@ -56,6 +57,7 @@ app.use('/auth', authRoutes);
 app.use('/user', googleRoutes);
 app.use('/orders', orderRouter);
 app.use('/api', travelRoutes);
+app.use('/user', githubRoutes);
 
 // Starta servern
 app.listen(PORT, () => {

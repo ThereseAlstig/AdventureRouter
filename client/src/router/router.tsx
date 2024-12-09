@@ -11,6 +11,7 @@ import { Admin } from '../pages/admin';
 import { CategoryPage } from '../pages/categoryPage';
 import { SubcategoryPage } from '../pages/subcategoryPage';
 import GoogleCallbackHandler from '../api/googleCallbackHandler';
+import GitHubCallbackHandler from '../api/gitHubCallbackHandler';
 
 const Router = createBrowserRouter([
 
@@ -57,8 +58,11 @@ element: <MyPage/>
 },{
     path: "/google/callback",
     element: <GoogleCallbackHandler/>,
+},
+{ 
+    path: "github/callback", 
+    element: <GitHubCallbackHandler />
 }
-
 ]
 
 }

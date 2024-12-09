@@ -34,6 +34,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   if (!auth) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }  
+
+  const handleGithubLogin = () => {
+    const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL; // Din backend-URL
+    window.location.href = `${backendUrl}/user/github`; // Backend-route som startar OAuth-flödet
+};
   
   const { login} = auth;
   // Hantera inloggning
@@ -123,7 +128,7 @@ console.log(data);
             />
           </div>
           <button type="submit">{isCreatingAccount ? 'Create Account' : 'Log In'}</button>
-          {!isCreatingAccount && (<button onClick={handleGoogleLogin}>{isCreatingAccount ? 'Create Account' : 'Log In Via google'}</button>)}
+          {!isCreatingAccount && (<><button onClick={handleGoogleLogin}>{isCreatingAccount ? 'Create Account' : 'Log In Via google'}</button><button onClick={handleGithubLogin}>{isCreatingAccount ? 'Create Account' : 'Log In Via GitHub'}</button></>)}
           {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Visa felmeddelande om det finns */}
           {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>} {/* Visa framgångsmeddelande */}
         </form>

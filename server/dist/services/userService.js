@@ -55,7 +55,8 @@ const findOrCreateUserByGoogle = (data) => __awaiter(void 0, void 0, void 0, fun
         // Skapa en ny användare om ingen hittas
         user = yield (0, exports.createUser)({
             email: data.email,
-            role: 'user', // Standardroll för nya användare
+            role: 'user',
+            username: data.username, // Standardroll för nya användare
         });
     }
     return user;
@@ -67,6 +68,7 @@ const findOrCreateUserByGithub = (data) => __awaiter(void 0, void 0, void 0, fun
     if (!user) {
         // Skapa en ny användare om ingen hittas
         user = yield (0, exports.createUser)({
+            username: data.username,
             email: data.email,
             role: 'user', // Standardroll för nya användare
         });

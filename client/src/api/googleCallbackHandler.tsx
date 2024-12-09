@@ -10,23 +10,20 @@ const GoogleCallbackHandler: React.FC = () => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
-
+        console.log('Token from URL:', token);
         if (token) {
+            console.log('Current URL:', window.location.href);
+
             try {
                 if (googleLogin) {
-                    googleLogin(token); // Använd googleLogin för att lagra token
-                } else {
-                    console.error('googleLogin is undefined');
-                    navigate('/login');
-                }
-                navigate('/my-page'); // Navigera till en skyddad sida
+                    googleLogin(token); 
+                    navigate('/my-page');
+                    // Använd googleLogin för att lagra token
+                } 
             } catch (error) {
                 console.error('Error during Google login:', error);
-                navigate('/login'); // Navigera tillbaka till login vid fel
+                navigate('/'); // Navigera tillbaka till login vid fel
             }
-        } else {
-            console.error('Missing token in callback URL');
-            navigate('/login'); // Navigera tillbaka till login vid fel
         }
     }, [googleLogin, navigate]);
 

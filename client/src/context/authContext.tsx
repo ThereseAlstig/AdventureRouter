@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 
+
 // Skapa Context
 
 interface AuthContextType {
@@ -46,7 +47,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 
   const googleLogin = (token: string) => {
+    
     if (token) {
+           console.log('Saving token in sessionStorage...');
       sessionStorage.setItem('token', token);
       setIsAuthenticated(true);
     } else {

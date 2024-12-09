@@ -13,6 +13,7 @@ router.get('/google/callback', passport_1.default.authenticate('google', { sessi
     console.log('User authenticated:', req.user);
     const user = req.user;
     const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-    res.redirect(`${callback}?token=${token}&email=${user.email}`); // Ändra till din frontend-URL
+    console.log(`Token:, ${callback}/google/callback?token=${token}&email=${user.email}`);
+    res.redirect(`${callback}/google/callback?token=${token}&email=${user.email}`); // Ändra till din frontend-URL
 });
 exports.default = router;

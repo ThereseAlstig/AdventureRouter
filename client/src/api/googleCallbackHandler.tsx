@@ -16,16 +16,14 @@ const GoogleCallbackHandler: React.FC = () => {
         if (token) {
             console.log('Current URL:', window.location.href);
 
-            try {
                 if (googleLogin) {
                     googleLogin(token, username ?? '', email ?? ''); 
                     navigate('/my-page');
                     // Använd googleLogin för att lagra token
-                } 
-            } catch (error) {
-                console.error('Error during Google login:', error);
-                navigate('/'); // Navigera tillbaka till login vid fel
-            }
+                }else {
+                    console.error('Missing token in callback URL');
+                    navigate('/'); // Navigera till startsidan vid fel
+                }
         }
     }, [googleLogin, navigate]);
 

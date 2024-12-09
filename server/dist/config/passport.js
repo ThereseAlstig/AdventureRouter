@@ -43,30 +43,21 @@ passport_1.default.use(new passport_github2_1.Strategy({
     clientID: process.env.GITHUB_CLIENT_ID || '',
     clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
     callbackURL: process.env.GITHUB_CALLBACK_URL || '',
-}, (profile, done) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    scope: ['user:email'],
+}, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
     try {
+        // Typdefinition för email-objekten
+        const primaryEmail = ((_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a.find((email) => email.primary)) === null || _b === void 0 ? void 0 : _b.value) || ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value);
         const user = yield (0, userService_1.findOrCreateUserByGithub)({
-            email: ((_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value) || '',
+            email: primaryEmail || '',
+            username: profile.username || '',
         });
         // Skicka användaren till req.user
-        done(null, {
-            email: user.email,
-            username: user.username,
-        });
-    }
-    catch (error) {
-        done(error);
-    }
-})));
-passport_1.default.serializeUser((user, done) => done(null, user.email));
-passport_1.default.deserializeUser((email, done) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield (0, userService_1.findUserByEmail)(email); // Implementera denna funktion
         done(null, user);
     }
     catch (error) {
         done(error);
     }
-}));
+})));
 exports.default = passport_1.default;

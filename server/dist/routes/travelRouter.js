@@ -8,4 +8,6 @@ const travelConbtrollers_1 = require("../controllers/travelConbtrollers");
 const router = express_1.default.Router();
 // Route för att hämta produkter baserat på väderförhållande
 router.get('/weather-products', travelConbtrollers_1.getWeatherProducts);
+router.post('/travel-journey', travelConbtrollers_1.createTrip);
+router.get('/travels', travelConbtrollers_1.trips);
 exports.default = router;

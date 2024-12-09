@@ -85,6 +85,36 @@ Content-Type: application/json
   ]
 }
 
+### Login User
+POST http://localhost:3000/api/travel-journey
+Content-Type: application/json
 
 
+{
+    "userEmail": "therese.alstig@gmail.com",
+    "startDate": "2024-12-10T08:00:00",
+    "endDate": "2024-12-12T18:00:00",
+    "travelMode": "car",
+    "startCity": "Stockholm",
+    "endCity": "Umeå",
+    "stops": [
+        { "cityName": "Luleå", "order": 1 },
+        { "cityName": "Sundsvall", "order": 2 }
+    ],
+    "startWeather": {
+        "weatherType": "Sunny",
+        "temperature": 25.5,
+        "windSpeed": 5.2,
+        "description": "Clear weather in Stockholm"
+    },
+    "endWeather": {
+        "weatherType": "Cloudy",
+        "temperature": 15.0,
+        "windSpeed": 3.1,
+        "description": "Cloudy weather in Umeå"
+    }
+}
 
+
+###
+GET http://localhost:3000/api/travels

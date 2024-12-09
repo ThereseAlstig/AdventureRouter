@@ -11,13 +11,12 @@ export const getAllProducts = async () => {
             p.description,
             p.image_url,
             p.in_stock,
-            p.travel_option_id,
 
                 c1.name AS category_one_name,
                 c2.name AS category_two_name,
                 w.name AS weather_name,
                 wt.name AS weather_temperature_name,
-                t.name AS travel_option_name
+                t2.name AS travel_options
 
         FROM 
             Products p
@@ -38,8 +37,10 @@ LEFT JOIN
         ProductWeatherTemperature pwt ON p.id = pwt.product_id
     LEFT JOIN 
         WeatherTemperature wt ON pwt.temperature_id = wt.id
-        LEFT JOIN
-        TravelOptions t on p.travel_option_id = t.id;
+LEFT JOIN 
+    ProductTravel pt ON p.id = pt.product_id
+LEFT JOIN 
+    TravelOptions t2 ON pt.travel_id = t2.id;
      `;
 
     try {
@@ -69,7 +70,6 @@ export const getFilteredProductsBY = async (filters: {
         p.price,
         p.description,
         p.image_url,
-        p.travel_option_id,
         t.name AS travel_option_name, 
         p.in_stock,
         c1.name AS category_one_name,
@@ -79,7 +79,9 @@ export const getFilteredProductsBY = async (filters: {
     FROM 
         Products p
     LEFT JOIN 
-        TravelOptions t on p.travel_option_id = t.id
+        ProductTravel pt ON p.id = pt.product_id
+    LEFT JOIN 
+        TravelOptions t on pt.travel_id = t.id
     LEFT JOIN 
         CategoryProduct cp ON p.id = cp.product_id
     LEFT JOIN 
@@ -146,11 +148,14 @@ export const getFilteredProductsBY = async (filters: {
 export const createProduct = async (productData: any) => {
     try {
         const [result] = await pool.query<ResultSetHeader>(
-            'INSERT INTO Products (name, price, description, travel_option_id, image_url, in_stock) VALUES (?, ?, ?, ?, ?, ?)',
-            [productData.name, productData.price, productData.description, productData.travel_option_id, productData.image_url, productData.in_stock]
+            'INSERT INTO Products (name, price, description, image_url, in_stock) VALUES (?, ?, ?, ?, ?)',
+            [productData.name, productData.price, productData.description, productData.image_url, productData.in_stock]
         );
       
-
+if(productData.travel_option_id && productData.travel_option_id.length > 0) {
+const travelValues = productData.travel_option_id.map((travelId: number) => [result.insertId, travelId]);
+await pool.query('INSERT INTO ProductTravel (product_id, travel_id) VALUES ?', [travelValues]);
+}
 if(productData.productCategories && productData.productCategories.length > 0) {
 const categoryValues = productData.productCategories.map((categoryId: number) => [result.insertId, categoryId]);
 await pool.query('INSERT INTO CategoryProduct (product_id, category_id) VALUES ?', [categoryValues]);

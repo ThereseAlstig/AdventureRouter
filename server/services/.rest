@@ -2,12 +2,12 @@ POST http://localhost:3000/products HTTP/1.1
 Content-Type: application/json
 
 {
+    "travel_option_id": [1, 2, 3],
     "weather_ids": [1, 2, 3],
     "productCategories": [1, 2, 3],
     "name": "Test Product",
     "price": 10.99,
     "description": "A product description",
-    "travel_option_id": 1,
     "image_url": "image.jpg",
     "in_stock": true
 }
@@ -43,9 +43,9 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/products/filtered?travelOptionName=motorcycle
+GET http://localhost:3000/products/filtered?travelOptionName=hike
 ###
-GET http://localhost:3000/products/travel-options
+GET http://localhost:3000/products/
 
 ###
 

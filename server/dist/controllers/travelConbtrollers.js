@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getWeatherProducts = void 0;
+exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
+const travelService_1 = require("../services/travelService");
 // Controller: Hämta produkter baserat på väderförhållande
 const getWeatherProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { weatherCondition } = req.query;
@@ -38,3 +39,27 @@ const getWeatherProducts = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getWeatherProducts = getWeatherProducts;
+const createTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, travelService_1.CreateTrip)(req, res);
+        res.status(201).json(result); // Skicka tillbaka framgångsmeddelande och tripId
+    }
+    catch (error) {
+        console.error('Error in createTrip controller:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ message: 'Failed to create trip', error: errorMessage });
+    }
+});
+exports.createTrip = createTrip;
+const trips = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, travelService_1.getTripWithDetails)(req, res);
+        res.status(201).json(result); // Skicka tillbaka framgångsmeddelande och tripId
+    }
+    catch (error) {
+        console.error('Error in createTrip controller:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ message: 'Failed to create trip', error: errorMessage });
+    }
+});
+exports.trips = trips;

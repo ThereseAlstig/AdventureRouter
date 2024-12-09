@@ -52,6 +52,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
     fetchTravelOptions();
   }, []);
 
+  //Filterar ut vilken mode som ska användas, beroende på om de tär för google map eller filtrera produkter
   const mapMode = (mode: string): { travelMode: google.maps.TravelMode; filterMode: string } => {
     const modeLower = mode.toLowerCase();
   

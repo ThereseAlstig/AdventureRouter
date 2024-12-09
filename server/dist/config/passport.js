@@ -30,7 +30,6 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
         let user = yield (0, userService_1.findOrCreateUserByGoogle)({
             email: ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value) || '',
             username: profile.displayName,
-            googleId: profile.id,
         });
         // Logga användarens data
         done(null, user);
@@ -52,8 +51,8 @@ passport_1.default.use(new passport_github2_1.Strategy({
         });
         // Skicka användaren till req.user
         done(null, {
-            id: user.id,
             email: user.email,
+            username: user.username,
         });
     }
     catch (error) {

@@ -14,6 +14,7 @@ interface LoginModalProps {
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // För lyckat konto skapande
   const [isCreatingAccount, setIsCreatingAccount] = useState(false); // För att växla mellan login och skapa konto
@@ -62,26 +63,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
     const response =  await fetch('http://localhost:3000/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, username }),
       });
 
-      const data = await response.json();  // Konvertera svaret till JSON
+      const data = await response.json();  
       // Visa meddelande om att kontot skapades framgångsrikt
       if (response.ok){
-      setSuccessMessage('You have an account, please login.');
+      setSuccessMessage('You created an account, please login.');
       
 console.log(data);
       }
-     
-
-      // Återställ felmeddelanden
       setError('');
       
       // Växla till login-formuläret efter en stund (eller när användaren trycker på OK)
       setTimeout(() => {
         setIsCreatingAccount(false);
         setSuccessMessage('');
-      }, 2000);  // Vänta 2 sekunder innan vi byter tillbaka till login
+      }, 6000);  // Vänta  sekunder innan vi byter tillbaka till login
 
     } catch (err) {
       // Hantera fel (t.ex. om användaren redan finns)
@@ -100,6 +98,13 @@ console.log(data);
         {/* Om vi är i skapande av konto-läge, visa formuläret för att skapa konto */}
         <form onSubmit={isCreatingAccount ? handleCreateAccount : handleLogin}>
           <div>
+            <label>Username:</label>
+            <input
+              type="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
             <label>E-mail:</label>
             <input
               type="email"

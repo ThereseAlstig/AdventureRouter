@@ -29,7 +29,7 @@ passport.use(
               let user = await findOrCreateUserByGoogle({
                 email: profile.emails?.[0]?.value || '',
                 username: profile.displayName,
-                googleId: profile.id,
+                
               });
 
       
@@ -60,8 +60,8 @@ passport.use(
 
             // Skicka användaren till req.user
             done(null, {
-                id: user.id,
                 email: user.email,
+                username: user.username,
                 
             });
             } catch (error) {

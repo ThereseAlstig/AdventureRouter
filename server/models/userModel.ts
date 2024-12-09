@@ -5,6 +5,4 @@ export interface IUser {
     username: string;
     password?: string; // Valfritt för Google-användare
     role?: string;
-    googleId?: string;
-    githubId?: string;
   }

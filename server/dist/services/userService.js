@@ -31,14 +31,16 @@ const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.findUserByEmail = findUserByEmail;
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield (0, exports.findUserByEmail)(user.email);
+    if (existingUser) {
+        throw new Error('User with this email already exists');
+    }
     const hashedPassword = user.password ? yield bcryptjs_1.default.hash(user.password, 10) : null;
-    yield db_1.default.query('INSERT INTO users (email, username, password, role,  googleId, githubId) VALUES (?, ?, ?, ?, ?, ?)', [
+    yield db_1.default.query('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)', [
         user.email,
         user.username || null,
-        user.password,
+        hashedPassword,
         user.role || 'user',
-        user.googleId || null,
-        user.githubId || null,
     ]);
     const newUser = yield (0, exports.findUserByEmail)(user.email);
     if (!newUser)
@@ -53,7 +55,6 @@ const findOrCreateUserByGoogle = (data) => __awaiter(void 0, void 0, void 0, fun
         // Skapa en ny användare om ingen hittas
         user = yield (0, exports.createUser)({
             email: data.email,
-            googleId: data.googleId,
             role: 'user', // Standardroll för nya användare
         });
     }

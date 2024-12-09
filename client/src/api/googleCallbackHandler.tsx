@@ -10,13 +10,15 @@ const GoogleCallbackHandler: React.FC = () => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
-        console.log('Token from URL:', token);
+        const email = params.get('email') || ''; 
+        const username = params.get('username') || '';
+  
         if (token) {
             console.log('Current URL:', window.location.href);
 
             try {
                 if (googleLogin) {
-                    googleLogin(token); 
+                    googleLogin(token, username ?? '', email ?? ''); 
                     navigate('/my-page');
                     // Använd googleLogin för att lagra token
                 } 

@@ -24,16 +24,19 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
   };
 
 export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
+  const existingUser = await findUserByEmail(user.email!);
+  if (existingUser) {
+      throw new Error('User with this email already exists');
+  }
+  
   const hashedPassword = user.password ? await bcrypt.hash(user.password, 10) : null;
   await pool.query(
-    'INSERT INTO users (email, username, password, role,  googleId, githubId) VALUES (?, ?, ?, ?, ?, ?)',
+    'INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)',
     [
         user.email,
        user.username || null,
-        user.password,
+        hashedPassword,
         user.role || 'user',
-        user.googleId || null,
-        user.githubId || null,
       ]
   );
 
@@ -47,7 +50,6 @@ export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
 export const findOrCreateUserByGoogle = async (data: {
   email: string;
   username?: string;
-  googleId: string;
 }): Promise<IUser> => {
   // Kontrollera om användaren redan finns baserat på e-post
   let user = await findUserByEmail(data.email);
@@ -56,7 +58,6 @@ export const findOrCreateUserByGoogle = async (data: {
     // Skapa en ny användare om ingen hittas
     user = await createUser({
       email: data.email,
-      googleId: data.googleId,
       role: 'user', // Standardroll för nya användare
     });
   }

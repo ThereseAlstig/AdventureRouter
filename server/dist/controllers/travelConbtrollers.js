@@ -53,8 +53,8 @@ const createTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createTrip = createTrip;
 const trips = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, travelService_1.getTripWithDetails)(req, res);
-        res.status(201).json(result); // Skicka tillbaka framgångsmeddelande och tripId
+        const trips = yield (0, travelService_1.getTripWithDetails)(req, res);
+        res.status(201).json(trips); // Skicka tillbaka framgångsmeddelande och tripId
     }
     catch (error) {
         console.error('Error in createTrip controller:', error);

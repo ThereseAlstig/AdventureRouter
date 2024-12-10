@@ -11,34 +11,71 @@ interface MapWithDirectionsProps {
 const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destination, waypoints, mode }) => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
+  const[distance, setDistance] = useState<string | null>(null);
+  const[duration, setDuration] = useState<string | null>(null);
 
+  const mapMode = (mode: string): { travelMode: google.maps.TravelMode; filterMode: string } => {
+    const modeLower = mode.toLowerCase();
+  
+    switch (modeLower) {
+      case "motorcycle":
+        return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "motorcycle" };
+      case "car":
+        return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "car" };
+      case "moped":
+        return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "moped" };
+      case "cykle":
+        return { travelMode: google.maps.TravelMode.BICYCLING, filterMode: "cykle" };
+      case "train":
+        return { travelMode: google.maps.TravelMode.TRANSIT, filterMode: "train" };
+      case "bus":
+        return { travelMode: google.maps.TravelMode.TRANSIT, filterMode: "bus" };
+      case "hike":
+        return { travelMode: google.maps.TravelMode.WALKING, filterMode: "hike" };
+      default:
+        throw new Error(`Invalid mode: ${mode}`);
+    }
+  };
   useEffect(() => {
     const fetchDirections = async () => {
+     const travelOption =  mapMode(mode);
+      console.log("Fetching directions...");
+      console.log("Start:", start);
+      console.log("Destination:", destination);
+      console.log("Waypoints:", waypoints); 
+      console.log("Mode:", travelOption.travelMode);
       const directionsService = new google.maps.DirectionsService();
       directionsService.route(
         {
           origin: start,
           destination: destination,
-          waypoints: waypoints.map((wp) => ({ location: wp, stopover: true } as google.maps.DirectionsWaypoint)),
-          travelMode: mode,
-          transitOptions: {
-            modes: [google.maps.TransitMode.BUS], // Prioritera BUS
-          },
+          waypoints: waypoints.map((wp) => ({
+            location: wp.location, // Här ska du se till att wp har en korrekt location
+            stopover: true, // Lägg till stopover som true för att markera att detta är ett stopp
+          } as google.maps.DirectionsWaypoint)),
+          travelMode: travelOption.travelMode,
+          
         },
         (result, status) => {
           if (status === "OK") {
             setDirections(result);
+      if (result && result.routes.length > 0 && result.routes[0].legs.length > 0) {
+        const leg = result.routes[0].legs[0];
+        setDistance(leg.distance ? leg.distance.text : "N/A");
+        setDuration(leg.duration ? leg.duration.text : "N/A");
           } else {
             console.error("Directions request failed:", status);
           }
         }
+      }
       );
-    };
+    }
 
     fetchDirections();
   }, [start, destination, waypoints, mode]);
 
   return (
+   <div className="google-container">
     <LoadScript googleMapsApiKey={apiKey}>
       <GoogleMap
         mapContainerStyle={{ width: "100%", height: "500px" }}
@@ -48,6 +85,13 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </LoadScript>
+     {distance && duration && (
+      <div>
+        <p>Distance: {distance}</p>
+        <p>Estimated Time: {duration}</p>
+      </div>
+     )}
+      </div>
   );
 };
 

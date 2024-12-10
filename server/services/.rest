@@ -65,7 +65,7 @@ Content-Type: application/x-www-form-urlencoded
 ###
 
 POST http://localhost:3000/orders/createOrders HTTP/1.1:
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzU3NDA1NCwiZXhwIjoxNzMzNTc3NjU0fQ.NqZ_dnSccDcLE8l1RsoMwMd47wGOcNsN_Vfg2zW8Kdk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzgxNjMyNiwiZXhwIjoxNzMzODE5OTI2fQ.NlYF5Smc9wl-VauKkmlsDPQYRRxdhSqhh-APEtWAH8I
 Content-Type: application/json
 
 {
@@ -87,6 +87,7 @@ Content-Type: application/json
 
 ### Login User
 POST http://localhost:3000/api/travel-journey
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzU3NDA1NCwiZXhwIjoxNzMzNTc3NjU0fQ.NqZ_dnSccDcLE8l1RsoMwMd47wGOcNsN_Vfg2zW8Kdk
 Content-Type: application/json
 
 
@@ -102,13 +103,11 @@ Content-Type: application/json
         { "cityName": "Sundsvall", "order": 2 }
     ],
     "startWeather": {
-        "weatherType": "Sunny",
         "temperature": 25.5,
         "windSpeed": 5.2,
         "description": "Clear weather in Stockholm"
     },
     "endWeather": {
-        "weatherType": "Cloudy",
         "temperature": 15.0,
         "windSpeed": 3.1,
         "description": "Cloudy weather in Umeå"

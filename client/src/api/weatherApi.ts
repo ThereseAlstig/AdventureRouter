@@ -2,7 +2,7 @@ export function calculateMidpointDate(startDate: string, arrivalDate: string): s
   const start = new Date(startDate);
   const end = new Date(arrivalDate);
 
-  // Beräkna mitten
+  // Beräkna mitten av stoppen
   const midpointTimestamp = (start.getTime() + end.getTime()) / 2;
   const midpointDate = new Date(midpointTimestamp);
 
@@ -40,8 +40,8 @@ export async function getWeather(city: string, targetDate: string) {
           cityName: weatherData.city_name,
           date: targetDate,
           description: "No forecast available",
-          temperature: "N/A",
-          windSpeed: "N/A",
+          temperature: null,
+          windSpeed: null,
           
         };
       }

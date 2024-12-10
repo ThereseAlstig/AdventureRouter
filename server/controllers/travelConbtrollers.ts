@@ -42,8 +42,8 @@ export const createTrip = async (req: Request, res: Response) => {
 };
 export const trips = async (req: Request, res: Response) => {
     try {
-        const result = await getTripWithDetails(req, res);
-        res.status(201).json(result); // Skicka tillbaka framgångsmeddelande och tripId
+        const trips = await getTripWithDetails(req, res);
+        res.status(201).json(trips); // Skicka tillbaka framgångsmeddelande och tripId
     } catch (error) {
         console.error('Error in createTrip controller:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';

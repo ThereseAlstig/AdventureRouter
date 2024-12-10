@@ -7,7 +7,8 @@ interface Trip {
     endCityId: number;                 
     createdAt: Date;                    
     stops: TripStop[];   
-    userEmail: string;               
+    userEmail: string;   
+    weatherConditionId: number | null;             
 }
 
 interface TripStop {

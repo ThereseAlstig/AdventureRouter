@@ -1,6 +1,7 @@
 import pool from '../config/db'; // Din databasanslutning
 import { Request, Response } from 'express';
 import { ResultSetHeader } from 'mysql2';
+import { title } from 'process';
 
 // Hjälpfunktion för att hämta eller skapa en stad
 const getOrCreateCity = async (cityName: string): Promise<number> => {
@@ -40,8 +41,8 @@ export const CreateTrip = async (req: Request, res: Response) => {
       // Skapa väder för startpunkten (om angivet)
       if (startWeather) {
           const [startResult] = await pool.query<ResultSetHeader>(
-              'INSERT INTO WeatherConditions (weather_type, temperature, wind_speed, description) VALUES (?, ?, ?, ?)',
-              [startWeather.weatherType, startWeather.temperature, startWeather.windSpeed, startWeather.description]
+              'INSERT INTO WeatherConditions (temperature, wind_speed, description) VALUES (?, ?, ?)',
+              [startWeather.temperature, startWeather.windSpeed, startWeather.description]
           );
           startWeatherId = startResult.insertId;
       }
@@ -49,17 +50,28 @@ export const CreateTrip = async (req: Request, res: Response) => {
       // Skapa väder för slutpunkten (om angivet)
       if (endWeather) {
           const [endResult] = await pool.query<ResultSetHeader>(
-              'INSERT INTO WeatherConditions (weather_type, temperature, wind_speed, description) VALUES (?, ?, ?, ?)',
-              [endWeather.weatherType, endWeather.temperature, endWeather.windSpeed, endWeather.description]
+              'INSERT INTO WeatherConditions (temperature, wind_speed, description) VALUES (?, ?, ?)',
+              [endWeather.temperature, endWeather.windSpeed, endWeather.description]
           );
           endWeatherId = endResult.insertId;
       }
 
       // Skapa resan
+
       const [tripResult] = await pool.query<ResultSetHeader>(
-        'INSERT INTO Trips (start_date, end_date, travel_mode, start_city_id, end_city_id, start_weather_condition_id, end_weather_condition_id, user_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [startDate, endDate, travelMode, startCityId, endCityId, startWeatherId, endWeatherId, userEmail]
-    );
+        'INSERT INTO Trips (title, start_date, end_date, travel_mode, start_city_id, end_city_id, start_weather_condition_id, end_weather_condition_id, user_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [   
+            title,
+            startDate || null, // Om `startDate` är tom eller undefined, sätt till `null`
+            endDate || null,   // Samma här för `endDate`
+            travelMode,
+            startCityId,
+            endCityId,
+            startWeatherId || null, // Om väderdata inte finns, sätt till `null`
+            endWeatherId || null,   // Samma här
+            userEmail,
+          ]
+        );
 
       const tripId = tripResult.insertId;
 
@@ -71,8 +83,8 @@ export const CreateTrip = async (req: Request, res: Response) => {
               let weatherConditionId: number | null = null;
               if (stop.weather) {
                   const [weatherResult] = await pool.query<ResultSetHeader>(
-                      'INSERT INTO WeatherConditions (weather_type, temperature, wind_speed, description) VALUES (?, ?, ?, ?)',
-                      [stop.weather.weatherType, stop.weather.temperature, stop.weather.windSpeed, stop.weather.description]
+                      'INSERT INTO WeatherConditions (temperature, wind_speed, description) VALUES (?, ?, ?)',
+                      [ stop.weather.temperature, stop.weather.windSpeed, stop.weather.description]
                   );
                   weatherConditionId = weatherResult.insertId;
               }
@@ -91,28 +103,76 @@ export const CreateTrip = async (req: Request, res: Response) => {
   }
 };
 
+const groupTripsWithStops = (rows: any[][]) => {
+    const trips: { [key: number]: any } = {};
 
+    const flatRows = Array.isArray(rows[0]) ? rows[0] : rows;
+    flatRows.forEach((row: any, index) => {
+      
+        if (!trips[row.trip_id]) {
+            // Skapa ett nytt trip-objekt om det inte redan existerar
+            trips[row.trip_id] = {
+                trip_id: row.trip_id,
+                title: row.title,
+                start_date: row.start_date,
+                end_date: row.end_date,
+                travel_mode: row.travel_mode,
+                best_experience: row.best_experience,
+                worst_experience: row.worst_experience,
+                start_city: row.start_city,
+                end_city: row.end_city,
+                start_weather: {
+                    temperature: row.start_temperature,
+                    wind_speed: row.start_wind_speed,
+                    description: row.start_description,
+                },
+                end_weather: {
+                    temperature: row.end_temperature,
+                    wind_speed: row.end_wind_speed,
+                    description: row.end_description,
+                },
+                user_email: row.user_email,
+                user_username: row.user_username,
+                stops: [], // Skapa en tom lista för stoppen
+            };
+        }
+
+        // Lägg till stopp om det existerar
+        if (row.stop_city_name) {
+            trips[row.trip_id].stops.push({
+                city_name: row.stop_city_name,
+                stop_order: row.stop_order,
+            });
+        }
+    });
+
+    // Returnera en array av resor
+    return Object.values(trips);
+};
 
 export const getTripWithDetails = async (req: Request, res: Response) => {
     try {
-        const [trips] = await pool.query(
+        const [rows]  = await pool.query(
             `SELECT 
                 t.id AS trip_id,
+                t.title,
                 t.start_date,
                 t.end_date,
                 t.travel_mode,
+                t.best_experience,
+                t.worst_experience,
                 sc.name AS start_city,
                 ec.name AS end_city,
-                swc.weather_type AS start_weather_type,
                 swc.temperature AS start_temperature,
                 swc.wind_speed AS start_wind_speed,
                 swc.description AS start_description,
-                ewc.weather_type AS end_weather_type,
                 ewc.temperature AS end_temperature,
                 ewc.wind_speed AS end_wind_speed,
                 ewc.description AS end_description,
                 t.user_email,
-                u.username AS user_username
+                u.username AS user_username,
+                c.name AS stop_city_name,
+                ts.stop_order AS stop_order
              FROM 
                 Trips t
              LEFT JOIN 
@@ -124,16 +184,25 @@ export const getTripWithDetails = async (req: Request, res: Response) => {
              LEFT JOIN 
                 WeatherConditions ewc ON t.end_weather_condition_id = ewc.id
                 LEFT JOIN 
-    users u ON t.user_email = u.email;`
+                users u ON t.user_email = u.email
+            LEFT JOIN 
+                TripStops ts ON t.id = ts.trip_id       
+            LEFT JOIN 
+                Cities c ON ts.city_id = c.id
+            ORDER BY 
+                t.id, ts.stop_order;`
         );
+       // rows är första elementet i tuple
+        const trips = groupTripsWithStops(rows as any[][]); 
+return trips;
+        } catch (error) {
+            console.error('Error fetching trip details:', error);
+            res.status(500).json({ message: 'Failed to fetch trip details' });
+        }
+    };
 
-        res.status(200).json(trips);
-    } catch (error) {
-        console.error('Error fetching trips:', error);
-        res.status(500).json({ message: 'Failed to fetch trips' });
-    }
-  }
 
+  
 // export const uploadImage = async (req: Request, res: Response) => {
 //     const { tripId } = req.body;
 //     const file = req.file;

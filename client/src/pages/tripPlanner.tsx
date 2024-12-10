@@ -5,17 +5,26 @@ import { getWeather } from "../api/weatherApi"; // Din väderfunktion
 import { ProductCarusellTips } from "../components/productCarusellTips";
 import { getFilteredProducts } from "../api/filterProductsApi";
 import { Product } from "../types/product";
+import { SaveTrip } from "../api/saveTrips";
+
 
 export const TripPlanner = () => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [tripWeather, setTripWeather] = useState<any>(null);
-  const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
+  const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "";
   const [places, setPlaces] = useState<any[]>([]);
   const mapRef = useRef<google.maps.Map | null>(null);
   const [distance, setDistance] = useState<string | null>(null);
 const [duration, setDuration] = useState<string | null>(null);
 const [modeTravelOptions, setModeTravelOptions] = useState<google.maps.TravelMode | null>(null);
 const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+const [title, setTitle] = useState<string>("");
+const [modeTravel, setModeTravel] = useState<string>("car");
+const [waypointList, setWaypointList] = useState<string[]>([]);
+const [startDate, setStartDate] = useState<Date | null>(null);
+const [arrivalDate, setArrivalDate] = useState<Date | null>(null);
+const [startCity, setStartCity] = useState<string>("");
+const [endCity, setEndCity] = useState<string>("");
   const fetchNearbyPlaces = (location: google.maps.LatLng) => {
     if (!mapRef.current) return;
 
@@ -36,6 +45,58 @@ const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     });
   };
 
+
+  //Spara resan
+  
+
+  const saveTrip = async () => {
+console.log('title', title);
+console.log('startDate', startDate);
+ 
+
+    const stops = tripWeather.midpoint
+    ? [{ cityName: tripWeather.midpoint.cityName, order: 1 }]
+    : waypointList.map((waypoint, index) => ({
+        cityName: waypoint,
+        order: index + 1, // Startar ordning från 1
+      }));
+
+    const trip: any = {
+      title: title || "Untitled Trip",
+      userEmail: sessionStorage.getItem('userEmail') || "Unknown user",
+      startDate: startDate || null,
+      endDate: arrivalDate || null,
+      travelMode: modeTravel,
+      startCity: startCity,
+      endCity: endCity,
+      stops,
+    };
+
+    if (tripWeather?.start) {
+      trip.startWeather = {
+        temperature: tripWeather.start.temperature || 0,
+        windSpeed: tripWeather.start.windSpeed || 0,
+        description: tripWeather.start.description || "No description",
+      };
+    }
+
+    // Lägg endast till `endWeather` om det finns
+    if (tripWeather?.destination) {
+      trip.endWeather = {
+        temperature: tripWeather.destination.temperature || 0,
+        windSpeed: tripWeather.destination.windSpeed || 0,
+        description: tripWeather.destination.description || "No description",
+      };
+    }
+    try {
+      const savedTrip = await SaveTrip(trip); // Använd SaveTrip för att skicka data
+      alert("Trip saved successfully!");
+      console.log("Saved trip:", savedTrip);
+    } catch (error) {
+      alert("Failed to save trip. Please try again. Login to save trip");
+      console.error("Error saving trip:", error);
+    }
+  };
 
 
   useEffect(() => {
@@ -71,6 +132,12 @@ const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     try {
       // Hämta väder för start och destination
       setModeTravelOptions(mode); 
+      setModeTravel(modeTravel);
+      setWaypointList(waypointList);
+      setStartDate(new Date(startDate));
+      setArrivalDate(new Date(arrivalDate));
+      setStartCity(start);
+      setEndCity(destination);
       const startWeather = await getWeather(start, startDate);
       const destinationWeather = await getWeather(destination, arrivalDate);
 
@@ -91,7 +158,6 @@ const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
       });
 
 if (startWeather || modeTravelOptions) {
-console.log("Fetching products for weather and travel mode", modeTravel, startWeather);
 handleFetchFilteredProducts(startWeather, modeTravel);
 }
 
@@ -197,8 +263,11 @@ handleFetchFilteredProducts(startWeather, modeTravel);
           <p>{tripWeather.destination?.description || "N/A"}</p>
           <p>Wind: {tripWeather.destination?.windSpeed || "N/A"}m/s</p>
           <label htmlFor="">Title: </label>
-          <input type="text" /><br></br>
-          <button className="centered-button">Save and share</button>
+          <input  type="text"
+        id="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)} /><br></br>
+          <button onClick={() => saveTrip()} className="centered-button">Save and share</button>
         </div>
       )}
       </div>

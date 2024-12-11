@@ -9,7 +9,7 @@ import { SaveTrip } from "../api/saveTrips";
 
 
 export const TripPlanner = () => {
-  const [loading, setLoading] = useState(false);
+
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [tripWeather, setTripWeather] = useState<any>(null);
   const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "";
@@ -51,7 +51,7 @@ const [endCity, setEndCity] = useState<string>("");
   
 
   const saveTrip = async () => { 
-    setLoading(true);
+  
 console.log('title', title);
 console.log('startDate', startDate);
  
@@ -103,7 +103,7 @@ console.log('startDate', startDate);
       alert("Failed to save trip. Please try again. Login to save trip");
       console.error("Error saving trip:", error);
     }finally {
-      setLoading(false);
+      
     }
   };
 

@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import pool from '../config/db'; // Din databasanslutning
 import { CreateTrip as createTripService, getTripWithDetails } from '../services/travelService';
-
+import { saveImage } from "../services/travelService";
+import multer from "multer";
 // Controller: Hämta produkter baserat på väderförhållande
 export const getWeatherProducts = async (req: Request, res: Response): Promise<void> => {
   const { weatherCondition } = req.query;
@@ -65,5 +66,98 @@ export const getUserTripsWithDetails = async (req: Request, res: Response) => {
   } catch (error) {
       console.error('Error fetching user trips:', error);
       res.status(500).json({ message: 'Failed to fetch user trips' });
+  }
+};
+
+// uppdaatera resa med bild och wors best
+
+export const updateTripWithDetails = async (req: Request, res: Response) => {
+  const { tripId } = req.params; // Hämta resans ID från URL
+  const { worst_experience, best_experience } = req.body; // Hämta upplevelser från body
+  
+  try {
+      // Starta en transaktion
+     const connection = await pool.getConnection() 
+      try{
+          await connection.beginTransaction();
+
+          // Uppdatera worst_experience och best_experience
+          await connection.query(
+              `UPDATE Trips 
+               SET worst_experience = ?, best_experience = ? 
+               WHERE id = ?`,
+              [worst_experience, best_experience, tripId]
+          );
+
+         
+
+          await connection.commit();
+          res.status(200).json({ message: 'Trip updated successfully' });
+        } catch (error) {
+          await connection.rollback();
+          res.status(500).json({ message: 'Failed to update trip', error });
+        } finally {
+          connection.release();
+        }
+      } catch (error) {
+        res.status(500).json({ message: 'Failed to get database connection', error });
+      }
+};
+
+const upload = multer({ storage: multer.memoryStorage() }); // Lagra filen i minnet
+
+export const uploadImageController = async (req: Request, res: Response) => {
+    try {
+        const { tripId } = req.params; // Hämta tripId från URL
+        const file = req.file; // Filen som laddades upp av användaren
+
+        if (!tripId || isNaN(Number(tripId))) {
+           res.status(400).json({ message: "Invalid trip ID" }); 
+           return 
+        }
+
+        if (!file) {
+           res.status(400).json({ message: "No file uploaded" }); 
+           return 
+        }
+
+        await saveImage(Number(tripId), file);
+
+        res.status(200).json({ message: "Image uploaded successfully!" });
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        res.status(500).json({ message: "Failed to upload image" });
+    }
+};
+
+export const getImageForTrip = async (req: Request, res: Response): Promise<void> => {
+  try {
+      const { tripId } = req.params;
+
+      if (!tripId || isNaN(Number(tripId))) {
+          res.status(400).json({ message: "Invalid trip ID" });
+          return;
+      }
+
+      // Hämta bilden från databasen
+      const [rows]: any = await pool.query(
+          `SELECT image, image_type FROM TripImages WHERE trip_id = ? LIMIT 1`,
+          [Number(tripId)]
+      );
+
+      if (rows.length === 0) {
+        console.log(`No image found for trip ${tripId}`);
+        res.status(200).json({ message: "No image found" });
+        return;
+      }
+
+      const { image, image_type } = rows[0];
+
+      // Skicka bilden som svar
+      res.set("Content-Type", image_type);
+      res.send(image);
+  } catch (error) {
+      console.error("Error fetching image:", error);
+      res.status(500).json({ message: "Failed to fetch image" });
   }
 };

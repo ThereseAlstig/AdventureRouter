@@ -12,9 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserTripsWithDetails = exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
+exports.getImageForTrip = exports.uploadImageController = exports.updateTripWithDetails = exports.getUserTripsWithDetails = exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
 const travelService_1 = require("../services/travelService");
+const travelService_2 = require("../services/travelService");
+const multer_1 = __importDefault(require("multer"));
 // Controller: Hämta produkter baserat på väderförhållande
 const getWeatherProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { weatherCondition } = req.query;
@@ -78,3 +80,79 @@ const getUserTripsWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.getUserTripsWithDetails = getUserTripsWithDetails;
+// uppdaatera resa med bild och wors best
+const updateTripWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tripId } = req.params; // Hämta resans ID från URL
+    const { worst_experience, best_experience } = req.body; // Hämta upplevelser från body
+    try {
+        // Starta en transaktion
+        const connection = yield db_1.default.getConnection();
+        try {
+            yield connection.beginTransaction();
+            // Uppdatera worst_experience och best_experience
+            yield connection.query(`UPDATE Trips 
+               SET worst_experience = ?, best_experience = ? 
+               WHERE id = ?`, [worst_experience, best_experience, tripId]);
+            yield connection.commit();
+            res.status(200).json({ message: 'Trip updated successfully' });
+        }
+        catch (error) {
+            yield connection.rollback();
+            res.status(500).json({ message: 'Failed to update trip', error });
+        }
+        finally {
+            connection.release();
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to get database connection', error });
+    }
+});
+exports.updateTripWithDetails = updateTripWithDetails;
+const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() }); // Lagra filen i minnet
+const uploadImageController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { tripId } = req.params; // Hämta tripId från URL
+        const file = req.file; // Filen som laddades upp av användaren
+        if (!tripId || isNaN(Number(tripId))) {
+            res.status(400).json({ message: "Invalid trip ID" });
+            return;
+        }
+        if (!file) {
+            res.status(400).json({ message: "No file uploaded" });
+            return;
+        }
+        yield (0, travelService_2.saveImage)(Number(tripId), file);
+        res.status(200).json({ message: "Image uploaded successfully!" });
+    }
+    catch (error) {
+        console.error("Error uploading image:", error);
+        res.status(500).json({ message: "Failed to upload image" });
+    }
+});
+exports.uploadImageController = uploadImageController;
+const getImageForTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { tripId } = req.params;
+        if (!tripId || isNaN(Number(tripId))) {
+            res.status(400).json({ message: "Invalid trip ID" });
+            return;
+        }
+        // Hämta bilden från databasen
+        const [rows] = yield db_1.default.query(`SELECT image, image_type FROM TripImages WHERE trip_id = ? LIMIT 1`, [Number(tripId)]);
+        if (rows.length === 0) {
+            console.log(`No image found for trip ${tripId}`);
+            res.status(200).json({ message: "No image found" });
+            return;
+        }
+        const { image, image_type } = rows[0];
+        // Skicka bilden som svar
+        res.set("Content-Type", image_type);
+        res.send(image);
+    }
+    catch (error) {
+        console.error("Error fetching image:", error);
+        res.status(500).json({ message: "Failed to fetch image" });
+    }
+});
+exports.getImageForTrip = getImageForTrip;

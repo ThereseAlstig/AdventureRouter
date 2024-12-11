@@ -9,6 +9,7 @@ import { SaveTrip } from "../api/saveTrips";
 
 
 export const TripPlanner = () => {
+  const [loading, setLoading] = useState(false);
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [tripWeather, setTripWeather] = useState<any>(null);
   const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "";
@@ -49,7 +50,8 @@ const [endCity, setEndCity] = useState<string>("");
   //Spara resan
   
 
-  const saveTrip = async () => {
+  const saveTrip = async () => { 
+    setLoading(true);
 console.log('title', title);
 console.log('startDate', startDate);
  
@@ -61,11 +63,16 @@ console.log('startDate', startDate);
         order: index + 1, // Startar ordning från 1
       }));
 
+      const formatDateToMySQL = (date: Date | null): string | null => {
+        if (!date) return null; // Om datumet är null, returnera null
+        return date.toISOString().slice(0, 19).replace("T", " ");
+      };
+
     const trip: any = {
       title: title || "Untitled Trip",
       userEmail: sessionStorage.getItem('userEmail') || "Unknown user",
-      startDate: startDate || null,
-      endDate: arrivalDate || null,
+      startDate: formatDateToMySQL(startDate) || null,
+      endDate: formatDateToMySQL(arrivalDate) || null,
       travelMode: modeTravel,
       startCity: startCity,
       endCity: endCity,
@@ -95,6 +102,8 @@ console.log('startDate', startDate);
     } catch (error) {
       alert("Failed to save trip. Please try again. Login to save trip");
       console.error("Error saving trip:", error);
+    }finally {
+      setLoading(false);
     }
   };
 

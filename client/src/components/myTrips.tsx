@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { MyTravelTips } from "../api/myTravelTips";
 import MapWithDirections from "../api/googleMapsApi";
+import { uploadImage } from "../api/uppdateTripForm";
+import { fetchTripImage } from "../api/fetchImg";
+// import { updateTripForm } from "../api/uppdateTripForm";
 
 export const MyTrips = () => {
 const [trips, setTrips] = useState<any[]>([]);
-const [bestExperience, setBestExperience] = useState("");
-const [worstExperience, setWorstExperience] = useState("");
+const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
+// const [bestExperience, setBestExperience] = useState("");
+// const [worstExperience, setWorstExperience] = useState("");
+
 
 function formatDateToReadable(dateString: string): string {
     const date = new Date(dateString);
@@ -47,6 +52,23 @@ function formatDateToReadable(dateString: string): string {
               }
               console.log('my trips', myTrips);
               setTrips(myTrips);
+
+              const images = await Promise.all(
+                myTrips.map(async (trip: any) => {
+                    const imageUrl = await fetchTripImage(trip.trip_id);
+                    return { tripId: trip.trip_id, imageUrl };
+                })
+            );
+
+            // Uppdatera state med bilder
+            const imageMap = images.reduce((acc, curr) => {
+                acc[curr.tripId] = curr.imageUrl;
+                return acc;
+            }, {} as { [key: number]: string | null });
+
+            setTripImages(imageMap);
+            console.log('images', images);
+       
             } catch (error) {
               console.error('Error fetching trips:', error);
             }
@@ -59,14 +81,115 @@ function formatDateToReadable(dateString: string): string {
     }
     , []);
 
-    const handleSave = () => {
-        console.log('Save trip');
-      };
+  
+
+
+
+    const handleSaveImage = async (tripId: number) => {
+        const trip = trips.find((t) => t.trip_id === tripId);
+        if (!trip || !trip.image) {
+            alert("Please select an image before saving.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("image", trip.image);
+    
+        try {
+            await uploadImage(tripId, trip.image);
+    
+            alert("Image uploaded successfully!");
+          
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Failed to upload image.");
+        }
+    };
+    
+
+
+    const handleSave = async (tripId: number) => {
+        console.log("tripId", tripId);
+        const tripIndex = trips.findIndex((t) => t.trip_id === tripId);
+        if (tripIndex === -1) return;
+    
+        const trip = trips[tripIndex];
+        const { bestExperience, worstExperience, image } = trip;
+    
+        if (!bestExperience.trim() || !worstExperience.trim()) {
+            alert("Both 'Best Experience' and 'Worst Experience' are required.");
+            return;
+        }
+
+        if (!bestExperience && !worstExperience && !image) {
+            alert("Please fill in experiences or upload an image.");
+            return;
+        }
+    
+       
+        const uppdatedTrip = {
+            
+            best_experience: bestExperience,
+            worst_experience: worstExperience,
+        }
+
+        const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+        const token = sessionStorage.getItem("token");
+       
+        try {
+           
+            const response = await fetch(`${backendUrl}/api/trips/${tripId}`, {
+                method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json', // Token för autentisering
+            },
+            body: JSON.stringify(uppdatedTrip),
+        });
+    
+            if (!response.ok) {
+                throw new Error("Failed to update trip");
+            }
+            setTrips((prevTrips) =>
+                prevTrips.map((trip) =>
+                    trip.trip_id === tripId
+                        ? { ...trip, best_experience: bestExperience, worst_experience: worstExperience }
+                        : trip
+                )
+            );
+            alert("Trip updated successfully!");
+    
+            // Töm värden för den aktuella resan
+            setTrips((prevTrips) =>
+                prevTrips.map((t, index) =>
+                    index === tripIndex
+                        ? { ...t, bestExperience: "", worstExperience: "", image: null }
+                        : t
+                )
+            );
+        } catch (error) {
+            console.error("Error updating trip:", error);
+            alert("Failed to update trip.");
+        }
+    };
+
+    
 
     return (
         <>
         {trips.map((trip, index) => (
           <div key={trip.trip_id + index} className="journey">
+                <div className="trip-details3">
+                {tripImages[trip.trip_id] && tripImages[trip.trip_id] !== "Image for trip null" ? (
+        <img
+            src={tripImages[trip.trip_id]!} // Endast om URL finns och inte är "null"
+            alt={`Image for trip ${trip.title}`}
+            width="200"
+        />
+    ) : (
+        <p>No image available for this trip.</p> // Fallback när ingen bild finns
+    )}
+</div>
           <div  className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
@@ -95,41 +218,82 @@ function formatDateToReadable(dateString: string): string {
                 </p>
               </div>
               <div className="trip-details3">
-    <h2>Best Experience</h2>
-    {trip.best_experience ? (
-      <p>{trip.best_experience}</p>
-    ) : (
-      <label>
-        Best Experience:
-        <input
-          type="text"
-          value={bestExperience}
-          onChange={(e) => setBestExperience(e.target.value)}
-        />
-      </label>
-    )}
-  </div>
-
-  <div className="trip-details3">
-    <h2>Worst Experience</h2>
-    {trip.worst_experience ? (
-      <p>{trip.worst_experience}</p>
-    ) : (
-      <label>
-        Worst Experience:
-        <input
-          type="text"
-          value={worstExperience}
-          onChange={(e) => setWorstExperience(e.target.value)}
-        />
-      </label>
-    )}
-  </div>
-
-  {(!trip.best_experience || !trip.worst_experience) && (
-    <button onClick={handleSave}>Save Experiences</button>
-  )}
+                <h2>Best Experience</h2>
+                {trip.best_experience ? (
+                    <p>{trip.best_experience}</p>
+                ) : (
+                    <label>
+                        Best Experience:
+                        <input
+                           type="text"
+                           value={trip.bestExperience || ''} // Lokalt tillstånd för varje resa
+                           onChange={(e) =>
+                               setTrips((prevTrips) =>
+                                   prevTrips.map((t) =>
+                                       t.trip_id === trip.trip_id
+                                           ? { ...t, bestExperience: e.target.value }
+                                           : t
+                                   )
+                               )
+                           }
+                       />
+                    </label>
+                    
+                )}
             </div>
+
+            <div className="trip-details3">
+                <h2>Worst Experience</h2>
+                {trip.worst_experience ? (
+                    <p>{trip.worst_experience}</p>
+                ) : (
+                    <label>
+                        Worst Experience:
+                        <input
+                type="text"
+                value={trip.worstExperience || ''} // Lokalt tillstånd för varje resa
+                onChange={(e) =>
+                    setTrips((prevTrips) =>
+                        prevTrips.map((t) =>
+                            t.trip_id === trip.trip_id
+                                ? { ...t, worstExperience: e.target.value }
+                                : t
+                        )
+                    )
+                }
+            />
+                    </label>
+                )}
+            </div>
+            <div className="trip-details3">
+                <h2>Upload an Image</h2>
+                <input
+        type="file"
+        onChange={(e) =>
+            setTrips((prevTrips) =>
+                prevTrips.map((t) =>
+                    t.trip_id === trip.trip_id
+                        ? { ...t, image: e.target.files ? e.target.files[0] : null }
+                        : t
+                )
+            )
+        }
+    />   <button
+    onClick={() => handleSaveImage(trip.trip_id)}
+    disabled={!trip.image} // Inaktivera knappen om ingen bild är vald
+>
+    Save Image
+</button>
+            </div>
+
+            {(!trip.best_experience || !trip.worst_experience || !trip.img) && (
+                <button
+                onClick={() => handleSave(trip.trip_id)}
+            >
+                    Save Experiences
+                </button>
+            )}
+        </div>
             <div className="trip-detail-right">
             <MapWithDirections
               start={trip.start_city}

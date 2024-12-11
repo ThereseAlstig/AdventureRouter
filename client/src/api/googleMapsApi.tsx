@@ -38,11 +38,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
   useEffect(() => {
     const fetchDirections = async () => {
      const travelOption =  mapMode(mode);
-      console.log("Fetching directions...");
-      console.log("Start:", start);
-      console.log("Destination:", destination);
-      console.log("Waypoints:", waypoints); 
-      console.log("Mode:", travelOption.travelMode);
+    
       if(travelOption.travelMode){
       const directionsService = new google.maps.DirectionsService();
       directionsService.route(

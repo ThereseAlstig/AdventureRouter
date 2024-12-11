@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTripWithDetails = exports.CreateTrip = void 0;
+exports.saveImage = exports.getTripWithDetails = exports.CreateTrip = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
 const process_1 = require("process");
 // Hjälpfunktion för att hämta eller skapa en stad
@@ -171,27 +171,17 @@ const getTripWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getTripWithDetails = getTripWithDetails;
-// export const uploadImage = async (req: Request, res: Response) => {
-//     const { tripId } = req.body;
-//     const file = req.file;
-//     if (!file) {
-//         return res.status(400).json({ message: 'No file uploaded' });
-//     }
-//     try {
-//         const mimeType = file.mimetype; // Exempel: 'image/jpeg'
-//         const imageSize = file.size; // Storlek i byte
-//         const imageData = file.buffer; // Binära data för bilden
-//         // Spara bilddata i databasen
-//         await pool.query(
-//             'INSERT INTO TripImages (trip_id, image, image_size, image_type) VALUES (?, ?, ?, ?)',
-//             [tripId, imageData, imageSize, mimeType]
-//         );
-//         res.status(201).json({ message: 'Image uploaded successfully' });
-//     } catch (error) {
-//         console.error('Error uploading image:', error);
-//         res.status(500).json({ message: 'Failed to upload image' });
-//     }
-// };
+const saveImage = (tripId, file) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!file) {
+        throw new Error("No file uploaded");
+    }
+    const mimeType = file.mimetype; // Exempel: 'image/jpeg'
+    const imageSize = file.size; // Storlek i byte
+    const imageData = file.buffer;
+    yield db_1.default.query(`INSERT INTO TripImages (trip_id, image, image_size, image_type) 
+         VALUES (?, ?, ?, ?)`, [tripId, imageData, imageSize, mimeType]);
+});
+exports.saveImage = saveImage;
 // export const getImage = async (req: Request, res: Response) => {
 //   const { imageId } = req.params;
 //   try {

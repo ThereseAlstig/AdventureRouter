@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
+exports.getUserTripsWithDetails = exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
 const travelService_1 = require("../services/travelService");
 // Controller: Hämta produkter baserat på väderförhållande
@@ -63,3 +63,18 @@ const trips = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.trips = trips;
+const getUserTripsWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userEmail = req.params.email; // Hämta e-post från URL-parameter
+        // Återanvänd befintlig service
+        const allTrips = yield (0, travelService_1.getTripWithDetails)(req, res);
+        // Filtrera resorna baserat på e-post
+        const userTrips = allTrips ? allTrips.filter((trip) => trip.user_email === userEmail) : [];
+        res.status(200).json(userTrips); // Returnera filtrerade resor
+    }
+    catch (error) {
+        console.error('Error fetching user trips:', error);
+        res.status(500).json({ message: 'Failed to fetch user trips' });
+    }
+});
+exports.getUserTripsWithDetails = getUserTripsWithDetails;

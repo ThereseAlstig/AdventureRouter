@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import { MyTrips } from "../components/myTrips";
+import { LoadScript } from "@react-google-maps/api";
 
 export const MyPage = () => {
-  
+  const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
   const auth = useContext(AuthContext);
 
   if (!auth) {
@@ -17,7 +19,7 @@ export const MyPage = () => {
     const handleLogout = async () => {
       console.log('logout');
       try {
-        await logout(); // Anropa logout från Context
+        logout(); // Anropa logout från Context
         navigate('/'); 
         console.log(isAuthenticated)// Omdirigera till startsidan efter utloggning
       } catch (err) {
@@ -55,10 +57,16 @@ export const MyPage = () => {
 
     return (
         <>
+         
       { isAuthenticated &&(
 <>
 <h2>My Page</h2>
             <button onClick={handleLogout}>Log Out</button>
+<LoadScript googleMapsApiKey={apiKey}>
+            <div>
+              <MyTrips/>
+            </div>
+            </LoadScript>
 </>
       )
 

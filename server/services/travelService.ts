@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { ResultSetHeader } from 'mysql2';
 import { title } from 'process';
 
+
 // Hjälpfunktion för att hämta eller skapa en stad
 const getOrCreateCity = async (cityName: string): Promise<number> => {
   // Kontrollera om staden redan finns
@@ -203,31 +204,31 @@ return trips;
 
 
   
-// export const uploadImage = async (req: Request, res: Response) => {
-//     const { tripId } = req.body;
-//     const file = req.file;
+export const uploadImage = async (req: Request, res: Response) => {
+    const { tripId } = req.body;
+    const file = req.file;
 
-//     if (!file) {
-//         return res.status(400).json({ message: 'No file uploaded' });
-//     }
+    if (!file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
 
-//     try {
-//         const mimeType = file.mimetype; // Exempel: 'image/jpeg'
-//         const imageSize = file.size; // Storlek i byte
-//         const imageData = file.buffer; // Binära data för bilden
+    try {
+        const mimeType = file.mimetype; // Exempel: 'image/jpeg'
+        const imageSize = file.size; // Storlek i byte
+        const imageData = file.buffer; // Binära data för bilden
 
-//         // Spara bilddata i databasen
-//         await pool.query(
-//             'INSERT INTO TripImages (trip_id, image, image_size, image_type) VALUES (?, ?, ?, ?)',
-//             [tripId, imageData, imageSize, mimeType]
-//         );
+        // Spara bilddata i databasen
+        await pool.query(
+            'INSERT INTO TripImages (trip_id, image, image_size, image_type) VALUES (?, ?, ?, ?)',
+            [tripId, imageData, imageSize, mimeType]
+        );
 
-//         res.status(201).json({ message: 'Image uploaded successfully' });
-//     } catch (error) {
-//         console.error('Error uploading image:', error);
-//         res.status(500).json({ message: 'Failed to upload image' });
-//     }
-// };
+        res.status(201).json({ message: 'Image uploaded successfully' });
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        res.status(500).json({ message: 'Failed to upload image' });
+    }
+};
 
 // export const getImage = async (req: Request, res: Response) => {
 //   const { imageId } = req.params;

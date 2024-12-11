@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GoogleMap, LoadScript, DirectionsRenderer } from "@react-google-maps/api";
+import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 
 interface MapWithDirectionsProps {
   start: google.maps.LatLng | string;
@@ -10,7 +10,6 @@ interface MapWithDirectionsProps {
 
 const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destination, waypoints, mode }) => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
-  const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
   const[distance, setDistance] = useState<string | null>(null);
   const[duration, setDuration] = useState<string | null>(null);
 
@@ -44,14 +43,15 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
       console.log("Destination:", destination);
       console.log("Waypoints:", waypoints); 
       console.log("Mode:", travelOption.travelMode);
+      if(travelOption.travelMode){
       const directionsService = new google.maps.DirectionsService();
       directionsService.route(
         {
           origin: start,
           destination: destination,
           waypoints: waypoints.map((wp) => ({
-            location: wp.location, // Här ska du se till att wp har en korrekt location
-            stopover: true, // Lägg till stopover som true för att markera att detta är ett stopp
+            location: wp.location, 
+            stopover: true, 
           } as google.maps.DirectionsWaypoint)),
           travelMode: travelOption.travelMode,
           
@@ -70,13 +70,13 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
       }
       );
     }
-
+  }
     fetchDirections();
   }, [start, destination, waypoints, mode]);
 
   return (
    <div className="google-container">
-    <LoadScript googleMapsApiKey={apiKey}>
+   
       <GoogleMap
         mapContainerStyle={{ width: "100%", height: "500px" }}
         center={{ lat: 59.3293, lng: 18.0686 }}
@@ -84,7 +84,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
       >
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
-    </LoadScript>
+  
      {distance && duration && (
       <div>
         <p>Distance: {distance}</p>

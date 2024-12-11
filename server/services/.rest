@@ -117,3 +117,18 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/travels/therese.alstig@gmail.com
+
+###
+
+POST http://localhost:3000/api/trips/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzkxNzA3OSwiZXhwIjoxNzMzOTIwNjc5fQ.j2mVhNlt-Ttx9u819-E-v6Qlul0uSelx6rEJ_jkQGvk
+Content-Type: application/json
+
+{
+
+  "best_experience": "Amazing trip!", 
+"worst_experience": "Got lost in the rain."
+}
+
+
+

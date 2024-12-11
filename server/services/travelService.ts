@@ -204,30 +204,19 @@ return trips;
 
 
   
-export const uploadImage = async (req: Request, res: Response) => {
-    const { tripId } = req.body;
-    const file = req.file;
-
+export const saveImage = async (tripId: number, file: Express.Multer.File) => {
     if (!file) {
-        return res.status(400).json({ message: 'No file uploaded' });
+        throw new Error("No file uploaded");
     }
 
-    try {
-        const mimeType = file.mimetype; // Exempel: 'image/jpeg'
-        const imageSize = file.size; // Storlek i byte
-        const imageData = file.buffer; // Binära data för bilden
-
-        // Spara bilddata i databasen
-        await pool.query(
-            'INSERT INTO TripImages (trip_id, image, image_size, image_type) VALUES (?, ?, ?, ?)',
-            [tripId, imageData, imageSize, mimeType]
-        );
-
-        res.status(201).json({ message: 'Image uploaded successfully' });
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        res.status(500).json({ message: 'Failed to upload image' });
-    }
+    const mimeType = file.mimetype; // Exempel: 'image/jpeg'
+    const imageSize = file.size; // Storlek i byte
+    const imageData = file.buffer;
+    await pool.query(
+        `INSERT INTO TripImages (trip_id, image, image_size, image_type) 
+         VALUES (?, ?, ?, ?)`,
+        [tripId, imageData, imageSize, mimeType]
+    );
 };
 
 // export const getImage = async (req: Request, res: Response) => {

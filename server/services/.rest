@@ -116,4 +116,4 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3000/api/travels
+GET http://localhost:3000/api/travels/therese.alstig@gmail.com

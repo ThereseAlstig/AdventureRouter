@@ -11,4 +11,5 @@ const router = express_1.default.Router();
 router.get('/weather-products', travelConbtrollers_1.getWeatherProducts);
 router.post('/travel-journey', authMiddleware_1.ensureAuthenticated, travelConbtrollers_1.createTrip);
 router.get('/travels', travelConbtrollers_1.trips);
+router.get('/travels/:email', authMiddleware_1.ensureAuthenticated, travelConbtrollers_1.getUserTripsWithDetails);
 exports.default = router;

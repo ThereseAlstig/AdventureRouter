@@ -50,3 +50,20 @@ export const trips = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Failed to create trip', error: errorMessage });
     }
 };
+
+export const getUserTripsWithDetails = async (req: Request, res: Response) => {
+  try {
+      const userEmail = req.params.email; // Hämta e-post från URL-parameter
+
+      // Återanvänd befintlig service
+      const allTrips = await getTripWithDetails(req, res);
+
+      // Filtrera resorna baserat på e-post
+      const userTrips = allTrips ? allTrips.filter((trip: any) => trip.user_email === userEmail) : [];
+
+      res.status(200).json(userTrips); // Returnera filtrerade resor
+  } catch (error) {
+      console.error('Error fetching user trips:', error);
+      res.status(500).json({ message: 'Failed to fetch user trips' });
+  }
+};

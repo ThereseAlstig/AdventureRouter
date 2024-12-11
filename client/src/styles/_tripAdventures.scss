@@ -1,15 +1,21 @@
+.journey{
+    margin-top: 20px;
+}
+
 .trip-container{
     min-height: 650px;
     width: 100%;
     display: flex;
-    
+    margin-bottom: 20px;
+ 
+      display: flex;
+  flex-direction: row;
 }
 
 .trip-detail-left{
     width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 .trip-detail-right{
@@ -18,14 +24,31 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-right: 40px;
 }
+
+.trip-details {
+    display: flex;
+    flex-wrap: wrap; /* Om du vill tillåta radbrytningar vid behov */
+    gap: 5px; /* Avstånd mellan elementen */
+  }
+  .trip-details p {
+    margin: 0; /* Tar bort standardmarginaler */
+  }
 
 //delar varje resa med en linje
 
 .trip-divider {
+    display:block;
+    height: 1px;
+    background-color: #0a0707;
     border: none;
     border-top: 2px solid #0a0707; /* Stil på linjen */
-    margin: 20px 0; /* Avstånd runt linjen */
+    margin: 10px 0; /* Avstånd runt linjen */
+    z-index: 1;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
 }
 .google-container{
     width: 100%;

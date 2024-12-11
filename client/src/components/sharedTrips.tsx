@@ -41,6 +41,7 @@ import MapWithDirections from "../api/googleMapsApi";
     return (
       <>
         {trips.map((trip, index) => (
+          <div className="journey">
           <div key={trip.trip_id + index} className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
@@ -79,7 +80,7 @@ import MapWithDirections from "../api/googleMapsApi";
               }))}
               mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
             />
-          </div>
+          </div></div>
             <hr className="trip-divider" />
           </div>
         ))}

@@ -56,7 +56,7 @@ const getFilteredProducts = (req, res) => __awaiter(void 0, void 0, void 0, func
             categoryTwo: req.query.categoryTwo ? String(req.query.categoryTwo) : null,
             weather: req.query.weather ? String(req.query.weather) : null,
             temperature: req.query.temperature ? String(req.query.temperature) : null,
-            travelOptionName: req.query.travelOptionName ? String(req.query.travelOptionName) : null,
+            travelOption: req.query.travelOption ? String(req.query.travelOption) : null,
         };
         const products = yield productService.getFilteredProductsBY(filters);
         console.log('Filtered products fetchedjljlkjlkjl:', products);

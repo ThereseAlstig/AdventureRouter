@@ -50,7 +50,7 @@ function formatDateToReadable(dateString: string): string {
               if (!myTrips) {
                 throw new Error('Failed to fetch trips');
               }
-              console.log('my trips', myTrips);
+             
               setTrips(myTrips);
 
               const images = await Promise.all(
@@ -67,7 +67,7 @@ function formatDateToReadable(dateString: string): string {
             }, {} as { [key: number]: string | null });
 
             setTripImages(imageMap);
-            console.log('images', images);
+           
        
             } catch (error) {
               console.error('Error fetching trips:', error);

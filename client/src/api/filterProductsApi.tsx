@@ -12,7 +12,7 @@ export async function  getFilteredProducts(weatherData?: any, mode?: any) {
   }
 
   if (mode) {
-    filters.travelOptionName = mode;
+    filters.travelOption = mode;
   }
 
   console.log("Filters skickade till API:", filters);
@@ -20,6 +20,9 @@ export async function  getFilteredProducts(weatherData?: any, mode?: any) {
 
   const params = new URLSearchParams(filters);
     try{
+
+        const url = `${website}/products/filtered?${params.toString()}`;
+        console.log('url', url);
         const response = await fetch(`${website}/products/filtered?${params.toString()}`,{
             method: 'GET',
             headers: {

@@ -6,7 +6,7 @@ export const Admin = () => {
     name: '',
     price: '',
     description: '',
-    travel_option_id: null,
+    travel_option_id: [],
     image_url: '',
     in_stock: true,
     productCategories: [],
@@ -98,7 +98,7 @@ interface WeatherOption {
           name: '',
           price: '',
           description: '',
-          travel_option_id: null,
+          travel_option_id: [],
           image_url: '',
           in_stock: true,
           productCategories: [],
@@ -150,8 +150,7 @@ interface WeatherOption {
         </div>
         <div>
           <label>Travel Option ID:</label>
-          <select   name="travel_option_id"
-    value={productData.travel_option_id || ''}
+          <select  multiple  name="travel_option_id"
     onChange={handleChange}>
         {travelOptions.map((option) => (
           <option key={option.id} value={option.id}>

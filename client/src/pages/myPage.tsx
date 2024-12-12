@@ -60,7 +60,7 @@ export const MyPage = () => {
          
       { isAuthenticated &&(
 <>
-<h2>My Page</h2>
+
             <button className="logoutButton" onClick={handleLogout}>Log Out</button>
 <LoadScript googleMapsApiKey={apiKey}>
             <div>

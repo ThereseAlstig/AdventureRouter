@@ -52,7 +52,7 @@ function formatDateToReadable(dateString: string): string {
               }
              
               setTrips(myTrips);
-
+              console.log("uppdatedTrip", myTrips);
               const images = await Promise.all(
                 myTrips.map(async (trip: any) => {
                     const imageUrl = await fetchTripImage(trip.trip_id);
@@ -167,6 +167,7 @@ function formatDateToReadable(dateString: string): string {
                         : t
                 )
             );
+            console.log("uppdatedTrip", uppdatedTrip);
         } catch (error) {
             console.error("Error updating trip:", error);
             alert("Failed to update trip.");
@@ -179,134 +180,134 @@ function formatDateToReadable(dateString: string): string {
         <>
         {trips.map((trip, index) => (
           <div key={trip.trip_id + index} className="journey">
-                <div className="trip-details3">
-                {tripImages[trip.trip_id] && tripImages[trip.trip_id] !== "Image for trip null" ? (
-        <img
-            src={tripImages[trip.trip_id]!} // Endast om URL finns och inte är "null"
-            alt={`Image for trip ${trip.title}`}
-            width="200"
-        />
-    ) : (
-        <p>No image available for this trip.</p> // Fallback när ingen bild finns
-    )}
-</div>
-          <div  className="trip-container">
+          <div className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
               <div className="trip-details">
-                <p>
-                  From {trip.start_city} to {trip.end_city}
-                </p>
+                <p>From {trip.start_city} to {trip.end_city}</p>
                 {trip.stops.length > 0 && (
                   <>
                     <p>Stopping in </p>
-                    <p>
-                      {trip.stops
-                        .map((stop: { city_name: string }) => stop.city_name)
-                        .join(" and ")}
-                    </p>
+                    <p>{trip.stops.map((stop: { city_name: string }) => stop.city_name).join(" and ")}</p>
                   </>
                 )}
                 <p>Traveling by {trip.travel_mode}.</p>
               </div>
-  
-              <div className="trip-details2">
+              <div className="trip-details">
                 <p>
-                  My adventure lasted from{" "}
-                  {formatDateToReadable(trip.start_date)} to{" "}
-                  {formatDateToReadable(trip.end_date)}.
+                  My adventure lasted from {formatDateToReadable(trip.start_date)} to {formatDateToReadable(trip.end_date)}.
                 </p>
               </div>
-              <div className="trip-details3">
-                <h2>Best Experience</h2>
-                {trip.best_experience ? (
-                    <p>{trip.best_experience}</p>
-                ) : (
-                    <label>
-                        Best Experience:
-                        <input
-                           type="text"
-                           value={trip.bestExperience || ''} // Lokalt tillstånd för varje resa
-                           onChange={(e) =>
-                               setTrips((prevTrips) =>
-                                   prevTrips.map((t) =>
-                                       t.trip_id === trip.trip_id
-                                           ? { ...t, bestExperience: e.target.value }
-                                           : t
-                                   )
-                               )
-                           }
-                       />
-                    </label>
-                    
-                )}
-            </div>
-
-            <div className="trip-details3">
-                <h2>Worst Experience</h2>
-                {trip.worst_experience ? (
-                    <p>{trip.worst_experience}</p>
-                ) : (
-                    <label>
-                        Worst Experience:
-                        <input
-                type="text"
-                value={trip.worstExperience || ''} // Lokalt tillstånd för varje resa
-                onChange={(e) =>
-                    setTrips((prevTrips) =>
-                        prevTrips.map((t) =>
-                            t.trip_id === trip.trip_id
-                                ? { ...t, worstExperience: e.target.value }
-                                : t
-                        )
-                    )
-                }
-            />
-                    </label>
-                )}
-            </div>
-            <div className="trip-details3">
-                <h2>Upload an Image</h2>
-                <input
-        type="file"
-        onChange={(e) =>
-            setTrips((prevTrips) =>
-                prevTrips.map((t) =>
-                    t.trip_id === trip.trip_id
-                        ? { ...t, image: e.target.files ? e.target.files[0] : null }
-                        : t
-                )
-            )
-        }
-    />   <button
-    onClick={() => handleSaveImage(trip.trip_id)}
-    disabled={!trip.image} // Inaktivera knappen om ingen bild är vald
->
-    Save Image
-</button>
-            </div>
-
-            {(!trip.best_experience || !trip.worst_experience || !trip.img) && (
-                <button
-                onClick={() => handleSave(trip.trip_id)}
-            >
-                    Save Experiences
-                </button>
-            )}
+        
+        <div className="weather-forecast">
+          <h2>Weather forecast:</h2>
+          {trip.start_weather && (
+            <div>
+          <h3>{trip.start_city}</h3>
+            <p>Temperature: {trip.start_weather.temperature}°C, Wind speed: {trip.start_weather.wind_speed}, {trip.start_weather.description}</p>
+          </div>)}
+          {trip.end_weather && (
+            <div>
+              <h3>{trip.end_city}</h3>
+              <p>Temperature: {trip.end_weather.temperature}°C, Wind speed: {trip.end_weather.wind_speed}, {trip.end_weather.description}</p>
+          <p></p>
+          </div>)}
+              
+          
         </div>
+              {!trip.best_experience && !trip.worst_experience && (
+                <div className="trip-details3">
+                  <h2>Best:</h2>
+                  <label>
+                    <input
+                      type="text"
+                      value={trip.bestExperience || ''}
+                      onChange={(e) =>
+                        setTrips((prevTrips) =>
+                          prevTrips.map((t) =>
+                            t.trip_id === trip.trip_id
+                              ? { ...t, bestExperience: e.target.value }
+                              : t
+                          )
+                        )
+                      }
+                    />
+                  </label>
+                  <h2>Worst:</h2>
+                  <label>
+                    <input
+                      type="text"
+                      value={trip.worstExperience || ''}
+                      onChange={(e) =>
+                        setTrips((prevTrips) =>
+                          prevTrips.map((t) =>
+                            t.trip_id === trip.trip_id
+                              ? { ...t, worstExperience: e.target.value }
+                              : t
+                          )
+                        )
+                      }
+                    />
+                  </label>
+                  <button onClick={() => handleSave(trip.trip_id)}>Save Experiences</button>
+                </div>
+              )}
+        
+              <div className="image-upload">
+                {tripImages[trip.trip_id] && tripImages[trip.trip_id] !== "Image for trip null" ? (
+                  <img
+                    src={tripImages[trip.trip_id]!}
+                    alt={`Image for trip ${trip.title}`}
+                    width="200"
+                    className="trip-image"
+                  />
+                ) : (
+                  <>
+                    <h2>Image:</h2>
+                    <input
+                      type="file"
+                      onChange={(e) =>
+                        setTrips((prevTrips) =>
+                          prevTrips.map((t) =>
+                            t.trip_id === trip.trip_id
+                              ? { ...t, image: e.target.files ? e.target.files[0] : null }
+                              : t
+                          )
+                        )
+                      }
+                    />
+                    <button
+                      className="save-image"
+                      onClick={() => handleSaveImage(trip.trip_id)}
+                      disabled={!trip.image}
+                    >
+                      Save Image
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
             <div className="trip-detail-right">
-            <MapWithDirections
-              start={trip.start_city}
-              destination={trip.end_city}
-              waypoints={trip.stops.map((stop: { city_name: string }) => ({
-                location: stop.city_name,
-                
-              }))}
-              mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
-            />
-          </div></div>
-            <hr className="trip-divider" />
+              <MapWithDirections
+                start={trip.start_city}
+                destination={trip.end_city}
+                waypoints={trip.stops.map((stop: { city_name: string }) => ({
+                  location: stop.city_name,
+                }))}
+                mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
+              />
+              {trip.best_experience || trip.worst_experience ? (
+                <div className="trip-details3-under-map">
+                  <h2>Best:</h2>
+                  <p>{trip.best_experience}</p>
+                  <h2>Worst:</h2>
+                  <p>{trip.worst_experience}</p>
+                </div>
+              ) : null}
+            </div>
           </div>
+          <hr className="trip-divider" />
+        </div>
         ))}
       </>
     

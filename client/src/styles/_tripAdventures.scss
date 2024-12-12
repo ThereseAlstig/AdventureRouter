@@ -51,10 +51,23 @@
     margin-right: auto;
 }
 .google-container{
-    width: 100%;
+    width: 90%;
     height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.logoutButton{
+    margin-top: 20px;
+    width: 100px;
+margin-left: 80%;
+margin-right: 20px;
+}
+
+@media (max-width: 768px) {
+
+    .logoutButton{
+        margin-left: 40%;
+    }
 }

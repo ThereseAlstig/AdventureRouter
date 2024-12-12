@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveImage = exports.getTripWithDetails = exports.CreateTrip = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
-const process_1 = require("process");
 // Hjälpfunktion för att hämta eller skapa en stad
 const getOrCreateCity = (cityName) => __awaiter(void 0, void 0, void 0, function* () {
     // Kontrollera om staden redan finns
@@ -29,7 +28,7 @@ const getOrCreateCity = (cityName) => __awaiter(void 0, void 0, void 0, function
 });
 // Uppdaterad `createTrip`-funktion
 const CreateTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { startDate, endDate, travelMode, startCity, endCity, stops, startWeather, endWeather, userEmail } = req.body;
+    const { title, startDate, endDate, travelMode, startCity, endCity, stops, startWeather, endWeather, userEmail } = req.body;
     try {
         // Hämta eller skapa startstad och slutstad
         const startCityId = yield getOrCreateCity(startCity);
@@ -48,7 +47,7 @@ const CreateTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         // Skapa resan
         const [tripResult] = yield db_1.default.query('INSERT INTO Trips (title, start_date, end_date, travel_mode, start_city_id, end_city_id, start_weather_condition_id, end_weather_condition_id, user_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
-            process_1.title,
+            title,
             startDate || null, // Om `startDate` är tom eller undefined, sätt till `null`
             endDate || null, // Samma här för `endDate`
             travelMode,

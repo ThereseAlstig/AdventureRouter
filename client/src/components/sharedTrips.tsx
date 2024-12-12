@@ -3,9 +3,10 @@ import MapWithDirections from "../api/googleMapsApi";
   
   interface ISharedTripsProps {
     trips: any[];
+    img: any;
   }
   
-  export const SharedTrips = ({ trips }: ISharedTripsProps) => {
+  export const SharedTrips = ({ trips, img}: ISharedTripsProps) => {
    
    
     // Formaterar datum
@@ -41,10 +42,23 @@ import MapWithDirections from "../api/googleMapsApi";
     return (
       <>
         {trips.map((trip, index) => (
-          <div className="journey">
-          <div key={trip.trip_id + index} className="trip-container">
+          <div key={trip.trip_id + index} className="journey">
+          <div className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
+
+            <div className="trip-details3">
+                {img[trip.trip_id] && img[trip.trip_id] !== "Image for trip null" ? (
+        <img
+            src={img[trip.trip_id]!} // Endast om URL finns och inte är "null"
+            alt={`Image for trip ${trip.title}`}
+            width="200"
+        />
+    ) : (
+        <p></p> // Fallback när ingen bild finns
+    )}
+</div>
+              
               <div className="trip-details">
                 <p>
                   From {trip.start_city} to {trip.end_city}

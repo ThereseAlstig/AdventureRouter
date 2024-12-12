@@ -6,6 +6,7 @@ import { ProductCarusellTips } from "../components/productCarusellTips";
 import { getFilteredProducts } from "../api/filterProductsApi";
 import { Product } from "../types/product";
 import { SaveTrip } from "../api/saveTrips";
+import { useNavigate } from "react-router-dom";
 
 
 export const TripPlanner = () => {
@@ -26,6 +27,7 @@ const [startDate, setStartDate] = useState<Date | null>(null);
 const [arrivalDate, setArrivalDate] = useState<Date | null>(null);
 const [startCity, setStartCity] = useState<string>("");
 const [endCity, setEndCity] = useState<string>("");
+const navigate = useNavigate();
   const fetchNearbyPlaces = (location: google.maps.LatLng) => {
     if (!mapRef.current) return;
 
@@ -51,9 +53,7 @@ const [endCity, setEndCity] = useState<string>("");
   
 
   const saveTrip = async () => { 
-  
-console.log('title', title);
-console.log('startDate', startDate);
+
  
 
     const stops = tripWeather.midpoint
@@ -98,6 +98,7 @@ console.log('startDate', startDate);
     try {
       const savedTrip = await SaveTrip(trip); // Använd SaveTrip för att skicka data
       alert("Trip saved successfully!");
+      navigate("/my-page")
       console.log("Saved trip:", savedTrip);
     } catch (error) {
       alert("Failed to save trip. Please try again. Login to save trip");

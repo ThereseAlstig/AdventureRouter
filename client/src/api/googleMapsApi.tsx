@@ -54,6 +54,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
         },
         (result, status) => {
           if (status === "OK") {
+       
             setDirections(result);
       if (result && result.routes.length > 0 && result.routes[0].legs.length > 0) {
         const leg = result.routes[0].legs[0];

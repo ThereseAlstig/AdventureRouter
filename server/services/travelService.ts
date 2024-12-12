@@ -29,7 +29,7 @@ const getOrCreateCity = async (cityName: string): Promise<number> => {
 
 // Uppdaterad `createTrip`-funktion
 export const CreateTrip = async (req: Request, res: Response) => {
-  const { startDate, endDate, travelMode, startCity, endCity, stops, startWeather, endWeather, userEmail } = req.body;
+  const {title, startDate, endDate, travelMode, startCity, endCity, stops, startWeather, endWeather, userEmail } = req.body;
 
   try {
       // Hämta eller skapa startstad och slutstad

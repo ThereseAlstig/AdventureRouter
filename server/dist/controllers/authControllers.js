@@ -13,12 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProtectedResource = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userService_1 = require("../services/userService");
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
+        console.log("Password received from frontend:", req.body.password);
         if (!email || !password) {
             res.status(400).json({ message: 'Email and password are required' });
             return; // Avsluta funktionen här för att undvika fortsatt exekvering
@@ -28,7 +29,10 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             res.status(400).json({ message: 'User already exists' });
             return;
         }
-        const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        // Verifiera lösenordet
+        const isMatch = yield bcrypt_1.default.compare(password, hashedPassword);
+        console.log("Password Match:", isMatch); // Förväntat: true
         const user = yield (0, userService_1.createUser)({ email, password: hashedPassword, username: username || email.split('@')[0], });
         // Logik för att hantera registrering
         res.status(201).json({ message: 'User registered successfully', user });
@@ -41,27 +45,37 @@ exports.registerUser = registerUser;
 const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
+        console.log("Email received from frontend:", email);
         if (!email || !password) {
-            res.status(400).json({ message: 'Email and password are required' });
-            return; // Avsluta här
+            res.status(400).json({ message: "Email and password are required" });
+            return;
         }
-        const user = yield (0, userService_1.findUserByEmail)(email);
-        if (!user || !user.password) {
-            res.status(401).json({ message: 'Invalid credentials' });
-            return; // Avsluta här
+        const user = yield (0, userService_1.findUserByEmail)(email.trim());
+        if (!user) {
+            res.status(401).json({ message: "User not found" });
+            return;
         }
-        const isMatch = yield bcryptjs_1.default.compare(password, user.password);
+        if (!user.password) {
+            res.status(401).json({ message: "User has no password set" });
+            return;
+        }
+        const isMatch = yield bcrypt_1.default.compare(password.trim(), user.password);
         if (!isMatch) {
-            res.status(401).json({ message: 'Invalid credentials' });
-            return; // Avsluta här
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
         }
-        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION || "2h" });
+        res.status(200).json({
+            token,
+            email: user.email,
+            username: user.username,
+            role: user.role,
         });
-        res.status(200).json({ token, email: user.email, username: user.username, role: user.role });
+        return;
     }
     catch (error) {
-        next(error); // Skicka vidare fel till Express error-handler
+        console.error("Login error:", error);
+        next(error);
     }
 });
 exports.loginUser = loginUser;

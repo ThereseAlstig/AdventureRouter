@@ -1,14 +1,18 @@
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import { RowDataPacket } from 'mysql2';
-
 import { IUser } from '../models/userModel';
 import pool from '../config/db';
 // Din databasanslutning
 
+//verifiera lösenord 
+export const verifyPassword = async (inputPassword: string, hashedPassword: string): Promise<boolean> => {
+  return await bcrypt.compare(inputPassword, hashedPassword);
+};
+
 export const findUserByEmail = async (email: string): Promise<IUser | null> => {
     try {
       const [rows] = await pool.query<IUser[] & RowDataPacket[]>(
-        'SELECT * FROM users WHERE email = ?',
+        'SELECT id, email, username, password, role FROM users WHERE email = ?',
         [email]
       );
   
@@ -28,13 +32,19 @@ export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
   if (existingUser) {
       throw new Error('User with this email already exists');
   }
-  
-  const hashedPassword = user.password ? await bcrypt.hash(user.password, 10) : null;
+  const trimmedPassword = user.password ? user.password.trim() : '';
+  const hashedPassword = user.password ? await bcrypt.hash(trimmedPassword, 10) : null;
+  console.log("Generated hash during user creation:", hashedPassword);
+
+  if (!hashedPassword) {
+    throw new Error('Password is required for this registration method');
+  }
+  console.log("Generated hash:", hashedPassword);
   await pool.query(
     'INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)',
     [
         user.email,
-       user.username || null,
+        user.username || null,
         hashedPassword,
         user.role || 'user',
       ]

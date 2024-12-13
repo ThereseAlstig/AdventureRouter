@@ -38,6 +38,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const login = async (email: string, password: string) => {
+    console.log('login');
+    console.log('email', email);
+    console.log('password', password);
     const response = await fetch(`${key}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

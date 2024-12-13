@@ -42,7 +42,7 @@
 }
       .tripPlanerForm__row--wide input {
        flex: 2; 
-       width: 500px !important;
+   
       
       }
 
@@ -63,6 +63,7 @@
 
 .tips_trips{
   margin-right: 40px;
+  width: 50%;
 }
 
 
@@ -142,8 +143,6 @@
 
 .result_container{
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
     margin-top: 20px;
 }
 

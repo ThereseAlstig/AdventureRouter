@@ -13,7 +13,9 @@ export const fetchTripImage = async (tripId: number): Promise<string | null> => 
         }
         const contentType = response.headers.get("Content-Type");
         if (!contentType || !contentType.startsWith("image/")) {
-            console.warn(`Response for trip ${tripId} does not contain valid image data.`);
+
+            //denna ger en error även om det inte är en 404
+            // console.warn(`Response for trip ${tripId} does not contain valid image data.`);
             return null; // Returnera null om ingen giltig bilddata finns
         }
 

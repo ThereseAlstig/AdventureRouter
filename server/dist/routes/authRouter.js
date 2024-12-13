@@ -13,4 +13,10 @@ router.post('/logout', authControllers_1.logoutUser);
 router.get('/protected', authMiddleware_1.ensureAuthenticated, (req, res) => {
     res.json({ message: 'Protected route accessed', user: req.user });
 });
+router.get('/protected-resource', authMiddleware_1.verifyToken, (req, res) => {
+    res.status(200).json({
+        message: 'Access granted to protected resource',
+        user: req.user,
+    });
+});
 exports.default = router;

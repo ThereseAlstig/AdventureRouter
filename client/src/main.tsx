@@ -9,8 +9,7 @@ import { AuthProvider } from "./context/authContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 <AuthProvider>
-  <RouterProvider router={Router}>
+  <RouterProvider router={Router}/>
    
-  </RouterProvider>
  </AuthProvider>
 );

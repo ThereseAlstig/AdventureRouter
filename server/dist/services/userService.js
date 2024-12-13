@@ -12,13 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = void 0;
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
+exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = exports.verifyPassword = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_1 = __importDefault(require("../config/db"));
 // Din databasanslutning
+//verifiera lösenord 
+const verifyPassword = (inputPassword, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield bcrypt_1.default.compare(inputPassword, hashedPassword);
+});
+exports.verifyPassword = verifyPassword;
 const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const [rows] = yield db_1.default.query('SELECT * FROM users WHERE email = ?', [email]);
+        const [rows] = yield db_1.default.query('SELECT id, email, username, password, role FROM users WHERE email = ?', [email]);
         if (rows.length === 0) {
             return null; // Ingen användare hittades
         }
@@ -35,7 +40,13 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     if (existingUser) {
         throw new Error('User with this email already exists');
     }
-    const hashedPassword = user.password ? yield bcryptjs_1.default.hash(user.password, 10) : null;
+    const trimmedPassword = user.password ? user.password.trim() : '';
+    const hashedPassword = user.password ? yield bcrypt_1.default.hash(trimmedPassword, 10) : null;
+    console.log("Generated hash during user creation:", hashedPassword);
+    if (!hashedPassword) {
+        throw new Error('Password is required for this registration method');
+    }
+    console.log("Generated hash:", hashedPassword);
     yield db_1.default.query('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)', [
         user.email,
         user.username || null,

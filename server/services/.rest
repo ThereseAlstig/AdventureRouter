@@ -19,27 +19,26 @@ Content-Type: application/json
 
 
 {
-  "email": "therese.alstig@gmail.com",
-  "password": "123",
+  "email": "thereseeee@testt",
+  "password": "12345",
   "username": "Jag",
   "role": "admin"
 }
+
+### Login User
+GET http://localhost:3000/auth/protected-resource
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDA4NzAxNCwiZXhwIjoxNzM0MDkwNjE0fQ.zCmcVJyhw3lPtZDfkTT22BVDsbDhsQF8i_7sjn3W-Is
+Content-Type: application/json
+
+
 
 ### Login User
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "therese.alstig@gmail.com",
-  "password": "123"
-}
-### Login User
-POST http://localhost:3000/auth/logout
-Content-Type: application/json
-
-{
-  "email": "test@example.com",
-  "password": "password123"
+  "email": "thereseeee@testt",
+  "password": "12345"
 }
 
 

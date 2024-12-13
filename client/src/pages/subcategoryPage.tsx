@@ -68,6 +68,10 @@ export const SubcategoryPage = () => {
 
         <Navigation/>
         <ProductCarusell products={products}/>
+        <div className="homepageWords">
+            <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>
+         </div>
+
         </>
         
     );

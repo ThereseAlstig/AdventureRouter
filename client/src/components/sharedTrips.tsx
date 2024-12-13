@@ -1,14 +1,50 @@
 
+import { useEffect, useState } from "react";
 import MapWithDirections from "../api/googleMapsApi";
+import { GetSharedAdventures } from "../api/getSharedTrips";
+import { fetchTripImage } from "../api/fetchImg";
   
-  interface ISharedTripsProps {
-    trips: any[];
-    img: any;
-  }
+
   
-  export const SharedTrips = ({ trips, img}: ISharedTripsProps) => {
-   
-   
+  export const SharedTrips = () => {
+   const [trips, setTrips] = useState<any[]>([]);
+   const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
+
+       useEffect(() => {
+         const loadTrips = async () => {
+           try {
+         
+       
+             const tripsData = await GetSharedAdventures();
+       
+             if (!tripsData) {
+               throw new Error('Failed to fetch trips');
+             }
+       
+             setTrips(tripsData);
+             localStorage.setItem('trips', JSON.stringify(tripsData));
+       
+             const images = await Promise.all(
+               tripsData.map(async (trip: any) => {
+                 const imageUrl = await fetchTripImage(trip.trip_id);
+                 return { tripId: trip.trip_id, imageUrl };
+               })
+             );
+       
+             const imageMap = images.reduce((acc, curr) => {
+               acc[curr.tripId] = curr.imageUrl;
+               return acc;
+             }, {} as { [key: number]: string | null });
+       
+             setTripImages(imageMap);
+             localStorage.setItem('tripImages', JSON.stringify(imageMap));
+           } catch (err: any) {
+             console.error(err);
+           }
+         };
+       
+         loadTrips();
+       }, []);
     // Formaterar datum
     function formatDateToReadable(dateString: string): string {
       const date = new Date(dateString);
@@ -48,9 +84,9 @@ import MapWithDirections from "../api/googleMapsApi";
               <h1>{trip.title}</h1>
 
             <div className="trip-details3">
-                {img[trip.trip_id] && img[trip.trip_id] !== "Image for trip null" ? (
+                {tripImages[trip.trip_id] && tripImages[trip.trip_id] !== "Image for trip null" ? (
         <img
-            src={img[trip.trip_id]!} // Endast om URL finns och inte är "null"
+            src={tripImages[trip.trip_id]!} // Endast om URL finns och inte är "null"
             alt={`Image for trip ${trip.title}`}
             width="200"
         />
@@ -101,6 +137,8 @@ import MapWithDirections from "../api/googleMapsApi";
       </>
     );
   };
+
+
 
 
 

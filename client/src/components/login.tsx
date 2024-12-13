@@ -44,7 +44,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   // Hantera inloggning
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+console.log('email', email);
+console.log('password', password);
     try {
       await login(email, password); // Anropa login från Context
       navigate('/my-page'); // Omdirigera användaren
@@ -62,7 +63,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
       setError('Please provide valid credentials.');
       return;
     }
-
+console.log('email', email);
+console.log('password', password);
     try {
       // Skicka POST-begäran till backend för att skapa användare
     const response =  await fetch('http://localhost:3000/auth/register', {

@@ -66,7 +66,7 @@ export const SharedAdventure = () => {
          <LoadScript googleMapsApiKey={apiKey}  onLoad={() => console.log("Google Maps API loaded successfully")}
   onError={(error) => console.error("Error loading Google Maps API", error)}>
           <div>
-        <SharedTrips trips={trips} img={tripImages}/>
+        <SharedTrips/>
         </div>
         </LoadScript>
         </>

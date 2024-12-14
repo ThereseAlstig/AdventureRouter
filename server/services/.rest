@@ -19,10 +19,10 @@ Content-Type: application/json
 
 
 {
-  "email": "thereseeee@testt",
+  "email": "t@testt",
   "password": "12345",
   "username": "Jag",
-  "role": "admin"
+  "role": "user"
 }
 
 ### Login User
@@ -37,7 +37,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "thereseeee@testt",
+  "email": "t@testt",
   "password": "12345"
 }
 

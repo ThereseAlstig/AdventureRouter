@@ -8,30 +8,45 @@ import { RequestHandler } from 'express';
 
 export const registerUser: RequestHandler = async (req, res, next) => {
   try {
-    const { email, password, username } = req.body;
-    console.log("Password received from frontend:", req.body.password);
-    if (!email || !password) {
-      res.status(400).json({ message: 'Email and password are required' });
-      return; // Avsluta funktionen här för att undvika fortsatt exekvering
-    }
+      const { email, password, username} = req.body;
 
-    const existingUser = await findUserByEmail(email);
-    if (existingUser) {
-      res.status(400).json({ message: 'User already exists' });
-      return;
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
+      if (!email) {
+          res.status(400).json({ message: 'Email is required' });
+          return;
+      }
 
+      const existingUser = await findUserByEmail(email);
+      if (existingUser) {
+          res.status(400).json({ message: 'User already exists' });
+          return;
+      }
 
-  
-    // Verifiera lösenordet
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-    console.log("Password Match:", isMatch); // Förväntat: true
-    const user = await createUser({ email, password: hashedPassword, username: username || email.split('@')[0], });
-    // Logik för att hantera registrering
-    res.status(201).json({ message: 'User registered successfully', user });
+      
+      // För traditionell registrering (lösenord krävs)
+      if (!password) {
+          res.status(400).json({ message: 'Password is required for this registration method' });
+          return;
+      }
+
+      const hashedPassword = await bcrypt.hash(password.trim(), 10);
+      console.log("Hashed password:", hashedPassword);
+      const user = await createUser({
+          email,
+          password: hashedPassword,
+          username: username || email.split('@')[0],
+      });
+
+      res.status(201).json({
+          message: 'User registered successfully',
+          user: {
+              id: user.id,
+              email: user.email,
+              username: user.username,
+              role: user.role,
+          },
+      });
   } catch (error) {
-    next(error); // Vid fel, skicka vidare till Express error-handler
+      next(error);
   }
 };
 

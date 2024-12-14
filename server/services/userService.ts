@@ -27,33 +27,29 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
     }
   };
 
-export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
-  const existingUser = await findUserByEmail(user.email!);
-  if (existingUser) {
-      throw new Error('User with this email already exists');
-  }
-  const trimmedPassword = user.password ? user.password.trim() : '';
-  const hashedPassword = user.password ? await bcrypt.hash(trimmedPassword, 10) : null;
-  console.log("Generated hash during user creation:", hashedPassword);
+  export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
+    const { email, username, password, role } = user;
 
-  if (!hashedPassword) {
-    throw new Error('Password is required for this registration method');
-  }
-  console.log("Generated hash:", hashedPassword);
-  await pool.query(
-    'INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)',
-    [
-        user.email,
-        user.username || null,
-        hashedPassword,
-        user.role || 'user',
-      ]
-  );
+    // Hantera lösenord
+    let hashedPassword = null;
+    if (password) {
+        console.log("Password received from frontend:", password);
+    }
 
-  const newUser = await findUserByEmail(user.email!);
-  if (!newUser) throw new Error('User creation failed');
-  return newUser;
+    // Skapa användaren i databasen
+    await pool.query(
+        'INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)',
+        [email, username || email!.split('@')[0], password, role || 'user']
+    );
+
+    const newUser = await findUserByEmail(email!);
+    if (!newUser) {
+        throw new Error('User creation failed');
+    }
+
+    return newUser;
 };
+
 
 
 

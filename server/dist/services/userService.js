@@ -36,26 +36,18 @@ const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.findUserByEmail = findUserByEmail;
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingUser = yield (0, exports.findUserByEmail)(user.email);
-    if (existingUser) {
-        throw new Error('User with this email already exists');
+    const { email, username, password, role } = user;
+    // Hantera lösenord
+    let hashedPassword = null;
+    if (password) {
+        console.log("Password received from frontend:", password);
     }
-    const trimmedPassword = user.password ? user.password.trim() : '';
-    const hashedPassword = user.password ? yield bcrypt_1.default.hash(trimmedPassword, 10) : null;
-    console.log("Generated hash during user creation:", hashedPassword);
-    if (!hashedPassword) {
-        throw new Error('Password is required for this registration method');
-    }
-    console.log("Generated hash:", hashedPassword);
-    yield db_1.default.query('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)', [
-        user.email,
-        user.username || null,
-        hashedPassword,
-        user.role || 'user',
-    ]);
-    const newUser = yield (0, exports.findUserByEmail)(user.email);
-    if (!newUser)
+    // Skapa användaren i databasen
+    yield db_1.default.query('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)', [email, username || email.split('@')[0], password, role || 'user']);
+    const newUser = yield (0, exports.findUserByEmail)(email);
+    if (!newUser) {
         throw new Error('User creation failed');
+    }
     return newUser;
 });
 exports.createUser = createUser;

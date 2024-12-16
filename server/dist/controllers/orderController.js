@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createOrder = void 0;
+exports.fetchCart = exports.CreateCart = exports.createOrder = void 0;
 const orderService_1 = require("../services/orderService");
 const db_1 = __importDefault(require("../config/db"));
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,3 +33,34 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.createOrder = createOrder;
+const CreateCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('CreateCart');
+    const { email, productId, quantity, cartId } = req.body; // Hämta från request-body
+    // För anonyma användare, lagras som cookie
+    let cart;
+    try {
+        const createCart = yield (0, orderService_1.addToCartService)(db_1.default, email, cartId, productId, quantity);
+        res.status(201).json({ message: 'Cart created successfully', cart: createCart });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to create cart', error: err.message });
+    }
+});
+exports.CreateCart = CreateCart;
+const fetchCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const email = (_a = req.query.email) !== null && _a !== void 0 ? _a : null;
+        const cartId = (_b = req.query.cartId) !== null && _b !== void 0 ? _b : null;
+        // Hämta produkter från kundkorgen
+        const cartItems = yield (0, orderService_1.getCartItems)(db_1.default, email, cartId);
+        // Returnera kundkorgen
+        res.status(200).json({ cartItems });
+    }
+    catch (error) {
+        console.error('Error fetching cart:', error.message);
+        res.status(500).json({ message: 'Failed to fetch cart', error: error.message });
+    }
+});
+exports.fetchCart = fetchCart;

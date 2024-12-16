@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
  dotenv.config();
 
 import express, { Request, Response } from 'express';
-import cors from 'cors';
+
 import pool from './config/db'; // Importera databaskonfigurationen
 import productRouter from './routes/productRouter';
 import session from 'express-session';
@@ -16,8 +16,8 @@ import googleRoutes from './routes/googleRoutes'; // Import googleRoutes
 import orderRouter from './routes/orderRouter'; // Import ordersRoutes
 import githubRoutes from './routes/githubRouter'; // Import githubRoutes
 import travelRoutes from './routes/travelRouter';
-
-
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 
 
@@ -33,6 +33,9 @@ app.use(bodyParser.json());
 app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
+
+
 
 // Test av databasanslutning
 (async () => {

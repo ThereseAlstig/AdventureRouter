@@ -3,6 +3,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import '../styles/_productSlider.scss'
 import { Product } from "../types/product";
 import { useSwipeable } from 'react-swipeable';
+import { saveToCart } from "../api/cart";
 
 
 interface ProductCarusellProps {
@@ -12,6 +13,8 @@ interface ProductCarusellProps {
 export const ProductCarusell: React.FC<ProductCarusellProps> = ({ products }) => {
 
 const [isMobile, setIsMobile] = useState(false);
+const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+
   const productsPerPage = 3;
   // const sliderRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef() as MutableRefObject<HTMLDivElement | null>;
@@ -51,6 +54,30 @@ const [isMobile, setIsMobile] = useState(false);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+
+    // Uppdatera antal för en specifik produkt
+    const handleQuantityChange = (productId: number, quantity: string) => {
+      setQuantities((prev) => ({
+          ...prev,
+          [productId]: parseInt(quantity) || 1, // Standard till 1 om input är tomt
+      }));
+  };
+  const handleAddToCart = async (productId: number) => {
+    const quantity = quantities[productId] || 1; // Hämta antal från state (standard till 1)
+    try {
+        const updatedCart = await saveToCart(productId, quantity);
+        console.log("Uppdaterad kundkorg:", updatedCart);
+        alert("Produkten lades till i kundkorgen!");
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Kunde inte lägga till produkten:", error.message);
+        } else {
+            console.error("Kunde inte lägga till produkten:", error);
+        }
+        alert("Något gick fel!");
+    }
+};
 
     const productsToShow = isMobile ? 1 : productsPerPage;
 //slider för mobile
@@ -143,7 +170,18 @@ const [isMobile, setIsMobile] = useState(false);
                     <h3>{product.name}</h3>
                     <p>{product.description}</p>
                     <p>{product.price} kr</p>
-                    <button className="button-cart">PUT IN CART</button>
+                    <div className="quantity-container">
+      <label htmlFor={`quantity-${product.id}`}>Antal:</label>
+      <input
+        id={`quantity-${product.id}`}
+        type="number"
+        min="1"
+        defaultValue="1"
+        onChange={(e) => handleQuantityChange(product.id, e.target.value)} // Hantera antal
+      />
+    </div>
+                    <button className="button-cart"
+      onClick={() => handleAddToCart(product.id)} >PUT IN CART</button>
                   </div>
                 ))}
               </div>

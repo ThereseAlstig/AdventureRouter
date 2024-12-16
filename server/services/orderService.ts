@@ -68,3 +68,126 @@ export const createOrderService = async (pool: Pool, orderData: OrderData) => {
     connection.release();
   }
 };
+
+
+
+
+
+
+export const addToCartService = async (
+    pool: Pool,
+    email: string | undefined,
+    cartId: string | undefined,
+    productId: number,
+    quantity: number
+): Promise<any> => {
+    try {
+        let cartIdToUse = cartId;
+
+        // Om användaren är inloggad, koppla kundkorgen till användarens e-post
+        if (email) {
+            const [userRows] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+            const user = (userRows as any[])[0];
+
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const userId = user.id;
+
+            // Kontrollera om kundkorgen redan finns för användaren
+            const [cartRows] = await pool.query('SELECT cart_id FROM Carts WHERE user_id = ?', [userId]);
+            const existingCart = (cartRows as any[])[0];
+
+            if (existingCart) {
+                cartIdToUse = existingCart.cart_id;
+            } else {
+                // Skapa en ny kundkorg om ingen finns
+                cartIdToUse = crypto.randomUUID();
+                await pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [cartIdToUse, userId]);
+            }
+        }
+
+        // Om användaren är anonym, använd `cartId` eller skapa en ny
+        if (!cartIdToUse) {
+            cartIdToUse = crypto.randomUUID(); // Generera ett nytt UUID för anonyma användare
+            await pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
+        }
+
+        // Lägg till produkten i kundkorgen
+        const [existingProductRows] = await pool.query<any[]>(
+            'SELECT * FROM CartItems WHERE cart_id = ? AND product_id = ?',
+            [cartIdToUse, productId]
+        );
+
+        if (existingProductRows.length > 0) {
+            // Uppdatera kvantiteten om produkten redan finns
+            await pool.query(
+                'UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?',
+                [quantity, cartIdToUse, productId]
+            );
+        } else {
+            // Lägg till en ny produkt i kundkorgen
+            await pool.query(
+                'INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)',
+                [cartIdToUse, productId, quantity]
+            );
+        }
+
+        // Returnera den uppdaterade kundkorgen
+        const [cartItems] = await pool.query('SELECT * FROM CartItems WHERE cart_id = ?', [cartIdToUse]);
+        return { cartId: cartIdToUse, items: cartItems };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(`Failed to add to cart: ${error.message}`);
+        } else {
+            throw new Error('Failed to add to cart: Unknown error');
+        }
+    }
+};
+
+
+
+
+export const getCartItems = async (pool: Pool, email: string | null, cartId: string | null) => {
+    try {
+        let query: string;
+        let params: (string | null)[];
+
+        if (email) {
+            // Om användaren är inloggad, hämta kundkorgen baserat på e-post
+            query = `
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                FROM CartItems ci
+                INNER JOIN Carts c ON ci.cart_id = c.cart_id
+                INNER JOIN Products p ON ci.product_id = p.id
+                INNER JOIN users u ON c.user_id = u.id
+                WHERE u.email = ?;
+            `;
+            params = [email];
+        } else if (cartId) {
+            // Om användaren är anonym, hämta kundkorgen baserat på `cartId`
+            query = `
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                FROM CartItems ci
+                INNER JOIN Carts c ON ci.cart_id = c.cart_id
+                INNER JOIN Products p ON ci.product_id = p.id
+                WHERE c.cart_id = ?;
+            `;
+            params = [cartId];
+        } else {
+            throw new Error('Either email or cartId must be provided');
+        }
+
+        // Kör frågan och returnera resultaten
+        const [rows] = await pool.query(query, params);
+        return rows; // Returnera produkter i kundkorgen
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error('Error fetching cart items:', error.message);
+        } else {
+            console.error('Error fetching cart items:', error);
+        }
+        throw new Error('Failed to fetch cart items');
+    }
+};

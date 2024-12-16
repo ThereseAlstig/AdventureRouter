@@ -10,4 +10,8 @@ const router = express_1.default.Router();
 router.post('/createOrders', (req, res, next) => {
     next();
 }, authMiddleware_1.ensureAuthenticated, orderController_1.createOrder);
+router.post('/createCart', (req, res, next) => {
+    next();
+}, orderController_1.CreateCart);
+router.get('/fetchCart', orderController_1.fetchCart);
 exports.default = router;

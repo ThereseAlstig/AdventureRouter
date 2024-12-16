@@ -15,19 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
-const db_1 = __importDefault(require("./config/db")); // Importera databaskonfigurationen
+const db_1 = __importDefault(require("./config/db"));
 const productRouter_1 = __importDefault(require("./routes/productRouter"));
 const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const authRouter_1 = __importDefault(require("./routes/authRouter"));
 require("./config/passport");
-const googleRoutes_1 = __importDefault(require("./routes/googleRoutes")); // Import googleRoutes
-const orderRouter_1 = __importDefault(require("./routes/orderRouter")); // Import ordersRoutes
-const githubRouter_1 = __importDefault(require("./routes/githubRouter")); // Import githubRoutes
+const googleRoutes_1 = __importDefault(require("./routes/googleRoutes"));
+const orderRouter_1 = __importDefault(require("./routes/orderRouter"));
+const githubRouter_1 = __importDefault(require("./routes/githubRouter"));
 const travelRouter_1 = __importDefault(require("./routes/travelRouter"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+const stripeRouter_1 = __importDefault(require("./routes/stripeRouter"));
 // Importera produktens router
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -60,6 +61,7 @@ app.use('/user', googleRoutes_1.default);
 app.use('/orders', orderRouter_1.default);
 app.use('/api', travelRouter_1.default);
 app.use('/user', githubRouter_1.default);
+app.use('/payment', stripeRouter_1.default);
 // Starta servern
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

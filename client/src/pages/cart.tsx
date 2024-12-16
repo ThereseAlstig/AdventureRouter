@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { fetchCart } from "../api/cart";
 import { CartItems } from "../components/cartItems";
 import { Product } from "../types/product";
+import PaymentPage from "./paymentPage";
 
 
 interface ProductCart extends Product {
+    product_id: any;
     quantity: number;
 }
 
@@ -12,7 +14,11 @@ interface ProductCart extends Product {
 
 export const Cart: React.FC = () => {
     const [products, setProducts] = useState<ProductCart[]>([]);
+    const [isPaying, setIsPaying] = useState(false);
 
+    const handleCheckout = () => {
+        setIsPaying(true); // Visa betalningssidan
+    };
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -32,6 +38,13 @@ export const Cart: React.FC = () => {
         fetchCartItems(); // Kör funktionen
     }, []); // Kör endast vid första renderingen
 
+
+    const cartItems = products.map((item) => ({
+        productId: item.product_id, // Konvertera till string om det är ett nummer
+        quantity: item.quantity,
+    }));
+
+
     return (
         <div>
           
@@ -43,7 +56,11 @@ export const Cart: React.FC = () => {
 {products.length > 0 &&
 <CartItems items={products}/>
 }
-            
+{!isPaying ? (
+                <button onClick={handleCheckout}>Go to Payment</button>
+            ) : (
+                <PaymentPage items={cartItems}/>
+            )}
         </div>
     );
 }

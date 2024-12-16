@@ -1,4 +1,5 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
+import pool from '../config/db';
 
 interface OrderItem {
   productId: number;
@@ -190,4 +191,34 @@ export const getCartItems = async (pool: Pool, email: string | null, cartId: str
         }
         throw new Error('Failed to fetch cart items');
     }
+};
+
+
+export const getProductsByIds = async (productIds: number[]): Promise<{ id: number; price: number }[]> => {
+  // Kontrollera om productIds inte är tomt
+  if (!productIds) {
+      return [];
+  }
+
+  try {
+      // Skapa en parameteriserad query
+      const query = `
+          SELECT id, price 
+          FROM Products 
+          WHERE id in (?);
+      `;
+
+      // Kör queryn och skicka in produkt-ID:n som parameter
+      const [rows]: any = await pool.query(query, [productIds]);
+console.log('Product fetched:', rows);
+      // Returnera resultaten i önskat format
+      return rows.map((row: { id: number; price: string }) => ({
+        id: row.id,
+        price: parseFloat(row.price), // Konvertera från sträng till nummer
+    }));
+    
+  } catch (error) {
+      console.error('Error fetching products by IDs:', error);
+      throw new Error('Failed to fetch products from database');
+  }
 };

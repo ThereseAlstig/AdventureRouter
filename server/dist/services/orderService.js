@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCartItems = exports.addToCartService = exports.createOrderService = void 0;
+exports.getProductsByIds = exports.getCartItems = exports.addToCartService = exports.createOrderService = void 0;
+const db_1 = __importDefault(require("../config/db"));
 const createOrderService = (pool, orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const { userEmail, items, address } = orderData;
     // 1. Beräkna totalpris
@@ -141,3 +145,30 @@ const getCartItems = (pool, email, cartId) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.getCartItems = getCartItems;
+const getProductsByIds = (productIds) => __awaiter(void 0, void 0, void 0, function* () {
+    // Kontrollera om productIds inte är tomt
+    if (!productIds) {
+        return [];
+    }
+    try {
+        // Skapa en parameteriserad query
+        const query = `
+          SELECT id, price 
+          FROM Products 
+          WHERE id in (?);
+      `;
+        // Kör queryn och skicka in produkt-ID:n som parameter
+        const [rows] = yield db_1.default.query(query, [productIds]);
+        console.log('Product fetched:', rows);
+        // Returnera resultaten i önskat format
+        return rows.map((row) => ({
+            id: row.id,
+            price: parseFloat(row.price), // Konvertera från sträng till nummer
+        }));
+    }
+    catch (error) {
+        console.error('Error fetching products by IDs:', error);
+        throw new Error('Failed to fetch products from database');
+    }
+});
+exports.getProductsByIds = getProductsByIds;

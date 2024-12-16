@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 import express, { Request, Response } from 'express';
 
-import pool from './config/db'; // Importera databaskonfigurationen
+import pool from './config/db'; 
 import productRouter from './routes/productRouter';
 import session from 'express-session';
 
@@ -12,12 +12,13 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import authRoutes from './routes/authRouter';
 import './config/passport'; 
-import googleRoutes from './routes/googleRoutes'; // Import googleRoutes
-import orderRouter from './routes/orderRouter'; // Import ordersRoutes
-import githubRoutes from './routes/githubRouter'; // Import githubRoutes
+import googleRoutes from './routes/googleRoutes'; 
+import orderRouter from './routes/orderRouter'; 
+import githubRoutes from './routes/githubRouter'; 
 import travelRoutes from './routes/travelRouter';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import stripeRoutes from './routes/stripeRouter'; 
 
 
 
@@ -62,6 +63,7 @@ app.use('/user', googleRoutes);
 app.use('/orders', orderRouter);
 app.use('/api', travelRoutes);
 app.use('/user', githubRoutes);
+app.use('/payment', stripeRoutes);
 
 // Starta servern
 app.listen(PORT, () => {

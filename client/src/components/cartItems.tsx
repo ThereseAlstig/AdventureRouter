@@ -1,6 +1,7 @@
 import { Product } from "../types/product";
 
 interface ProductCart extends Product {
+    product_id:  null | undefined;
     quantity: number;
 }
 
@@ -26,7 +27,7 @@ console.log(items, 'items');
             <h1 className="youre-cart">Youre cart:</h1>
             <ul className="cart-items">
                 {items.items.map((item) => (
-                    <li key={item.id}>
+                    <li key={item.product_id}>
                         <img src={item.image_url} alt={item.name} />
                         <h2>{item.name}</h2>
                         

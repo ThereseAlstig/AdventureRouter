@@ -14,4 +14,6 @@ router.post('/createCart', (req, res, next) => {
     next();
 }, orderController_1.CreateCart);
 router.get('/fetchCart', orderController_1.fetchCart);
+router.post('/clearCartByEmail', authMiddleware_1.ensureAuthenticated, (0, orderController_1.clearCartByEmailController)());
+router.post('/transferAnonymousCart', orderController_1.transferAnonymousCartController);
 exports.default = router;

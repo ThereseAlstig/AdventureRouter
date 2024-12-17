@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
+import  createOrder  from '../api/createOrder';
+import ClearCart from '../api/clearCart';
+import { useNavigate } from 'react-router-dom';
 interface PaymentFormProps {
     clientSecret: string;
+    items: { productId: number; quantity: number }[];
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret, items }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [paymentStatus, setPaymentStatus] = useState<string>('');
-
+    const [address, setAddress] = useState<string>('');
+    const userEmail = sessionStorage.getItem('userEmail');
+    const  navigate  = useNavigate();
     const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!stripe || !elements) {
             setPaymentStatus('Stripe has not loaded yet.');
+            return;
+        }
+        if (!address) {
+            setPaymentStatus('Please enter your address before proceeding.');
             return;
         }
 
@@ -36,6 +45,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
                 setPaymentStatus(`Payment failed: ${error.message}`);
             } else if (paymentIntent && paymentIntent.status === 'succeeded') {
                 setPaymentStatus('Payment successful!');
+                const orderData = {
+                    userEmail,
+                    address,
+                    items,
+                };
+                await createOrder(orderData);
+                await ClearCart();
+                navigate('/tank-you')
             }
         } catch (error: any) {
             setPaymentStatus(`Unexpected error: ${error.message}`);
@@ -45,6 +62,17 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
     return (
         <div>
             <form onSubmit={handlePayment}>
+            <div>
+                    <label>Address:</label>
+                    <input
+                        type="text"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Enter your delivery address"
+                        required
+                        style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+                    />
+                </div>
                 <CardElement
                     options={{
                         style: {

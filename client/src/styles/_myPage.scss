@@ -61,3 +61,13 @@ img{
         width: 90%;
       
     };
+
+    @media (max-width: 768px){
+.image-upload{
+    margin-left: 0px;
+}
+
+.trip-details3-under-map{
+    padding: 20px;
+}
+    }

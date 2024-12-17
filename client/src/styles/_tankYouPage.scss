@@ -1,0 +1,31 @@
+/* Container */
+.thank-you-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+
+
+
+
+/* Tack-text */
+.thank-you-text {
+    position: relative;
+    z-index: 10;
+    font-size: 2rem;
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px 20px;
+    border-radius: 8px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+

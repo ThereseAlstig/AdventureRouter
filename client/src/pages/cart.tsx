@@ -56,10 +56,13 @@ export const Cart: React.FC = () => {
 {products.length > 0 &&
 <CartItems items={products}/>
 }
-{!isPaying ? (
+{!isPaying ? (<div className="checkout">
                 <button onClick={handleCheckout}>Go to Payment</button>
+                </div>
             ) : (
+                <div className="payment">
                 <PaymentPage items={cartItems}/>
+                </div>
             )}
         </div>
     );

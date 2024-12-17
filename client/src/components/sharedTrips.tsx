@@ -23,7 +23,7 @@ import { fetchTripImage } from "../api/fetchImg";
        
              setTrips(tripsData);
              localStorage.setItem('trips', JSON.stringify(tripsData));
-       
+       console.log(trips);
              const images = await Promise.all(
                tripsData.map(async (trip: any) => {
                  const imageUrl = await fetchTripImage(trip.trip_id);
@@ -119,6 +119,13 @@ import { fetchTripImage } from "../api/fetchImg";
                   {formatDateToReadable(trip.end_date)}.
                 </p>
               </div>
+              {trip.best_experience? (
+                <div className="trips-best">
+                  <h2>Best:</h2>
+                  <p>{trip.best_experience}</p>
+                
+                </div>
+              ) : null}
             </div>
             <div className="trip-detail-right">
             <MapWithDirections

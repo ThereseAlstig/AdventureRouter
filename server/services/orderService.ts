@@ -4,7 +4,7 @@ import pool from '../config/db';
 interface OrderItem {
   productId: number;
   quantity: number;
-  price: number; // Pris per produkt
+  // Pris per produkt
 }
 
 interface OrderData {
@@ -72,9 +72,6 @@ export const createOrderService = async (pool: Pool, orderData: OrderData) => {
 
 
 
-
-
-
 export const addToCartService = async (
     pool: Pool,
     email: string | undefined,
@@ -84,6 +81,9 @@ export const addToCartService = async (
 ): Promise<any> => {
     try {
         let cartIdToUse = cartId;
+
+        console.log('email:', email);
+        console.log('cartId:', cartId);
 
         // Om användaren är inloggad, koppla kundkorgen till användarens e-post
         if (email) {
@@ -106,13 +106,27 @@ export const addToCartService = async (
                 // Skapa en ny kundkorg om ingen finns
                 cartIdToUse = crypto.randomUUID();
                 await pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [cartIdToUse, userId]);
+                console.log('New cart created for user:', userId, 'with cart ID:', cartIdToUse);
             }
         }
 
-        // Om användaren är anonym, använd `cartId` eller skapa en ny
-        if (!cartIdToUse) {
-            cartIdToUse = crypto.randomUUID(); // Generera ett nytt UUID för anonyma användare
+        // Om användaren är anonym eller har ett befintligt cartId
+        if (cartIdToUse) {
+            const [cartRows] = await pool.query<any[]>(
+                'SELECT cart_id FROM Carts WHERE cart_id = ?',
+                [cartIdToUse]
+            );
+
+            if (cartRows.length === 0) {
+                // Skapa en ny kundvagn i databasen om ID:t inte finns
+                await pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
+                console.log('Cart ID did not exist, new cart created:', cartIdToUse);
+            }
+        } else {
+            // Skapa ett nytt cartId om inget ID finns och användaren är anonym
+            cartIdToUse = crypto.randomUUID();
             await pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
+            console.log('New cart created for anonymous user with ID:', cartIdToUse);
         }
 
         // Lägg till produkten i kundkorgen
@@ -127,12 +141,14 @@ export const addToCartService = async (
                 'UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?',
                 [quantity, cartIdToUse, productId]
             );
+            console.log('Product quantity updated in cart:', productId);
         } else {
             // Lägg till en ny produkt i kundkorgen
             await pool.query(
                 'INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)',
                 [cartIdToUse, productId, quantity]
             );
+            console.log('Product added to cart with ID:', cartIdToUse);
         }
 
         // Returnera den uppdaterade kundkorgen
@@ -140,12 +156,14 @@ export const addToCartService = async (
         return { cartId: cartIdToUse, items: cartItems };
     } catch (error) {
         if (error instanceof Error) {
+            console.error('Error in addToCartService:', error.message);
             throw new Error(`Failed to add to cart: ${error.message}`);
         } else {
             throw new Error('Failed to add to cart: Unknown error');
         }
     }
 };
+
 
 
 
@@ -221,4 +239,78 @@ console.log('Product fetched:', rows);
       console.error('Error fetching products by IDs:', error);
       throw new Error('Failed to fetch products from database');
   }
+};
+
+// ta bort innehåll i kundkorgen
+export const clearCartByEmailService = async ( email: string): Promise<void> => {
+    try {
+        // Hämta användarens cart_id baserat på e-post
+        const [cartRows] = await pool.query(
+            'SELECT cart_id FROM Carts INNER JOIN users ON Carts.user_id = users.id WHERE users.email = ?',
+            [email]
+        );
+
+        const cart = (cartRows as any[])[0];
+
+        if (!cart) {
+            throw new Error('No cart found for this user.');
+        }
+
+        const cartId = cart.cart_id;
+
+        // Ta bort alla produker från kundkorgen
+        await pool.query('DELETE FROM CartItems WHERE cart_id = ?', [cartId]);
+        console.log(`Cart cleared for user with email: ${email}`);
+    } catch (error) {
+        throw new Error(`Failed to clear cart: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+};
+
+// För över anonym kundkorg till inloggad användare
+export const transferAnonymousCartService = async (
+   
+    cardId: string,
+    email: string
+): Promise<void> => {
+    const [userRows] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+    const user = (userRows as any[])[0];
+    if (!user) throw new Error('User not found');
+
+    const userId = user.id;
+
+    const [cartRows] = await pool.query('SELECT cart_id FROM Carts WHERE user_id = ?', [userId]);
+    let userCartId = (cartRows as any[])[0]?.cart_id;
+
+    if (!cardId) {
+        userCartId = crypto.randomUUID();
+        await pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [userCartId, userId]);
+    }
+
+    const [anonymousCartItems] = await pool.query(
+        'SELECT product_id, quantity FROM CartItems WHERE cart_id = ?',
+        [cardId]
+    );
+
+    for (const item of anonymousCartItems as any[]) {
+        const [existingItems]: [any[], any] = await pool.query(
+            'SELECT quantity FROM CartItems WHERE cart_id = ? AND product_id = ?',
+            [userCartId, item.product_id]
+        );
+
+        if (existingItems.length > 0) {
+            await pool.query(
+                'UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?',
+                [item.quantity, userCartId, item.product_id]
+            );
+        } else {
+            await pool.query(
+                'INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)',
+                [userCartId, item.product_id, item.quantity]
+            );
+        }
+    }
+
+    // Radera den anonyma kundkorgen
+    await pool.query('DELETE FROM CartItems WHERE cart_id = ?', [cardId]);
+    await pool.query('DELETE FROM Carts WHERE cart_id = ?', [cardId]);
 };

@@ -26,8 +26,10 @@
         }
         p{
             width: 20%; 
-        };
+        }
     }
+
+  
     
 
     img{
@@ -53,7 +55,29 @@ margin-left: 80px;
     font-size: large;
     margin-top: 50px;
 }
+  .checkout{
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        padding-top: 20px;
 
+        button{
+            max-width: 150px;
+        }
+       
+    }
+
+    .payment{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+
+        button{
+            max-width: 150px;
+        }
+    }
 @media (max-width: 768px){
     .cart-items{
         margin-left: 0;

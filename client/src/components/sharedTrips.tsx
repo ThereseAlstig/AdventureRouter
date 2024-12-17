@@ -88,6 +88,7 @@ import { fetchTripImage } from "../api/fetchImg";
         <img
             src={tripImages[trip.trip_id]!} // Endast om URL finns och inte är "null"
             alt={`Image for trip ${trip.title}`}
+            loading="lazy"
             width="200"
         />
     ) : (

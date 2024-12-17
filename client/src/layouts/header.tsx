@@ -43,7 +43,7 @@ console.log(isAuthenticated);
         <header className="bg-gray-800  text-center p-4 ">
             <div className="center">
 <div className="topNavigation">
-           <NavLink to='/' className='left'>
+           <NavLink to='/' className='left' aria-label="Link to startpage">
             <h1>Adventure Route</h1>
             </NavLink>
 
@@ -58,15 +58,15 @@ console.log(isAuthenticated);
         // Om användaren är inloggad, visa "Your Account"-knappen
         <>
 
-        <NavLink to="/my-page" className="right">
+        <NavLink to="/my-page" className="right" aria-label="My page">
           <FontAwesomeIcon icon={faUser} className="logo-user" />
         </NavLink>
         </>
       ) : (
         // Om användaren inte är inloggad, visa "Logga in/skapa användare"-knappen
-        <NavLink to="#" onClick={openModal} className="right">
+        <NavLink to="#" onClick={openModal} className="right" aria-label="loggin in or create account">
           <h2 className="logo-text">Login/create account</h2>
-          <FontAwesomeIcon icon={faUser} className="logo-img" />
+          <FontAwesomeIcon icon={faUser} className="logo-img" aria-label="Go to youre page"/>
         </NavLink>
       )}
 
@@ -79,7 +79,7 @@ console.log(isAuthenticated);
 
           
 </div></div>
-  <NavLink to="/cart" className="cart-icon ">
+  <NavLink to="/cart" className="cart-icon " aria-label="Go to youre cart">
                 <FontAwesomeIcon icon={faShoppingCart} />
             </NavLink>
 
@@ -89,17 +89,17 @@ console.log(isAuthenticated);
 
 <div className={`nav-links ${isOpen ? 'open' : ''}`}>
     <NavLink to="/shop" className={({ isActive }) => isActive ? "active-link" : ""}   onClick={handleCloseMenu}>
-        <h2>SHOP</h2>
+        <h3>SHOP</h3>
     </NavLink>
     <NavLink to="/journey-planner" className={({ isActive }) => isActive ? "active-link" : ""}  onClick={handleCloseMenu}>
-        <h2>JOURNEY PLANNER</h2>
+        <h3>JOURNEY PLANNER</h3>
     </NavLink>
     <NavLink to="/shared-adventure" className={({ isActive }) => isActive ? "active-link" : ""}  onClick={handleCloseMenu}>
-        <h2>SHARED ADVENTURE</h2>
+        <h3>SHARED ADVENTURE</h3>
     </NavLink>
     <NavLink to="/cart" className={({ isActive }) => isActive ? "active-link" : ""}  onClick={handleCloseMenu}>
     <FontAwesomeIcon icon={faShoppingCart} className="cart-icon"/>
-        <h2>CART</h2>
+        <h3>CART</h3>
     </NavLink>
 </div>
 

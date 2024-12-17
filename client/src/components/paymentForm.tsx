@@ -66,6 +66,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret, items }) => {
                     <label>Address:</label>
                     <input
                         type="text"
+                        aria-label="Youre delivery address"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         placeholder="Enter your delivery address"

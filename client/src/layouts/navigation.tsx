@@ -67,17 +67,17 @@ export const Navigation = () => {
             <nav className="navigation">
                {categories.map((category) => (
                 <div key={category.id}>
-                       <h2 onClick={() => toggleSubcategories(category.id)}> 
+                       <h3 onClick={() => toggleSubcategories(category.id)}> 
                         <NavLink to={`/categories/${category.id}`} className={({ isActive }) => (isActive ? "active" : "")}>
                             {category.name}
-                        </NavLink></h2>
+                        </NavLink></h3>
                     {openCategory === category.id && (
                         <ul>
                             {category.subcategories && category.subcategories.length > 0 ? (
                                 category.subcategories.map((subcategory) => (
                                     <li key={subcategory.id}> 
                                     <NavLink to={`/categories/${category.id}/subcategories/${subcategory.id}`}
-                                    className={({ isActive }) => (isActive ? "active subcategory" : "subcategory")}>
+                                    className={({ isActive }) => (isActive ? "active subcategory" : "subcategory")} aria-label="navigate to categorie">
                                     {subcategory.name}
                                 </NavLink></li>
                                 ))

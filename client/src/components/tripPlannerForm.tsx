@@ -107,6 +107,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         Start:
         </label><input
           type="text"
+          aria-label="start location"
           value={start}
           onChange={(e) => setStart(e.target.value)}
           placeholder="Start location"
@@ -119,6 +120,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         Destination:</label>
         <input
           type="text"
+          aria-label="destination"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           placeholder="Destination"
@@ -130,6 +132,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         <div className="tripPlanerForm__inputWrapper">
         <input
           type="text"
+          aria-label="optional waypoints"
           value={waypoints}
           onChange={(e) => setWaypoints(e.target.value)}
           placeholder="Optional waypoints"
@@ -142,6 +145,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         Start Date: </label>
         <input
           type="date"
+          aria-label="departure date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
@@ -151,6 +155,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         Arrival Date:</label>
         <input
           type="date"
+          aria-label="arrival date"
           value={arrivalDate}
           onChange={(e) => setArrivalDate(e.target.value)}
         />

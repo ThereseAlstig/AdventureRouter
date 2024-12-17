@@ -106,10 +106,7 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
           setCurrentIndex(currentIndex - 1);
         }
       };
-    console.log({
-      currentIndex,
-      translateX: (currentIndex * (100 / productsToShow)),
-    });
+  
    
     const calculateTranslateX = () => {
       if (!sliderRef.current) {
@@ -134,12 +131,6 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
       // Beräkna den totala förflyttningen
       const translateX = currentIndex * (productWidth + gap);
     
-      console.log({
-        currentIndex,
-        productWidth,
-        gap,
-        translateX,
-      });
     
       return translateX;
     };

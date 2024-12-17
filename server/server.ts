@@ -19,7 +19,7 @@ import travelRoutes from './routes/travelRouter';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import stripeRoutes from './routes/stripeRouter'; 
-
+import compression from 'compression';
 
 
  // Importera produktens router
@@ -35,7 +35,7 @@ app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: t
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
-
+app.use(compression());
 
 
 // Test av databasanslutning

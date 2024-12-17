@@ -27,7 +27,7 @@ export const Home = () => {
 
     return (
         <>
-            <h2>Här visas en film om hur man hittar på sidan</h2>
+            <div>Film</div>
 
         <div className="homepageWords">
             <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>   

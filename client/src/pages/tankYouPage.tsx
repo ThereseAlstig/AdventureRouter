@@ -28,6 +28,7 @@ const ThankYouPage: React.FC = () => {
             {showVideo &&(
                 <video autoPlay muted loop className="adventure-video" aria-label="A vintage and retro outdoor adventure animation with text Adventure Router Youre journey starts now, Sweden">
                 <source src='/Vintage and Retro Outdoor Adventure Animated Logo.mp4' type="video/mp4" />
+                <track src="captions.vtt" kind="captions" label="English"></track>
                 Your browser does not support the video tag.
                 </video>
 

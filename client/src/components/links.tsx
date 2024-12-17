@@ -16,6 +16,7 @@ export const Links: React.FC<LinksProps> = ({ links }) => {
                 <a 
                     key={index} 
                     href={on.link} 
+                    aria-label="Link to productpage page "
                     rel="noopener noreferrer" 
                     className="linkWrapper"
                 >

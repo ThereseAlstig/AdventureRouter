@@ -111,11 +111,13 @@ console.log(data);
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              aria-label="username"
             />
             <label>E-mail:</label>
             <input
               type="email"
               value={email}
+              aria-label="Email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -124,6 +126,7 @@ console.log(data);
             <label>Password:</label>
             <input
               type="password"
+              aria-label="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

@@ -29,6 +29,7 @@ const travelRouter_1 = __importDefault(require("./routes/travelRouter"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const stripeRouter_1 = __importDefault(require("./routes/stripeRouter"));
+const compression_1 = __importDefault(require("compression"));
 // Importera produktens router
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,7 @@ app.use((0, express_session_1.default)({ secret: 'your_secret_key', resave: fals
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use((0, cookie_parser_1.default)());
+app.use((0, compression_1.default)());
 // Test av databasanslutning
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {

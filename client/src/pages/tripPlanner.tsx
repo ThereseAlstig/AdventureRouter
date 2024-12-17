@@ -218,7 +218,7 @@ handleFetchFilteredProducts(startWeather, modeTravel);
     <div>
       <div className="journrey__container">
       <div className ="tripPlanerForm">
-      <h1>Plan youre trip</h1>
+      <h2>Plan youre trip</h2>
       <TripPlannerForm onSubmit={handleSubmit} />
       </div>
       <div className="googleMapContainer">

@@ -27,33 +27,6 @@ export const MyPage = () => {
       }
     };
 
-// const Logout = async() => {
-  
-
-//     try {
-//         // Skicka en POST-begäran till backend för att logga ut användaren
-//         const response = await fetch('http://localhost:3000/auth/logout', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//         });
-  
-//         // Om backend inte svarar med status 200, visa ett felmeddelande
-//         if (!response.ok) {
-//           throw new Error('Logout failed');
-//         }
-  
-//         // Ta bort token från sessionStorage
-//         sessionStorage.removeItem('token');
-  
-//         // Omdirigera användaren till inloggningssidan eller startsidan efter utloggning
-//         navigate('/'); // Byt ut '/login' med den faktiska inloggningssidan om den är annorlunda
-//       } catch (err) {
-//         // Hantera eventuella fel under logout-processen
-//         console.error(err);
-//       }
-//     };
 
     return (
         <>
@@ -62,7 +35,7 @@ export const MyPage = () => {
 <>
 
             <button className="logoutButton" onClick={handleLogout}>Log Out</button>
-<LoadScript googleMapsApiKey={apiKey}>
+            <LoadScript googleMapsApiKey={apiKey}>
             <div>
               <MyTrips/>
             </div>

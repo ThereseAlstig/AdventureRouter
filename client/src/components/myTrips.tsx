@@ -260,6 +260,7 @@ function formatDateToReadable(dateString: string): string {
                     alt={`Image for trip ${trip.title}`}
                     width="200"
                     className="trip-image"
+                    loading="lazy"
                   />
                 ) : (
                   <>

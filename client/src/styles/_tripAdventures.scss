@@ -68,9 +68,33 @@ margin-right: 20px;
     text-align: center;
 }
 
-@media (max-width: 768px) {
+.trips-best{
+    margin-top: 20px;
+    margin-left: 40px;
+}
 
+@media (max-width: 768px) {
+.trip-container{
+    flex-direction: column;
+}
     .logoutButton{
         margin-left: 40%;
     }
+    .trip-detail-left{
+        margin-right: 0px;
+        margin-top: 60px;
+        width: 100%;
+
+    }
+    .trip-detail-right{
+        margin-right: 0px;
+        margin-top: 60px;
+        width: 100%;
+
+    }
+    .trips-best{
+        margin-left: 0px;
+        padding: 20px;
+    }
+    
 }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductsByIds = exports.getCartItems = exports.addToCartService = exports.createOrderService = void 0;
+exports.transferAnonymousCartService = exports.clearCartByEmailService = exports.getProductsByIds = exports.getCartItems = exports.addToCartService = exports.createOrderService = void 0;
 const db_1 = __importDefault(require("../config/db"));
 const createOrderService = (pool, orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const { userEmail, items, address } = orderData;
@@ -51,6 +51,8 @@ exports.createOrderService = createOrderService;
 const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let cartIdToUse = cartId;
+        console.log('email:', email);
+        console.log('cartId:', cartId);
         // Om användaren är inloggad, koppla kundkorgen till användarens e-post
         if (email) {
             const [userRows] = yield pool.query('SELECT id FROM users WHERE email = ?', [email]);
@@ -69,22 +71,35 @@ const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter
                 // Skapa en ny kundkorg om ingen finns
                 cartIdToUse = crypto.randomUUID();
                 yield pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [cartIdToUse, userId]);
+                console.log('New cart created for user:', userId, 'with cart ID:', cartIdToUse);
             }
         }
-        // Om användaren är anonym, använd `cartId` eller skapa en ny
-        if (!cartIdToUse) {
-            cartIdToUse = crypto.randomUUID(); // Generera ett nytt UUID för anonyma användare
+        // Om användaren är anonym eller har ett befintligt cartId
+        if (cartIdToUse) {
+            const [cartRows] = yield pool.query('SELECT cart_id FROM Carts WHERE cart_id = ?', [cartIdToUse]);
+            if (cartRows.length === 0) {
+                // Skapa en ny kundvagn i databasen om ID:t inte finns
+                yield pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
+                console.log('Cart ID did not exist, new cart created:', cartIdToUse);
+            }
+        }
+        else {
+            // Skapa ett nytt cartId om inget ID finns och användaren är anonym
+            cartIdToUse = crypto.randomUUID();
             yield pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
+            console.log('New cart created for anonymous user with ID:', cartIdToUse);
         }
         // Lägg till produkten i kundkorgen
         const [existingProductRows] = yield pool.query('SELECT * FROM CartItems WHERE cart_id = ? AND product_id = ?', [cartIdToUse, productId]);
         if (existingProductRows.length > 0) {
             // Uppdatera kvantiteten om produkten redan finns
             yield pool.query('UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?', [quantity, cartIdToUse, productId]);
+            console.log('Product quantity updated in cart:', productId);
         }
         else {
             // Lägg till en ny produkt i kundkorgen
             yield pool.query('INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)', [cartIdToUse, productId, quantity]);
+            console.log('Product added to cart with ID:', cartIdToUse);
         }
         // Returnera den uppdaterade kundkorgen
         const [cartItems] = yield pool.query('SELECT * FROM CartItems WHERE cart_id = ?', [cartIdToUse]);
@@ -92,6 +107,7 @@ const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter
     }
     catch (error) {
         if (error instanceof Error) {
+            console.error('Error in addToCartService:', error.message);
             throw new Error(`Failed to add to cart: ${error.message}`);
         }
         else {
@@ -172,3 +188,51 @@ const getProductsByIds = (productIds) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getProductsByIds = getProductsByIds;
+// ta bort innehåll i kundkorgen
+const clearCartByEmailService = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Hämta användarens cart_id baserat på e-post
+        const [cartRows] = yield db_1.default.query('SELECT cart_id FROM Carts INNER JOIN users ON Carts.user_id = users.id WHERE users.email = ?', [email]);
+        const cart = cartRows[0];
+        if (!cart) {
+            throw new Error('No cart found for this user.');
+        }
+        const cartId = cart.cart_id;
+        // Ta bort alla produker från kundkorgen
+        yield db_1.default.query('DELETE FROM CartItems WHERE cart_id = ?', [cartId]);
+        console.log(`Cart cleared for user with email: ${email}`);
+    }
+    catch (error) {
+        throw new Error(`Failed to clear cart: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+});
+exports.clearCartByEmailService = clearCartByEmailService;
+// För över anonym kundkorg till inloggad användare
+const transferAnonymousCartService = (cardId, email) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const [userRows] = yield db_1.default.query('SELECT id FROM users WHERE email = ?', [email]);
+    const user = userRows[0];
+    if (!user)
+        throw new Error('User not found');
+    const userId = user.id;
+    const [cartRows] = yield db_1.default.query('SELECT cart_id FROM Carts WHERE user_id = ?', [userId]);
+    let userCartId = (_a = cartRows[0]) === null || _a === void 0 ? void 0 : _a.cart_id;
+    if (!cardId) {
+        userCartId = crypto.randomUUID();
+        yield db_1.default.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [userCartId, userId]);
+    }
+    const [anonymousCartItems] = yield db_1.default.query('SELECT product_id, quantity FROM CartItems WHERE cart_id = ?', [cardId]);
+    for (const item of anonymousCartItems) {
+        const [existingItems] = yield db_1.default.query('SELECT quantity FROM CartItems WHERE cart_id = ? AND product_id = ?', [userCartId, item.product_id]);
+        if (existingItems.length > 0) {
+            yield db_1.default.query('UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?', [item.quantity, userCartId, item.product_id]);
+        }
+        else {
+            yield db_1.default.query('INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)', [userCartId, item.product_id, item.quantity]);
+        }
+    }
+    // Radera den anonyma kundkorgen
+    yield db_1.default.query('DELETE FROM CartItems WHERE cart_id = ?', [cardId]);
+    yield db_1.default.query('DELETE FROM Carts WHERE cart_id = ?', [cardId]);
+});
+exports.transferAnonymousCartService = transferAnonymousCartService;

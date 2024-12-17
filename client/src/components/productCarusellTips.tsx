@@ -5,6 +5,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import '../styles/_productSlider.scss'
 import { Product } from "../types/product";
 import { useSwipeable } from 'react-swipeable';
+import { saveToCart } from "../api/cart";
 
 
 interface ProductCarusellProps {
@@ -84,6 +85,22 @@ const swipeHandlers = useSwipeable({
         }
       };
  
+ const handleAddToCart = async (productId: number) => {
+    const quantity = 1; // Hämta antal från state (standard till 1)
+    try {
+        const updatedCart = await saveToCart(productId, quantity);
+        console.log("Uppdaterad kundkorg:", updatedCart);
+        alert("Produkten lades till i kundkorgen!");
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Kunde inte lägga till produkten:", error.message);
+        } else {
+            console.error("Kunde inte lägga till produkten:", error);
+        }
+        alert("Något gick fel!");
+    }
+};
+
 
     const calculateTranslateX = () => {
       if (!sliderRef.current) return 0;
@@ -147,7 +164,8 @@ const swipeHandlers = useSwipeable({
                     <h3>{product.name}</h3>
                 
                     <p>{product.price} kr</p>
-                    <button className="button-cart">PUT IN CART</button>
+                    <button className="button-cart"
+      onClick={() => handleAddToCart(product.id)} >PUT IN CART</button>
                  </div> </div>
                 ))}
               </div>

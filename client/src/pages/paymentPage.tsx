@@ -15,6 +15,12 @@ const stripeKey = import.meta.env.VITE_REACT_APP_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(`${stripeKey}`); 
 
 const handleCheckout = async () => {
+
+    const userToken = sessionStorage.getItem('token'); 
+    if (!userToken) {
+        alert('You must be logged in to proceed with payment.');
+        return;
+    }
     try {
         // Skicka items till backend
         const clientSecret = await createPaymentIntent(items);
@@ -25,10 +31,11 @@ const handleCheckout = async () => {
 };
 const createPaymentIntent = async (cartItems: { productId: number; quantity: number }[]): Promise<string> =>{
         try {
+            const userToken = sessionStorage.getItem('token'); 
             console.log('cartItems', cartItems);
             const response = await fetch(`${backendUrl}/payment/create-payment-intent`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {      Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cartItems }),  // Exempel: 1000 öre = 10 SEK
             });
 
@@ -42,13 +49,15 @@ const createPaymentIntent = async (cartItems: { productId: number; quantity: num
     };
 
     return (
-        <div>
+        <div className='payment-page'>
             <h1>Payment Page</h1>
             {!clientSecret ? (
+                <div>
                 <button onClick={handleCheckout}>Start Payment</button>
+                </div>
             ) : (
                 <Elements stripe={stripePromise}>
-                    <PaymentForm clientSecret={clientSecret} />
+                    <PaymentForm clientSecret={clientSecret} items={items}/>
                 </Elements>
             )}
         </div>

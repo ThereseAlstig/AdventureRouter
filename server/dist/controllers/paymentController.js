@@ -47,7 +47,7 @@ const createPaymentIntent = (req, res) => __awaiter(void 0, void 0, void 0, func
             currency: 'sek',
             payment_method_types: ['card'],
         });
-        res.status(200).json({ clientSecret: paymentIntent.client_secret });
+        res.status(200).json({ clientSecret: paymentIntent.client_secret, totalAmount });
     }
     catch (error) {
         if (error instanceof Error) {

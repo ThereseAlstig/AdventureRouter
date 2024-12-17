@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
-
+import  TransferCartToUser  from '../api/transferCartToUser';
 
 // Skapa Context
 
@@ -52,17 +52,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!response.ok) {
       throw new Error(data.message || 'Invalid credentials');
     }
-
+  
     sessionStorage.setItem('token', data.token);
     sessionStorage.setItem('userEmail', email);
     sessionStorage.setItem('username', data.username);
     setIsAuthenticated(true);
     setEmail(email);
     setUsername(data.username);
+    
+    const cartId = sessionStorage.getItem('cartId');
+    console.log('cartId', cartId);
+    if(cartId){
+      try {
+        console.log('Transferring anonymous cart...');
+        await TransferCartToUser(cartId, email);
+        sessionStorage.removeItem('cartId'); // Rensa efter överföring
+        console.log('Anonymous cart transferred successfully.');
+      } catch (error: any) {
+        console.error('Error transferring cart:', error.message);
+      }
+    }
   };
 
 
-  const googleLogin = (token: string, email: string = '', username: string = '') => {
+  const googleLogin = async (token: string, email: string = '', username: string = '') => {
     
     if (token) {
            console.log('Saving token in sessionStorage...');
@@ -72,6 +85,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(true);
       setEmail(email); 
       setUsername(username);
+
+      const cartId = sessionStorage.getItem('cartId');
+    console.log('cartId', cartId);
+    if(cartId){
+      try {
+        console.log('Transferring anonymous cart...');
+        await TransferCartToUser(cartId, email);
+        sessionStorage.removeItem('cartId'); // Rensa efter överföring
+        console.log('Anonymous cart transferred successfully.');
+      } catch (error: any) {
+        console.error('Error transferring cart:', error.message);
+      }
+    }
     } else {
       throw new Error('Google login failed: Missing token');
     }
@@ -95,7 +121,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   
         // Ta bort token från sessionStorage
         sessionStorage.removeItem('token');
-        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('userEmail');
         sessionStorage.removeItem('username');
         setIsAuthenticated(false);
         setEmail(null);

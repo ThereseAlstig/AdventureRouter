@@ -1,6 +1,6 @@
 import express from 'express';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
-import { CreateCart, createOrder, fetchCart } from '../controllers/orderController';
+import { clearCartByEmailController, CreateCart, createOrder, fetchCart, transferAnonymousCartController } from '../controllers/orderController';
 
 const router = express.Router();
 
@@ -11,5 +11,7 @@ router.post('/createOrders', (req, res, next) => {
   next();
   }, CreateCart);
   router.get('/fetchCart', fetchCart);
+  router.post('/clearCartByEmail', ensureAuthenticated, clearCartByEmailController());
+  router.post('/transferAnonymousCart', transferAnonymousCartController);
 
 export default router;

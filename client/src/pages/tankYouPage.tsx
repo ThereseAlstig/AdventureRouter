@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
  // Din lilla GIF-fil
 
 const ThankYouPage: React.FC = () => {
-    const [showMessage, setShowMessage] = useState(false);
+   
     const [showVideo, setShowVideo] = useState(false);
 
     useEffect(() => {
         // Visa texten efter en liten fördröjning
         const timer = setTimeout(() => {
-            setShowMessage(true);
+           
             setShowVideo(true);
         }, 3000); 
 

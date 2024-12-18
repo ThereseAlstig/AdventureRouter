@@ -5,8 +5,16 @@
     justify-content: space-between;
     font-family: 'poppins', sans-serif;
     margin-top: 50px;
+    a{
+        color: white;
+        text-decoration: none;
+    }
 }
-
+.middle-footer{
+    display: flex;
+    justify-content: center;
+    min-width: 50%;
+}
 .left-footer{
  
     padding: 20px;
@@ -24,6 +32,8 @@
     }
     .left-footer{
         margin-top: 20px;
+        display: flex;
+        flex-direction: column;
     }
     .right-footer{
         margin-top: 20px;

@@ -105,14 +105,18 @@ console.log(data);
         {/* Om vi är i skapande av konto-läge, visa formuläret för att skapa konto */}
         <form onSubmit={isCreatingAccount ? handleCreateAccount : handleLogin}>
           <div>
-            <label>Username:</label>
+            {isCreatingAccount && (
+              <>
+              <label>Username:</label>
             <input
               type="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
               aria-label="username"
-            />
+            /><br></br></>
+            )
+              }
+            
             <label>E-mail:</label>
             <input
               type="email"

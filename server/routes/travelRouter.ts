@@ -1,5 +1,5 @@
 import express from 'express';
-import {  createTrip, getImageForTrip, getUserTripsWithDetails, getWeatherProducts, trips, updateTripWithDetails, uploadImageController } from '../controllers/travelConbtrollers';
+import {  createTrip, getImageForTrip, getSingleTripById, getUserTripsWithDetails, getWeatherProducts, trips, updateTripWithDetails, uploadImageController } from '../controllers/travelConbtrollers';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
 // import upload from '../middleware/multer';
 
@@ -17,6 +17,7 @@ router.post("/trips/:tripId",  ensureAuthenticated, updateTripWithDetails, (req,
 });
 router.post("/trips/:tripId/image", upload.single("image"), uploadImageController);
 router.get("/trips/:tripId/image", getImageForTrip);
+router.get("/trip/:id", getSingleTripById);
 
 
 export default router;

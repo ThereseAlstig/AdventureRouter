@@ -12,7 +12,7 @@ export const MyPage = () => {
     throw new Error('AuthContext must be used within an AuthProvider');
   }  
   
-  const { logout, isAuthenticated } = auth;
+  const { logout, isAuthenticated, username } = auth;
 
     const navigate = useNavigate(); 
 
@@ -30,10 +30,14 @@ export const MyPage = () => {
 
     return (
         <>
-         
+         { !isAuthenticated && (
+            <div className="center">
+                <h1>Log in to see your trips</h1>
+            </div>
+          )}
       { isAuthenticated &&(
 <>
-
+            <h2 className="center">Välkommen {username}!</h2>
             <button className="logoutButton" onClick={handleLogout}>Log Out</button>
             <LoadScript googleMapsApiKey={apiKey}>
             <div>

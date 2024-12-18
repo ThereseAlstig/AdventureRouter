@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getImageForTrip = exports.uploadImageController = exports.updateTripWithDetails = exports.getUserTripsWithDetails = exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
+exports.getSingleTripById = exports.getImageForTrip = exports.uploadImageController = exports.updateTripWithDetails = exports.getUserTripsWithDetails = exports.trips = exports.createTrip = exports.getWeatherProducts = void 0;
 const db_1 = __importDefault(require("../config/db")); // Din databasanslutning
 const travelService_1 = require("../services/travelService");
 const travelService_2 = require("../services/travelService");
@@ -156,3 +156,24 @@ const getImageForTrip = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getImageForTrip = getImageForTrip;
+const getSingleTripById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const trips = yield (0, travelService_1.getTripWithDetails)(req, res); // Kalla på din funktion och hämta alla resor
+        const tripId = parseInt(req.params.id, 10);
+        if (!trips || !Array.isArray(trips)) {
+            res.status(500).json({ message: 'Failed to process trips' });
+            return;
+        }
+        const filteredTrip = trips.find((trip) => trip.trip_id === tripId);
+        if (!filteredTrip) {
+            res.status(404).json({ message: 'Trip not found' });
+            return;
+        }
+        res.status(200).json(filteredTrip);
+    }
+    catch (error) {
+        console.error('Error fetching single trip:', error);
+        res.status(500).json({ message: 'Failed to fetch trip details' });
+    }
+});
+exports.getSingleTripById = getSingleTripById;

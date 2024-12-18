@@ -30,7 +30,7 @@
     }
 
   
-    
+   
 
     img{
         width: 200px;
@@ -41,6 +41,10 @@
 
 }
 
+.cart-links{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 .total{
 margin-left: 80px;
 }
@@ -105,4 +109,7 @@ margin-left: 80px;
             height: auto;
         }
     }
+}
+.payment-page{
+    width: 400px;
 }

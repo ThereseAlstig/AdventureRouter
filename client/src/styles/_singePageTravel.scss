@@ -1,0 +1,60 @@
+.trip-details-container {
+  display: flex;
+  margin-top: 40px;
+  width: 100%;
+  gap: 20px;
+  padding: 0 20px;
+
+  .tips_trips {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+   
+
+  .image{
+    width: 100%;
+     
+    }
+    .vertical-carousel {
+      max-width: 100%;
+   
+    }
+  }
+}
+
+.trip-details-singel-page3 {
+  display: flex;
+    flex-direction: column;
+  width: 45%;
+
+}
+
+.trip-details11 {
+  text-align: center;
+  width: 45%;
+}
+
+@media (max-width: 768px){
+    .trip-details-container {
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+
+        .google-container {
+            width: 100%;
+        }
+    
+    }    
+    .vertical-item .image {
+      width: 100%;
+      max-width: 100%;
+      
+    }
+    .trip-details-singel-page3 {
+        width: 100%;
+    }
+    .trip-details11 {
+        width: 100%;
+    }
+    }

@@ -21,10 +21,8 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
         return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "motorcycle" };
       case "car":
         return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "car" };
-      case "moped":
-        return { travelMode: google.maps.TravelMode.DRIVING, filterMode: "moped" };
-      case "cykle":
-        return { travelMode: google.maps.TravelMode.BICYCLING, filterMode: "cykle" };
+      case "bicycle":
+        return { travelMode: google.maps.TravelMode.BICYCLING, filterMode: "bicycle" };
       case "train":
         return { travelMode: google.maps.TravelMode.TRANSIT, filterMode: "train" };
       case "bus":
@@ -38,7 +36,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
   useEffect(() => {
     const fetchDirections = async () => {
      const travelOption =  mapMode(mode);
-    
+
       if(travelOption.travelMode){
       const directionsService = new google.maps.DirectionsService();
       directionsService.route(

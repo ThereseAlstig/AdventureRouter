@@ -196,7 +196,7 @@
 .navigation {
     display: flex;
     justify-content: space-around;
- position: relative;
+    position: relative;
     color: rgb(15, 12, 12);
     padding: 10px 0;
     width: 100%;
@@ -219,8 +219,8 @@
         flex-direction: row;
         width: auto;
         position: absolute;
-        top: 100%; /* Placera undermenyn direkt under huvudmenyn */
-        left: 0px; /* Justera undermenyn till vänsterkanten */
+        top: 100%; 
+        left: 0px;
         z-index: 10;
        
      
@@ -229,9 +229,13 @@
         li {
             padding-right: 50px;
             margin-left: 80px;
-            flex-grow: 1; /* Se till att varje undermenypunkt tar lika mycket plats */
+            flex-grow: 1; 
             text-align: center;
-            font-size: x-large;
+            font-size: 1.0rem;
+
+            a{
+                font-size: 1.2rem;
+            }
             &:hover {
                 text-decoration: underline;
             }
@@ -297,7 +301,7 @@
             margin-left: 80px;
             flex-grow: 1; /* Se till att varje undermenypunkt tar lika mycket plats */
             text-align: center;
-            font-size: x-large;
+            font-size: 1.5rem;
             &:hover {
                 text-decoration: underline;
             }

@@ -123,7 +123,7 @@ const getCartItems = (pool, email, cartId) => __awaiter(void 0, void 0, void 0, 
         if (email) {
             // Om användaren är inloggad, hämta kundkorgen baserat på e-post
             query = `
-                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url, c.cart_id
                 FROM CartItems ci
                 INNER JOIN Carts c ON ci.cart_id = c.cart_id
                 INNER JOIN Products p ON ci.product_id = p.id
@@ -135,7 +135,7 @@ const getCartItems = (pool, email, cartId) => __awaiter(void 0, void 0, void 0, 
         else if (cartId) {
             // Om användaren är anonym, hämta kundkorgen baserat på `cartId`
             query = `
-                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url, c.cart_id
                 FROM CartItems ci
                 INNER JOIN Carts c ON ci.cart_id = c.cart_id
                 INNER JOIN Products p ON ci.product_id = p.id

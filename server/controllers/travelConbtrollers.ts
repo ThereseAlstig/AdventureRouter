@@ -161,3 +161,27 @@ export const getImageForTrip = async (req: Request, res: Response): Promise<void
       res.status(500).json({ message: "Failed to fetch image" });
   }
 };
+
+export const getSingleTripById = async (req: Request, res: Response) => {
+  try {
+      const trips = await getTripWithDetails(req, res); // Kalla på din funktion och hämta alla resor
+      const tripId = parseInt(req.params.id, 10);
+
+      if (!trips || !Array.isArray(trips)) {
+          res.status(500).json({ message: 'Failed to process trips' });
+          return 
+      }
+
+      const filteredTrip = trips.find((trip: any) => trip.trip_id === tripId);
+
+      if (!filteredTrip) {
+         res.status(404).json({ message: 'Trip not found' }); 
+         return 
+      }
+
+      res.status(200).json(filteredTrip);
+  } catch (error) {
+      console.error('Error fetching single trip:', error);
+      res.status(500).json({ message: 'Failed to fetch trip details' });
+  }
+};

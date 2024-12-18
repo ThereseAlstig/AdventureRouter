@@ -176,7 +176,7 @@ export const getCartItems = async (pool: Pool, email: string | null, cartId: str
         if (email) {
             // Om användaren är inloggad, hämta kundkorgen baserat på e-post
             query = `
-                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url, c.cart_id
                 FROM CartItems ci
                 INNER JOIN Carts c ON ci.cart_id = c.cart_id
                 INNER JOIN Products p ON ci.product_id = p.id
@@ -187,7 +187,7 @@ export const getCartItems = async (pool: Pool, email: string | null, cartId: str
         } else if (cartId) {
             // Om användaren är anonym, hämta kundkorgen baserat på `cartId`
             query = `
-                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url
+                SELECT ci.product_id, ci.quantity, p.name, p.price, p.image_url, c.cart_id
                 FROM CartItems ci
                 INNER JOIN Carts c ON ci.cart_id = c.cart_id
                 INNER JOIN Products p ON ci.product_id = p.id

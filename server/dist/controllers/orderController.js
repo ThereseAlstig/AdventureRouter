@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transferAnonymousCartController = exports.clearCartByEmailController = exports.fetchCart = exports.CreateCart = exports.createOrder = void 0;
+exports.updateCartItem = exports.transferAnonymousCartController = exports.clearCartByEmailController = exports.fetchCart = exports.CreateCart = exports.createOrder = void 0;
 const orderService_1 = require("../services/orderService");
 const db_1 = __importDefault(require("../config/db"));
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,3 +97,31 @@ const transferAnonymousCartController = (req, res) => __awaiter(void 0, void 0, 
     }
 });
 exports.transferAnonymousCartController = transferAnonymousCartController;
+const updateCartItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { cartId, productId, quantity } = req.body; // Hämta productId och nytt antal från body
+    try {
+        // Kontrollera om produkten finns i varukorgen
+        const [existingItem] = yield db_1.default.query(`SELECT * FROM CartItems WHERE cart_id = ? AND product_id = ?`, [cartId, productId]);
+        if (!existingItem) {
+            res.status(404).json({ message: 'Product not found in cart' });
+            return;
+        }
+        if (quantity <= 0) {
+            // Om antal <= 0, ta bort produkten
+            yield db_1.default.query(`DELETE FROM CartItems WHERE cart_id = ? AND product_id = ?`, [cartId, productId]);
+            res.status(200).json({ message: 'Product removed from cart' });
+            return;
+        }
+        else {
+            // Annars uppdatera antal
+            yield db_1.default.query(`UPDATE CartItems SET quantity = ? WHERE cart_id = ? AND product_id = ?`, [quantity, cartId, productId]);
+            res.status(200).json({ message: 'Cart updated successfully' });
+            return;
+        }
+    }
+    catch (error) {
+        console.error('Error updating cart item:', error);
+        res.status(500).json({ message: 'Failed to update cart item' });
+    }
+});
+exports.updateCartItem = updateCartItem;

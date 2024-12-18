@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MapWithDirections from "../api/googleMapsApi";
 import { GetSharedAdventures } from "../api/getSharedTrips";
 import { fetchTripImage } from "../api/fetchImg";
+import { Link } from "react-router-dom";
   
 
   
@@ -138,6 +139,10 @@ import { fetchTripImage } from "../api/fetchImg";
               }))}
               mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
             />
+            <Link to={`/travel-journal/${trip.trip_id}`} 
+            className="readMore"  
+            aria-label="read more">Read more
+            </Link>
           </div></div>
             <hr className="trip-divider" />
           </div>

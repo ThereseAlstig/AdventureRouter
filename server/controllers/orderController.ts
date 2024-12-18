@@ -87,3 +87,44 @@ export const transferAnonymousCartController= async (req: Request, res: Response
   }
 
 };
+
+
+
+export const updateCartItem = async (req: Request, res: Response) => {
+  
+  const { cartId, productId, quantity } = req.body; // Hämta productId och nytt antal från body
+
+  try {
+      // Kontrollera om produkten finns i varukorgen
+      const [existingItem] = await pool.query(
+          `SELECT * FROM CartItems WHERE cart_id = ? AND product_id = ?`,
+          [cartId, productId]
+      );
+
+      if (!existingItem) {
+          res.status(404).json({ message: 'Product not found in cart' });
+       return
+      }
+
+      if (quantity <= 0) {
+          // Om antal <= 0, ta bort produkten
+          await pool.query(
+              `DELETE FROM CartItems WHERE cart_id = ? AND product_id = ?`,
+              [cartId, productId]
+          );
+          res.status(200).json({ message: 'Product removed from cart' });
+          return 
+      } else {
+          // Annars uppdatera antal
+          await pool.query(
+              `UPDATE CartItems SET quantity = ? WHERE cart_id = ? AND product_id = ?`,
+              [quantity, cartId, productId]
+          );
+          res.status(200).json({ message: 'Cart updated successfully' });
+          return 
+      }
+  } catch (error) {
+      console.error('Error updating cart item:', error);
+      res.status(500).json({ message: 'Failed to update cart item' });
+  }
+};

@@ -13,6 +13,8 @@ import { SubcategoryPage } from '../pages/subcategoryPage';
 import GoogleCallbackHandler from '../api/googleCallbackHandler';
 import GitHubCallbackHandler from '../api/gitHubCallbackHandler';
 import ThankYouPage from '../pages/tankYouPage';
+import { AboutUs } from '../pages/aboutUs';
+import { TragvelJourney } from '../pages/travelJourney';
 
 const Router = createBrowserRouter([
 
@@ -67,7 +69,13 @@ element: <MyPage/>
 {
     path: "/tank-you",
     element: <ThankYouPage/>
-},
+},{
+    path: "/about-us",
+    element: <AboutUs/>
+},{
+    path: "/travel-journal/:id",
+    element: <TragvelJourney/>
+}
 ]
 
 }

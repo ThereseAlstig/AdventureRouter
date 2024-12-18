@@ -20,4 +20,5 @@ router.post("/trips/:tripId", authMiddleware_1.ensureAuthenticated, travelConbtr
 });
 router.post("/trips/:tripId/image", upload.single("image"), travelConbtrollers_1.uploadImageController);
 router.get("/trips/:tripId/image", travelConbtrollers_1.getImageForTrip);
+router.get("/trip/:id", travelConbtrollers_1.getSingleTripById);
 exports.default = router;

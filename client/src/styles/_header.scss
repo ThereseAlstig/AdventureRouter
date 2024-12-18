@@ -87,43 +87,20 @@
 
 /* För mobilversionen */
 @media (max-width: 768px) {
-   .left  h1{
-        font-size: 2.3rem;
-        text-align: center;
+  .topNavigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    }
+    .logo{
+        margin-bottom: 50px;
+    }
+    header{
+        margin-bottom: 180px;
     }
 
-   
-    .right-icons{
-        margin-top: 5px;
-        width: 10px;
-        height: auto;
-    }
-
-    .left{
-        font-size: medium;
-        margin-left: 85px;
-   
-    }
-  
-    .logo-text {
-        display: none; /* Dölj texten på små skärmar */
-    }
-    .logo-user{
-        margin-top: 25px;
-    }
-
-    .logo-img {
-        display: block; /* Visa loggan istället */
-        width: 45px; /* Justera storleken på loggan */
-        height: auto; 
-        margin-top: 15px;
-    }
-
-      .cart-icon {
-        display: block; /* Visa ikonen i mobilläge */
-       margin-left: 25px;
-       margin-top: 55px;
-       /* Justera positionen om nödvändigt */
+    .cart-icon {
+        display: block;
     }
    
 }

@@ -136,74 +136,101 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     };
     
 
+    const CrocodileGap = ({ direction }: { direction: "left" | "right" }) => {
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            transform: direction === "left" ? "rotate(180deg)" : "none",
+            width: "40px",
+            height: "40px",
+            fill: "#333",
+          }}
+        >
+          <path d="M4 12l6-6v4h10v4H10v4l-6-6z" />
+        </svg>
+      );
+    };
+    
     return (
-      
-            <div className="product-carousel">
-              <div    ref={(node) => {
-    if (node) {
-      sliderRef.current = node; // Koppla ref manuellt
-      if (isMobile && swipeHandlers.ref) {
-        swipeHandlers.ref(node); // Koppla swipeHandlers också
-      }
-    }
-  }}
-                className="product-slider"
+      <div className="product-carousel-container">
+        {!isMobile && (
+          <>
+            <button
+              type="button"
+              onClick={prevSlide}
+              className="carousel-button prev-button"
+              name="prev"
+              aria-label="Previous"
+            >
+              <CrocodileGap direction="right" />
+            </button>
+          </>
+        )}
+    
+        <div className="product-carousel">
+          <div
+            ref={(node) => {
+              if (node) {
+                sliderRef.current = node; // Koppla ref manuellt
+                if (isMobile && swipeHandlers.ref) {
+                  swipeHandlers.ref(node); // Koppla swipeHandlers också
+                }
+              }
+            }}
+            className="product-slider"
+            style={{
+              transform: `translateX(-${calculateTranslateX()}px)`,
+            }}
+          >
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="product-item"
                 style={{
-                  transform: `translateX(-${calculateTranslateX()}px)`,
-              
+                  flex: `0 0 calc((100% - (${productsToShow} - 1) * 20px) / ${productsToShow})`, // Dynamisk bredd
                 }}
               >
-                {products.map((product) => (
-                  <div key={product.id} className="product-item"  style={{
-                    flex: `0 0 calc((100% - (${productsToShow} - 1) * 20px) / ${productsToShow})`, // Dynamisk bredd
-                  }}>
-                    <img src={product.image_url} alt={product.name} />
-                    <h3>{product.name}</h3>
-                    <p>{product.description}</p>
-                    <p>{product.price} kr</p>
-                    <div className="quantity-container">
-      <label htmlFor={`quantity-${product.id}`}>Antal:</label>
-      <input
-        id={`quantity-${product.id}`}
-        type="number"
-        min="1"
-        defaultValue="1"
-        onChange={(e) => handleQuantityChange(product.id, e.target.value)} // Hantera antal
-      />
-    </div>
-                    <button className="button-cart"
-      onClick={() => handleAddToCart(product.id)} >PUT IN CART</button>
-                  </div>
-                ))}
+                <img src={product.image_url} alt={product.name} />
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+                <p>{product.price} kr</p>
+                <div className="quantity-container">
+                  <label htmlFor={`quantity-${product.id}`}>Antal:</label>
+                  <input
+                    id={`quantity-${product.id}`}
+                    type="number"
+                    min="1"
+                    defaultValue="1"
+                    onChange={(e) => handleQuantityChange(product.id, e.target.value)} // Hantera antal
+                  />
+                </div>
+                <button
+                  className="button-cart"
+                  onClick={() => handleAddToCart(product.id)}
+                >
+                  PUT IN CART
+                </button>
               </div>
-              {!isMobile && (
-                <>
-                  <button
-                    type="button"
-                    onClick={prevSlide}
-                    className="carousel-button prev-button"
-                    name="prev"
-                    aria-label="Previous"
-                  >
-                    <svg viewBox="0 0 24 24">
-                      <path d="M7.98 8.32 4.3 12l3.67 3.67 3.67 3.67.35-.35.35-.35-3.06-3.06-3.06-3.06H19v-1h-6.38c-3.509 0-6.38-.013-6.38-.03 0-.016 1.377-1.407 3.06-3.09l3.061-3.061-.351-.349-.351-.349L7.98 8.32" />
-                    </svg>
-                  </button>
-                  <button
-                    type="button"
-                    name="next"
-                    aria-label="Next"
-                    onClick={nextSlide}
-                    className="carousel-button next-button"
-                  >
-                    <svg viewBox="0 0 24 24">
-                      <path d="m11.99 4.99-.349.351L14.7 8.4c1.683 1.683 3.06 3.073 3.06 3.09 0 .016-2.871.03-6.38.03H5v1h12.78l-3.06 3.06-3.06 3.06.35.35.35.35 3.67-3.67L19.7 12l-3.68-3.68-3.681-3.681-.349.351" />
-                    </svg>
-                  </button>
-                </>
-              )}
-            </div>
-          );
-        
-};
+            ))}
+          </div>
+        </div>
+    
+        {!isMobile && (
+          <>
+            <button
+              type="button"
+              name="next"
+              aria-label="Next"
+              onClick={nextSlide}
+              className="carousel-button next-button"
+            >
+              <CrocodileGap direction="left" />
+            </button>
+          </>
+        )}
+      </div>
+    );
+  }
 

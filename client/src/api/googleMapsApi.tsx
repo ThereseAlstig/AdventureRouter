@@ -37,16 +37,23 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
     const fetchDirections = async () => {
      const travelOption =  mapMode(mode);
 
+     const formattedWaypoints = waypoints.map((wp) => {
+      // Korrigera extra kapsling om det finns
+      const location = typeof wp.location === "string" ? wp.location : wp.location;
+  return {
+    location,
+    stopover: true,
+  };
+    });
+    
+     const hasWaypoints = formattedWaypoints && formattedWaypoints.length > 0;
       if(travelOption.travelMode){
       const directionsService = new google.maps.DirectionsService();
       directionsService.route(
         {
           origin: start,
           destination: destination,
-          waypoints: waypoints.map((wp) => ({
-            location: wp.location, 
-            stopover: true, 
-          } as google.maps.DirectionsWaypoint)),
+          waypoints: hasWaypoints ? formattedWaypoints : undefined,
           travelMode: travelOption.travelMode,
           
         },
@@ -56,8 +63,8 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
             setDirections(result);
       if (result && result.routes.length > 0 && result.routes[0].legs.length > 0) {
         const leg = result.routes[0].legs[0];
-        setDistance(leg.distance ? leg.distance.text : "N/A");
-        setDuration(leg.duration ? leg.duration.text : "N/A");
+        setDistance(leg.distance ? leg.distance.text : "No distance available");
+        setDuration(leg.duration ? leg.duration.text : "No duration available");
           } else {
             console.error("Directions request failed:", status);
           }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCategories = exports.createProduct = exports.getFilteredProductsBY = exports.getAllProducts = void 0;
+exports.getCategoryTwoIdByName = exports.getCategoryOneIdByName = exports.getProductById = exports.getAllCategories = exports.createProduct = exports.getFilteredProductsBY = exports.getAllProducts = void 0;
 const db_1 = __importDefault(require("../config/db"));
 //getting all products
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -247,3 +247,99 @@ const getAllCategories = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllCategories = getAllCategories;
+const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!id || isNaN(Number(id))) {
+        throw new Error('Invalid product ID');
+    }
+    const query = `
+        SELECT 
+            p.id AS id,
+            p.name AS name,
+            p.price,
+            p.description,
+            p.image_url,
+            p.in_stock,
+
+            c1.name AS category_one_name,
+            c2.name AS category_two_name,
+            w.name AS weather_name,
+            wt.name AS weather_temperature_name,
+            t2.name AS travel_options
+
+        FROM 
+            Products p
+
+        LEFT JOIN 
+            CategoryProduct cp ON p.id = cp.product_id
+        LEFT JOIN 
+            CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
+        LEFT JOIN 
+            CategoryOne c1 ON cp.category_id = c1.id AND c1.id IS NOT NULL
+        LEFT JOIN 
+            ProductWeather pw ON p.id = pw.product_id
+        LEFT JOIN 
+            Weather w ON pw.weather_id = w.id
+        LEFT JOIN 
+            ProductWeatherTemperature pwt ON p.id = pwt.product_id
+        LEFT JOIN 
+            WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN 
+            ProductTravel pt ON p.id = pt.product_id
+        LEFT JOIN 
+            TravelOptions t2 ON pt.travel_id = t2.id
+        WHERE 
+            p.id = ?;  -- Placeholder för ID
+    `;
+    try {
+        const [rows] = yield db_1.default.query(query, [id]); // Skicka med ID som parameter
+        if (rows.length === 0) {
+            return null; // Om ingen produkt hittas, returnera null
+        }
+        return rows[0]; // Returnera den första raden (den enda produkten)
+    }
+    catch (error) {
+        console.error('Error fetching product by ID:', error); // Logga eventuella fel
+        throw error; // Släng felet så att det hanteras i någon annan del av koden
+    }
+});
+exports.getProductById = getProductById;
+//hitta id på categorierna
+const getCategoryOneIdByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = `
+        SELECT id 
+        FROM CategoryOne 
+        WHERE name = ?;
+    `;
+    try {
+        console.log('Fetching category with name:', name);
+        // Specificera att resultatet är en array av RowDataPacket
+        const [rows] = yield db_1.default.query(query, [name]);
+        return rows[0].id; // Returnera det första ID:t
+    }
+    catch (error) {
+        console.error('Error fetching CategoryTwo ID by name:', error);
+        throw error; // Släng felet för vidare hantering
+    }
+});
+exports.getCategoryOneIdByName = getCategoryOneIdByName;
+//Hitta id på subcategorierna
+const getCategoryTwoIdByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = `
+        SELECT id 
+        FROM CategoryTwo 
+        WHERE name = ?;
+    `;
+    try {
+        console.log('Fetching category with name:', name);
+        const [rows] = yield db_1.default.query(query, [name]);
+        if (rows.length === 0) {
+            return null;
+        }
+        return rows[0].id;
+    }
+    catch (error) {
+        console.error('Error fetching CategoryTwo ID by name:', error);
+        throw error;
+    }
+});
+exports.getCategoryTwoIdByName = getCategoryTwoIdByName;

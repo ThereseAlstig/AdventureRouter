@@ -1,5 +1,5 @@
 import pool from '../config/db';
-import { ResultSetHeader } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
 //getting all products
 export const getAllProducts = async () => {
@@ -255,5 +255,109 @@ export const getAllCategories = async () => {
     } catch (error) {
         console.error('Error fetching categories:', error);
         throw error;  // Kasta vidare felet
+    }
+};
+
+
+export const getProductById = async (id: number) => {
+    if (!id || isNaN(Number(id))) {
+        throw new Error('Invalid product ID');
+    }
+    const query = `
+        SELECT 
+            p.id AS id,
+            p.name AS name,
+            p.price,
+            p.description,
+            p.image_url,
+            p.in_stock,
+
+            c1.name AS category_one_name,
+            c2.name AS category_two_name,
+            w.name AS weather_name,
+            wt.name AS weather_temperature_name,
+            t2.name AS travel_options
+
+        FROM 
+            Products p
+
+        LEFT JOIN 
+            CategoryProduct cp ON p.id = cp.product_id
+        LEFT JOIN 
+            CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
+        LEFT JOIN 
+            CategoryOne c1 ON cp.category_id = c1.id AND c1.id IS NOT NULL
+        LEFT JOIN 
+            ProductWeather pw ON p.id = pw.product_id
+        LEFT JOIN 
+            Weather w ON pw.weather_id = w.id
+        LEFT JOIN 
+            ProductWeatherTemperature pwt ON p.id = pwt.product_id
+        LEFT JOIN 
+            WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN 
+            ProductTravel pt ON p.id = pt.product_id
+        LEFT JOIN 
+            TravelOptions t2 ON pt.travel_id = t2.id
+        WHERE 
+            p.id = ?;  -- Placeholder för ID
+    `;
+
+    try {
+        const [rows]: [any[], any] = await pool.query(query, [id]); // Skicka med ID som parameter
+        if (rows.length === 0) {
+            return null; // Om ingen produkt hittas, returnera null
+        }
+    
+        return rows[0]; // Returnera den första raden (den enda produkten)
+    } catch (error) {
+        console.error('Error fetching product by ID:', error);  // Logga eventuella fel
+        throw error;  // Släng felet så att det hanteras i någon annan del av koden
+    }
+};
+
+//hitta id på categorierna
+export const getCategoryOneIdByName = async (name: string) => {
+    const query = `
+        SELECT id 
+        FROM CategoryOne 
+        WHERE name = ?;
+    `;
+
+    try {
+        console.log('Fetching category with name:', name);
+        // Specificera att resultatet är en array av RowDataPacket
+        const [rows] = await pool.query<RowDataPacket[]>(query, [name]);
+        
+      
+
+        return rows[0].id; // Returnera det första ID:t
+    } catch (error) {
+        console.error('Error fetching CategoryTwo ID by name:', error);
+        throw error; // Släng felet för vidare hantering
+    }
+};
+
+//Hitta id på subcategorierna
+export const getCategoryTwoIdByName = async (name: string): Promise<number | null> => {
+    const query = `
+        SELECT id 
+        FROM CategoryTwo 
+        WHERE name = ?;
+    `;
+
+    try {
+        console.log('Fetching category with name:', name);
+        const [rows] = await pool.query<RowDataPacket[]>(query, [name]);
+        
+        
+        if (rows.length === 0) {
+            return null; 
+        }
+
+        return rows[0].id; 
+    } catch (error) {
+        console.error('Error fetching CategoryTwo ID by name:', error);
+        throw error; 
     }
 };

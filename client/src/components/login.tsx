@@ -24,13 +24,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
  
   const handleGoogleLogin = () => {
     const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-    console.log(key);
+ 
     // Omdirigera användaren till Google OAuth-flödet via backend
     window.location.href = `${key}/user/google`;
-    console.log('google login');
+   
   };
 
-  
   if (!auth) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }  
@@ -44,8 +43,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   // Hantera inloggning
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-console.log('email', email);
-console.log('password', password);
+
     try {
       await login(email, password); // Anropa login från Context
       navigate('/my-page'); // Omdirigera användaren

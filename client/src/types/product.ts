@@ -6,6 +6,9 @@ export interface Product {
     image_url: string;
     categoryId: number;
     subcategoryId: number;
+    category_one_name: string;
+    category_two_name: string;
+
 }
 
 

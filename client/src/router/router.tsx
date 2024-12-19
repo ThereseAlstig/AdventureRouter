@@ -15,6 +15,7 @@ import GitHubCallbackHandler from '../api/gitHubCallbackHandler';
 import ThankYouPage from '../pages/tankYouPage';
 import { AboutUs } from '../pages/aboutUs';
 import { TragvelJourney } from '../pages/travelJourney';
+import { ProductPage } from '../pages/productPage';
 
 const Router = createBrowserRouter([
 
@@ -75,7 +76,12 @@ element: <MyPage/>
 },{
     path: "/travel-journal/:id",
     element: <TragvelJourney/>
+},{
+    path: "/shop/:id",
+    element: <ProductPage/>
 }
+
+
 ]
 
 }

@@ -145,20 +145,8 @@ const imageMap = { [Number(id)]: imageUrl };
     ) : (
         <p></p> // Fallback när ingen bild finns    
         )}
-        </div></div>
 
-        <div className="trip-details-singel-page3">
-       <MapWithDirections
-              start={trip.start_city}
-              destination={trip.end_city}
-              waypoints={trip.stops.map((stop: { city_name: string }) => ({
-                location: stop.city_name,
-                
-              }))}
-              mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
-            />
-       
-        <div className="weather-forecast">
+<div className="weather-forecast">
           <h2>Weather forecast:</h2>
           {trip.start_weather && (
             <div>
@@ -172,6 +160,20 @@ const imageMap = { [Number(id)]: imageUrl };
           <p></p>
           </div>)}
               </div>
+        </div></div>
+
+        <div className="trip-details-singel-page3">
+       <MapWithDirections
+              start={trip.start_city}
+              destination={trip.end_city}
+              waypoints={trip.stops.map((stop: { city_name: string }) => ({
+                location: stop.city_name,
+                
+              }))}
+              mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
+            />
+       
+       
          <div className= "tips_trips">
                  <ProductCarusellTips products={filteredProducts} />
                  </div>

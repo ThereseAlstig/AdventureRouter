@@ -18,7 +18,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
         { expiresIn: '1h' }
     );
 
-    console.log(`Token:, ${callback}/google/callback?token=${token}&email=${user.email}`);
+    console.log(`Token:, ${callback}/google/callback?token=${token}&email=${user.email}&username=${user.username}`);
     res.redirect(`${callback}/google/callback?token=${token}&email=${user.email}&username=${user.username}`);// Ändra till din frontend-URL
 });
 

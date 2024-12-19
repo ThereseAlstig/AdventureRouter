@@ -31,6 +31,8 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
             email: ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value) || '',
             username: profile.displayName,
         });
+        console.log('User:', user);
+        console.log('profile:', profile);
         // Logga användarens data
         done(null, user);
     }

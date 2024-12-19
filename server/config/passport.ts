@@ -28,6 +28,8 @@ passport.use(
                 username: profile.displayName,
                 
               });
+              console.log('User:', user);
+              console.log('profile:', profile);
              // Logga användarens data
               done(null, user);
             } catch (error) {

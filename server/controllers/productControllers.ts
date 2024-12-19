@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as productService from '../services/productService';
 import pool from '../config/db';
-import { createProduct } from '../services/productService';
+import { createProduct, getCategoryOneIdByName, getCategoryTwoIdByName } from '../services/productService';
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
@@ -10,6 +10,21 @@ export const getProducts = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch products' });
     }
+};
+
+//Hämta produkter baserat på ID
+export const getProductById = async (req: Request, res: Response) => {
+  const { id } = req.params; // Hämta ID från request-parametrarna
+  try {
+      const product = await productService.getProductById(Number(id)); 
+      if (!product) {
+          res.status(404).json({ message: 'Product not found' });
+          return 
+      }
+      res.status(200).json(product);
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch product' });
+  }
 };
 
 export const getFilteredProducts = async (req: Request, res: Response) => {
@@ -23,7 +38,7 @@ try {
       };
 
     const products = await productService.getFilteredProductsBY(filters);
-    console.log('Filtered products fetchedjljlkjlkjl:', products);
+    
     res.status(200).json(products);
 } catch (error) {
     res.status(500).json({ message: 'Failed to fetch products' });
@@ -40,14 +55,15 @@ export const getCategories = async (req: Request, res: Response) => {
     }
 }
 
+// Skapa en ny produkt
 export const addProduct = async (req: Request, res: Response) => {
-console.log('addProduct');
-    const productData = req.body;  // Hämta produktdata från POST-begäran
+
+    const productData = req.body;  
 
     try {
         // Anropa servicefunktionen för att skapa produkten
         const result = await createProduct(productData);
-        res.status(201).json(result);  // Skicka tillbaka resultatet från databasen
+        res.status(201).json(result);  
     } catch (error) {
         res.status(500).json({ message: 'Failed to add product.' });
     }
@@ -65,6 +81,7 @@ export const getAllTravelOptions = async (req: Request, res: Response) => {
     }
   };
   
+  //hämta categorierna
   export const getAllCategoriesTwo = async (req: Request, res: Response) => {
     try {
       const [categories] = await pool.query('SELECT id, name FROM CategoryTwo');
@@ -75,6 +92,7 @@ export const getAllTravelOptions = async (req: Request, res: Response) => {
     }
   };
 
+  //Hämta temperaturspann
   export const getAllWeatherTemperatures = async (req: Request, res: Response) => {
     try {
       const [weatherTemperatures] = await pool.query('SELECT id, name FROM WeatherTemperature');
@@ -85,6 +103,7 @@ export const getAllTravelOptions = async (req: Request, res: Response) => {
     }
   };
 
+  //Hämta väder
   export const getAllWeatherOptions = async (req: Request, res: Response) => {
     try {
       const [weatherOptions] = await pool.query('SELECT id, name FROM Weather');
@@ -93,3 +112,27 @@ export const getAllTravelOptions = async (req: Request, res: Response) => {
      console.error('Error fetching weather options:', error);
     }
   };
+
+//hämta väder id
+  export const getCategoriesId = async (req: Request, res: Response) => {
+   
+
+    const { categoryOne, categoryTwo } = req.body;
+
+    if (!categoryOne || !categoryTwo) {
+        res.status(400).json({ message: 'Both categoryOne and categoryTwo are required' });
+    return
+   }
+  try {
+    const categoryOneId = await getCategoryOneIdByName(categoryOne as string);
+    const categoryTwoId = await getCategoryTwoIdByName(categoryTwo as string);
+    res.status(200).json({
+      categoryOneId,
+      categoryTwoId,
+  });
+} catch (error) {
+  console.error('Error fetching category IDs:', error);
+  res.status(500).json({ message: 'Failed to fetch category IDs' });
+}
+};
+  

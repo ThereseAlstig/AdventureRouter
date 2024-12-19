@@ -4,6 +4,7 @@ import '../styles/_productSlider.scss'
 import { Product } from "../types/product";
 import { useSwipeable } from 'react-swipeable';
 import { saveToCart } from "../api/cart";
+import { Link } from "react-router-dom";
 
 
 interface ProductCarusellProps {
@@ -192,7 +193,9 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
                   flex: `0 0 calc((100% - (${productsToShow} - 1) * 20px) / ${productsToShow})`, // Dynamisk bredd
                 }}
               >
-                <img src={product.image_url} alt={product.name} />
+                <Link to={`/shop/${product.id}`}>
+                 
+                <img src={product.image_url} alt={product.name} /></Link>
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>
                 <p>{product.price} kr</p>

@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(true);
       setEmail(email); 
       setUsername(username);
-
+console.log('email', email);
       const cartId = sessionStorage.getItem('cartId');
     console.log('cartId', cartId);
     if(cartId){

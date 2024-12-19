@@ -6,6 +6,7 @@ import '../styles/_productSlider.scss'
 import { Product } from "../types/product";
 import { useSwipeable } from 'react-swipeable';
 import { saveToCart } from "../api/cart";
+import { Link } from "react-router-dom";
 
 
 interface ProductCarusellProps {
@@ -158,7 +159,9 @@ const swipeHandlers = useSwipeable({
                    // Dynamisk bredd
                   }}>
                      <div className="image">
+                     <Link to={`/shop/${product.id}`}>
         <img src={product.image_url} alt={product.name}/>
+        </Link>
       </div>
       <div className="product-description">
                     <h3>{product.name}</h3>

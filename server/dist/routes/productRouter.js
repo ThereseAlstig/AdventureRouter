@@ -14,4 +14,6 @@ router.get('/categoriesTwo', productControllers_1.getAllCategoriesTwo);
 router.get('/travel-options', productControllers_1.getAllTravelOptions);
 router.get('/weather-temperatures', productControllers_1.getAllWeatherTemperatures);
 router.get('/weather-options', productControllers_1.getAllWeatherOptions);
+router.get('/:id', productControllers_1.getProductById);
+router.post('/categoryId', productControllers_1.getCategoriesId);
 exports.default = router;

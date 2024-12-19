@@ -45,7 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllWeatherOptions = exports.getAllWeatherTemperatures = exports.getAllCategoriesTwo = exports.getAllTravelOptions = exports.addProduct = exports.getCategories = exports.getFilteredProducts = exports.getProducts = void 0;
+exports.getCategoriesId = exports.getAllWeatherOptions = exports.getAllWeatherTemperatures = exports.getAllCategoriesTwo = exports.getAllTravelOptions = exports.addProduct = exports.getCategories = exports.getFilteredProducts = exports.getProductById = exports.getProducts = void 0;
 const productService = __importStar(require("../services/productService"));
 const db_1 = __importDefault(require("../config/db"));
 const productService_1 = require("../services/productService");
@@ -59,6 +59,22 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProducts = getProducts;
+//Hämta produkter baserat på ID
+const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params; // Hämta ID från request-parametrarna
+    try {
+        const product = yield productService.getProductById(Number(id));
+        if (!product) {
+            res.status(404).json({ message: 'Product not found' });
+            return;
+        }
+        res.status(200).json(product);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Failed to fetch product' });
+    }
+});
+exports.getProductById = getProductById;
 const getFilteredProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filters = {
@@ -69,7 +85,6 @@ const getFilteredProducts = (req, res) => __awaiter(void 0, void 0, void 0, func
             travelOption: req.query.travelOption ? String(req.query.travelOption) : null,
         };
         const products = yield productService.getFilteredProductsBY(filters);
-        console.log('Filtered products fetchedjljlkjlkjl:', products);
         res.status(200).json(products);
     }
     catch (error) {
@@ -87,13 +102,13 @@ const getCategories = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getCategories = getCategories;
+// Skapa en ny produkt
 const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('addProduct');
-    const productData = req.body; // Hämta produktdata från POST-begäran
+    const productData = req.body;
     try {
         // Anropa servicefunktionen för att skapa produkten
         const result = yield (0, productService_1.createProduct)(productData);
-        res.status(201).json(result); // Skicka tillbaka resultatet från databasen
+        res.status(201).json(result);
     }
     catch (error) {
         res.status(500).json({ message: 'Failed to add product.' });
@@ -112,6 +127,7 @@ const getAllTravelOptions = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAllTravelOptions = getAllTravelOptions;
+//hämta categorierna
 const getAllCategoriesTwo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [categories] = yield db_1.default.query('SELECT id, name FROM CategoryTwo');
@@ -123,6 +139,7 @@ const getAllCategoriesTwo = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAllCategoriesTwo = getAllCategoriesTwo;
+//Hämta temperaturspann
 const getAllWeatherTemperatures = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [weatherTemperatures] = yield db_1.default.query('SELECT id, name FROM WeatherTemperature');
@@ -134,6 +151,7 @@ const getAllWeatherTemperatures = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.getAllWeatherTemperatures = getAllWeatherTemperatures;
+//Hämta väder
 const getAllWeatherOptions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [weatherOptions] = yield db_1.default.query('SELECT id, name FROM Weather');
@@ -144,3 +162,24 @@ const getAllWeatherOptions = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getAllWeatherOptions = getAllWeatherOptions;
+//hämta väder id
+const getCategoriesId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { categoryOne, categoryTwo } = req.body;
+    if (!categoryOne || !categoryTwo) {
+        res.status(400).json({ message: 'Both categoryOne and categoryTwo are required' });
+        return;
+    }
+    try {
+        const categoryOneId = yield (0, productService_1.getCategoryOneIdByName)(categoryOne);
+        const categoryTwoId = yield (0, productService_1.getCategoryTwoIdByName)(categoryTwo);
+        res.status(200).json({
+            categoryOneId,
+            categoryTwoId,
+        });
+    }
+    catch (error) {
+        console.error('Error fetching category IDs:', error);
+        res.status(500).json({ message: 'Failed to fetch category IDs' });
+    }
+});
+exports.getCategoriesId = getCategoriesId;

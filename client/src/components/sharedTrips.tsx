@@ -4,12 +4,16 @@ import MapWithDirections from "../api/googleMapsApi";
 import { GetSharedAdventures } from "../api/getSharedTrips";
 import { fetchTripImage } from "../api/fetchImg";
 import { Link } from "react-router-dom";
-  
+
 
   
   export const SharedTrips = () => {
    const [trips, setTrips] = useState<any[]>([]);
    const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
+ 
+
+  
+
 
        useEffect(() => {
          const loadTrips = async () => {
@@ -78,6 +82,7 @@ import { Link } from "react-router-dom";
   
     return (
       <>
+      
         {trips.map((trip, index) => (
           <div key={trip.trip_id + index} className="journey">
           <div className="trip-container">
@@ -130,6 +135,7 @@ import { Link } from "react-router-dom";
               ) : null}
             </div>
             <div className="trip-detail-right">
+           
             <MapWithDirections
               start={trip.start_city}
               destination={trip.end_city}
@@ -139,6 +145,7 @@ import { Link } from "react-router-dom";
               }))}
               mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
             />
+            
             <Link to={`/travel-journal/${trip.trip_id}`} 
             className="readMore"  
             aria-label="read more">Read more
@@ -147,7 +154,7 @@ import { Link } from "react-router-dom";
             <hr className="trip-divider" />
           </div>
         ))}
-      </>
+   </>
     );
   };
 

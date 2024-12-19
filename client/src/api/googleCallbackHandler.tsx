@@ -12,12 +12,13 @@ const GoogleCallbackHandler: React.FC = () => {
         const token = params.get('token');
         const email = params.get('email') || ''; 
         const username = params.get('username') || '';
-  
+
+
         if (token) {
-            console.log('Current URL:', window.location.href);
+           
 
                 if (googleLogin) {
-                    googleLogin(token, username ?? '', email ?? ''); 
+                    googleLogin(token,  email ?? '', username ?? ''); 
                     navigate('/my-page');
                     // Använd googleLogin för att lagra token
                 }else {

@@ -54,8 +54,6 @@ const navigate = useNavigate();
 
   const saveTrip = async () => { 
 
- 
-
     const stops = tripWeather.midpoint
     ? [{ cityName: tripWeather.midpoint.cityName, order: 1 }]
     : waypointList.map((waypoint, index) => ({
@@ -112,7 +110,8 @@ const navigate = useNavigate();
   useEffect(() => {
     if (directions && directions.routes.length > 0) {
       const route = directions.routes[0];
-      const midpoint = route.overview_path[Math.floor(route.overview_path.length / 2)];
+      const midpoint = route.overview_path[Math.floor(route.overview_path.length / 2)]; 
+      console.log("Midpoint:", midpoint);
       fetchNearbyPlaces(new google.maps.LatLng(midpoint.lat(), midpoint.lng()));
     }
   }, [directions]);

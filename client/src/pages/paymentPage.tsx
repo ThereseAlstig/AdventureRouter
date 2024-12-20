@@ -32,7 +32,7 @@ const handleCheckout = async () => {
 const createPaymentIntent = async (cartItems: { productId: number; quantity: number }[]): Promise<string> =>{
         try {
             const userToken = sessionStorage.getItem('token'); 
-            console.log('cartItems', cartItems);
+          
             const response = await fetch(`${backendUrl}/payment/create-payment-intent`, {
                 method: 'POST',
                 headers: {      Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },

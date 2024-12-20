@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { saveToCart } from "../api/cart";
 import { GetCategoryId } from "../api/getCategorieId";
 
+
+//sida för enskild produkt
 export const ProductPage = () => {
 const [product, setProduct] = useState<Product | null>(null);
 const { id } = useParams();
@@ -20,11 +22,12 @@ const [categoryIds, setCategoryIds] = useState<{ categoryOneId: number, category
             if (id) {
                 const data = await GetProduct(id);
                 setProduct(data);
-                
+                console.log("product", data);
                 try {
                     const categoryIds = await GetCategoryId(data.category_one_name, data.category_two_name); // Väntar på resultatet
                     console.log("categoriessss", categoryIds); 
                     setCategoryIds(categoryIds)// Loggar resultatet
+                    console.log("categoryIds", categoryIds);
                 } catch (error) {
                     console.error('Error fetching category IDs:', error);
                 }

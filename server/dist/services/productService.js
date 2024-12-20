@@ -253,42 +253,42 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const query = `
         SELECT 
-            p.id AS id,
-            p.name AS name,
-            p.price,
-            p.description,
-            p.image_url,
-            p.in_stock,
 
-            c1.name AS category_one_name,
-            c2.name AS category_two_name,
-            w.name AS weather_name,
-            wt.name AS weather_temperature_name,
-            t2.name AS travel_options
-
+             p.id AS id,
+        p.name AS name,
+        p.price,
+        p.description,
+        p.image_url,
+        t.name AS travel_option_name, 
+        p.in_stock,
+        c1.name AS category_one_name,
+        c2.name AS category_two_name,
+        w.name AS weather_name,
+        wt.name AS weather_temperature_name
         FROM 
             Products p
 
         LEFT JOIN 
-            CategoryProduct cp ON p.id = cp.product_id
-        LEFT JOIN 
-            CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
-        LEFT JOIN 
-            CategoryOne c1 ON cp.category_id = c1.id AND c1.id IS NOT NULL
-        LEFT JOIN 
-            ProductWeather pw ON p.id = pw.product_id
-        LEFT JOIN 
-            Weather w ON pw.weather_id = w.id
-        LEFT JOIN 
-            ProductWeatherTemperature pwt ON p.id = pwt.product_id
-        LEFT JOIN 
-            WeatherTemperature wt ON pwt.temperature_id = wt.id
-        LEFT JOIN 
-            ProductTravel pt ON p.id = pt.product_id
-        LEFT JOIN 
-            TravelOptions t2 ON pt.travel_id = t2.id
+        ProductTravel pt ON p.id = pt.product_id
+    LEFT JOIN 
+        TravelOptions t on pt.travel_id = t.id
+    LEFT JOIN 
+        CategoryProduct cp ON p.id = cp.product_id
+    LEFT JOIN 
+        CategoryTwo c2 ON cp.category_id = c2.id
+    LEFT JOIN 
+        CategoryOne c1 ON c2.category_one_id = c1.id
+    LEFT JOIN 
+        ProductWeather pw ON p.id = pw.product_id
+    LEFT JOIN 
+        Weather w ON pw.weather_id = w.id
+    LEFT JOIN 
+        ProductWeatherTemperature pwt ON p.id = pwt.product_id
+    LEFT JOIN 
+        WeatherTemperature wt ON pwt.temperature_id = wt.id
+   
         WHERE 
-            p.id = ?;  -- Placeholder för ID
+            p.id = ?;  
     `;
     try {
         const [rows] = yield db_1.default.query(query, [id]); // Skicka med ID som parameter

@@ -1,0 +1,38 @@
+.admin{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    input{
+        margin: 10px 10px 10px 0;
+        min-width: 350px;
+       
+
+       
+    }
+
+    select{
+        margin: 10px 10px 10px 0;
+        min-width: 350px;
+        min-height: 150px;
+        border: 2px solid #000;
+        background-color: #F1FEED;
+    }
+    textarea{
+        margin: 10px 10px 10px 0;
+        min-width: 350px;
+        min-height: 350px;
+        padding-bottom: 0;
+        border: 2px solid #000;
+        background-color: #F1FEED;
+    }
+    
+    .row{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+    }
+
+}

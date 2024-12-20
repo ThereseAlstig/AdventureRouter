@@ -23,12 +23,13 @@ export const Cart: React.FC = () => {
         setIsPaying(true); 
     };
 
+    //>Hämtar kundvagnen
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 const cart = await fetchCart(); 
                 setProducts(cart); 
-                console.log('Fetched cart:', cart);
+                
             } catch (err) {
                 if (err instanceof Error) {
                     console.error('Error fetching cart:', err.message);
@@ -41,6 +42,8 @@ export const Cart: React.FC = () => {
         fetchCartItems(); 
     }, []); 
 
+
+    //länkar till interna reklam länkar, som syns om man inte har några produkter i kundvagnen
     const links1 = [
         {
             image: "/solar-cell-7097620_1280.jpg",
@@ -62,6 +65,7 @@ export const Cart: React.FC = () => {
         
         }];
 
+        //Länkar till interna reklam länkar 2 
         const links2 = [
             {
                 image: "/adventure-1850178_1280.jpg",

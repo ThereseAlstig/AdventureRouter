@@ -17,19 +17,15 @@ export const Navigation = () => {
         const [error, setError] = useState(null);
         const [openCategory, setOpenCategory] = useState<number | null>(null);
         const { categoryId} = useParams<{ categoryId: string; subcategoryId?:string }>();
-        // Hämta alla kategorier när komponenten laddas
 
-      
-    
-        
-        
+        // Hämta alla kategorier när komponenten laddas
         useEffect(() => {
             const fetchCategories = async () => {
                 try {
 
                    
                     const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-                    console.log(key);
+                 
                     // Hämtar huvudkategorier och underkategorier
                     const response = await fetch(`${key}/products/categories`);
                     if (!response.ok) {
@@ -49,7 +45,7 @@ export const Navigation = () => {
             };
     
             fetchCategories();
-        }, []); // Tom array, för att köra fetch en gång när komponenten renderas
+        }, []); 
     
         if (loading) {
             return <p>Loading categories...</p>;

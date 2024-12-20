@@ -1,6 +1,17 @@
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom"
+import { AuthContext } from "../context/authContext";
 
 export const Footer = () => {
+
+    const context = useContext(AuthContext);
+    const userRole = context?.userRole;
+
+    useEffect(() => {
+        console.log("userRole", userRole);
+    }, [userRole]);
     return (
         <footer className="footer">
             <div className="left-footer">
@@ -15,6 +26,10 @@ export const Footer = () => {
             </div>
             <h1 className="middle-footer">Adventure Awaits You</h1>
             <p className="right-footer">&copy; 2025 - All rights reserved Adventure Router AB</p>
+           {(
+
+            <Link to="/admin"><FontAwesomeIcon icon={faGear}/></Link>
+           )} 
         </footer>
     );
 }

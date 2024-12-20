@@ -7,6 +7,7 @@ interface AuthContextType {
     isAuthenticated: boolean;
     email: string | null;
     username: string | null;
+    userRole: string | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     googleLogin: (token: string, email: string, username: string) => void;
@@ -26,7 +27,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
+  //Hämtar token från sessionStorage
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     const storedEmail = sessionStorage.getItem('userEmail');
@@ -34,13 +37,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(!!token); // Kontrollera om en token finns
     setEmail(storedEmail);
     setUsername(storedUsername);
-    setIsAuthenticated(!!token); // Kontrollera om en token finns
+    setIsAuthenticated(!!token); 
+    // Kontrollera om en token finns
   }, []);
 
+
+  //Inloggning för användare
   const login = async (email: string, password: string) => {
-    console.log('login');
-    console.log('email', email);
-    console.log('password', password);
+
     const response = await fetch(`${key}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,6 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const data = await response.json();
 
+setUserRole(data.role);
     if (!response.ok) {
       throw new Error(data.message || 'Invalid credentials');
     }
@@ -56,6 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     sessionStorage.setItem('token', data.token);
     sessionStorage.setItem('userEmail', email);
     sessionStorage.setItem('username', data.username);
+    sessionStorage.setItem('userRole', data.role);
     setIsAuthenticated(true);
     setEmail(email);
     setUsername(data.username);
@@ -64,17 +70,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log('cartId', cartId);
     if(cartId){
       try {
-        console.log('Transferring anonymous cart...');
+     
         await TransferCartToUser(cartId, email);
         sessionStorage.removeItem('cartId'); // Rensa efter överföring
-        console.log('Anonymous cart transferred successfully.');
+    
       } catch (error: any) {
         console.error('Error transferring cart:', error.message);
       }
     }
   };
 
-
+//inlogg för både Google och Github
   const googleLogin = async (token: string, email: string = '', username: string = '') => {
     
     if (token) {
@@ -85,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(true);
       setEmail(email); 
       setUsername(username);
-console.log('email', email);
+
       const cartId = sessionStorage.getItem('cartId');
     console.log('cartId', cartId);
     if(cartId){
@@ -103,6 +109,8 @@ console.log('email', email);
     }
   };
 
+
+  //Utloggning för användare (ALLA)
   const logout = async () => {
     console.log('logout');
     try {
@@ -114,7 +122,7 @@ console.log('email', email);
           },
         });
   
-        // Om backend inte svarar med status 200, visa ett felmeddelande
+       
         if (!response.ok) {
           throw new Error('Logout failed');
         }
@@ -126,9 +134,7 @@ console.log('email', email);
         setIsAuthenticated(false);
         setEmail(null);
         setUsername(null);
-        console.log(isAuthenticated);
-        // Omdirigera användaren till inloggningssidan eller startsidan efter utloggning
-        // Byt ut '/login' med den faktiska inloggningssidan om den är annorlunda
+     
       } catch (err) {
         // Hantera eventuella fel under logout-processen
         console.error(err);
@@ -137,7 +143,7 @@ console.log('email', email);
 
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, email, username, login, logout, googleLogin }}>
+    <AuthContext.Provider value={{ isAuthenticated, email, username, userRole, login, logout, googleLogin }}>
       {children}
     </AuthContext.Provider>
   );

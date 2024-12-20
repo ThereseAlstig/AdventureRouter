@@ -63,13 +63,13 @@ export const CreateTrip = async (req: Request, res: Response) => {
         'INSERT INTO Trips (title, start_date, end_date, travel_mode, start_city_id, end_city_id, start_weather_condition_id, end_weather_condition_id, user_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [   
             title,
-            startDate || null, // Om `startDate` är tom eller undefined, sätt till `null`
-            endDate || null,   // Samma här för `endDate`
+            startDate || null, 
+            endDate || null,  
             travelMode,
             startCityId,
             endCityId,
-            startWeatherId || null, // Om väderdata inte finns, sätt till `null`
-            endWeatherId || null,   // Samma här
+            startWeatherId || null, 
+            endWeatherId || null,   
             userEmail,
           ]
         );
@@ -104,6 +104,7 @@ export const CreateTrip = async (req: Request, res: Response) => {
   }
 };
 
+// Hjälpfunktion för att gruppera resor med stopp
 const groupTripsWithStops = (rows: any[][]) => {
     const trips: { [key: number]: any } = {};
 
@@ -151,6 +152,8 @@ const groupTripsWithStops = (rows: any[][]) => {
     return Object.values(trips);
 };
 
+
+//Hämta resor med detaljer
 export const getTripWithDetails = async (req: Request, res: Response) => {
     try {
         const [rows]  = await pool.query(
@@ -203,7 +206,7 @@ return trips;
     };
 
 
-  
+  //sparar ner bilder till skapde resor
 export const saveImage = async (tripId: number, file: Express.Multer.File) => {
     if (!file) {
         throw new Error("No file uploaded");
@@ -219,23 +222,4 @@ export const saveImage = async (tripId: number, file: Express.Multer.File) => {
     );
 };
 
-// export const getImage = async (req: Request, res: Response) => {
-//   const { imageId } = req.params;
-
-//   try {
-//       const [rows] = await pool.query('SELECT image, image_type FROM TripImages WHERE id = ?', [imageId]);
-
-//       if (rows.length === 0) {
-//           return res.status(404).json({ message: 'Image not found' });
-//       }
-
-//       const { image, image_type } = rows[0];
-
-//       res.setHeader('Content-Type', image_type);
-//       res.send(image); // Skicka binär data till klienten
-//   } catch (error) {
-//       console.error('Error fetching image:', error);
-//       res.status(500).json({ message: 'Failed to fetch image' });
-//   }
-// };
 

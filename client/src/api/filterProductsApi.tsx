@@ -1,3 +1,5 @@
+
+//Filtrering för att hitta produkter som passar, väder, åkmedel och temperatur
 export async function  getFilteredProducts(weatherData?: any, mode?: any) {
     const website = import.meta.env.VITE_REACT_APP_BACKEND_URL;
   
@@ -15,8 +17,7 @@ export async function  getFilteredProducts(weatherData?: any, mode?: any) {
     filters.travelOption = mode;
   }
 
-  console.log("Filters skickade till API:", filters);
-  console.log('mpde', mode);
+  
 
   const params = new URLSearchParams(filters);
     try{
@@ -51,6 +52,7 @@ export async function  getFilteredProducts(weatherData?: any, mode?: any) {
 
 }
 
+//Funktioner för att hitta kategori för temperatur och väder
 function getTemperatureCategory(temperature: number) {
     if (temperature < -10) {
         return 'Extremely cold';
@@ -67,6 +69,8 @@ function getTemperatureCategory(temperature: number) {
     }
 }
 
+
+//Funktion för att hitta kategori för väder
 function getWeatherCategory(description: string) {
     if (description.toLowerCase().includes('cloud')) {
         return 'cloudy'; // Matchar din databaskategori för snö

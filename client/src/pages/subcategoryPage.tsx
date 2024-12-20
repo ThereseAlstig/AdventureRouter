@@ -4,6 +4,8 @@ import { Navigation } from "../layouts/navigation"
 import { Product } from "../types/product";
 import { ProductCarusell } from "../components/productCarusell";
 
+
+//Sida för underkategori
 export const SubcategoryPage = () => {
 
 
@@ -12,12 +14,14 @@ export const SubcategoryPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
 
+
+    //Hämtar produkter från underkategorin
     useEffect(() => {
         if (!subcategoryId) {
             console.warn("Category ID is undefined or not available yet");
             return;
         }
-        console.log('categoir', subcategoryId);
+       
         const fetchFilteredProducts = async () => {
             try {
                 const key = import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -30,13 +34,12 @@ export const SubcategoryPage = () => {
                     throw new Error("Failed to fetch products");
                 }
                 const data: Product[] = await response.json();
-                console.log("Fetched products:", data);
+               
                 const uniqueProducts = data.filter(
                     (product, index, self) =>
                         index === self.findIndex((p) => p.id === product.id)
                 );
                 setProducts(uniqueProducts);
-                console.log('produkter', products)
                 setLoading(false);
             } catch (err: any) {
                 setError(err.message);
@@ -45,7 +48,7 @@ export const SubcategoryPage = () => {
         };
 
       
-            fetchFilteredProducts(); // Kör GET-begäran om categoryOne finns
+            fetchFilteredProducts(); 
         
     }, [subcategoryId]);
 

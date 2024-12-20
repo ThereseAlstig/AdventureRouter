@@ -8,11 +8,13 @@ import { useContext, useState } from "react";
 import LoginModal from "../components/login";
 import { AuthContext } from "../context/authContext";
 
+
+//Header
 export const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const auth = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
-    // const navigate = useNavigate();
+   
     if (!auth) {
       throw new Error('AuthContext must be used within an AuthProvider');
     }
@@ -20,7 +22,6 @@ export const Header = () => {
      const { isAuthenticated  } = auth;
   
 
-console.log(isAuthenticated);
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
@@ -47,15 +48,12 @@ console.log(isAuthenticated);
             <h1>Adventure Route</h1>
             </NavLink>
 
-            <img src="/Vintage_and_Retro.png" alt="Company logo Adventure Route" className="logo"/>
+            <img src="/Vintage_and_Retro2.png" alt="Company logo Adventure Route" className="logo" loading="lazy"/>
             
-           {/* <NavLink to='/tripPlanner' className="right">
-            <h2 className="logo-text">Logga in/skapa användare</h2>   
-            <FontAwesomeIcon icon={faUser} className="logo-img"/>
-            </NavLink> */}
+           
 <div className="right-icons">
             {isAuthenticated ? (
-        // Om användaren är inloggad, visa "Your Account"-knappen
+        // Om användaren är inloggad, visa "Min sida"-knappen
         <>
 
         <NavLink to="/my-page" className="right" aria-label="My page">

@@ -1,3 +1,5 @@
+//Navigationsmenyn för produkter
+
 .center {
     display: flex;
     justify-content: center;
@@ -58,16 +60,16 @@
 
 .logo {
     position: absolute;
-    top: 50%;  /* Centrera vertikalt */
-    left: 50%; /* Centrera horisontellt */
-    transform: translate(-50%, -50%); /* Flytta logotypen tillbaka så den är exakt centrerad */
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%); 
 
     /* Responsiv storlek */
-    width: 45vw; /* Använd viewportbredd för att göra logotypen responsiv */
+    width: 45vw; 
     max-width: 250px; /* Max storlek för logotypen */
     height: auto;
     margin-top: 25px;
-     /* Behåll proportionerna */
+    
 }
 
 .navigation a.active {
@@ -174,16 +176,16 @@
     }
 
     .logo-img {
-        display: inline; /* Visa ikonen på små skärmar */
-        font-size: 1.5em; /* Justera storleken på ikonen */
-        position: absolute; /* Gör det möjligt att positionera ikonen absolut */
-        bottom: -62px; /* Flytta ikonen ner */
-        right: 20px; /* Flytta ikonen åt höger */
+        display: inline; 
+        font-size: 1.5em; 
+        position: absolute; 
+        bottom: -62px; 
+        right: 20px; 
     }
 
     .topNavigation {
         flex-direction: row;
-        margin-top: 45px;/* Justera layouten */
+        margin-top: 45px;
     }
 
     .logo {

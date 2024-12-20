@@ -1,20 +1,19 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import MapWithDirections from "../api/googleMapsApi";
 import { GetSharedAdventures } from "../api/getSharedTrips";
 import { fetchTripImage } from "../api/fetchImg";
 import { Link } from "react-router-dom";
 
 
-  
+  //Delade resor
   export const SharedTrips = () => {
    const [trips, setTrips] = useState<any[]>([]);
    const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
- 
+   const [visibleTripIds, setVisibleTripIds] = useState<Set<number>>(new Set());
+const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
-  
-
-
+//Hämtar resor
        useEffect(() => {
          const loadTrips = async () => {
            try {
@@ -28,7 +27,7 @@ import { Link } from "react-router-dom";
        
              setTrips(tripsData);
              localStorage.setItem('trips', JSON.stringify(tripsData));
-       console.log(trips);
+      
              const images = await Promise.all(
                tripsData.map(async (trip: any) => {
                  const imageUrl = await fetchTripImage(trip.trip_id);
@@ -50,6 +49,45 @@ import { Link } from "react-router-dom";
        
          loadTrips();
        }, []);
+
+       useEffect(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+              entries.forEach((entry) => {
+                  const tripId = Number(entry.target.getAttribute("data-trip-id"));
+                  console.log(`Trip ${tripId} is intersecting:`, entry.isIntersecting);
+                  if (entry.isIntersecting) {
+                      setVisibleTripIds((prev) => new Set(prev).add(tripId));
+                  }
+              });
+          },
+          {
+              root: null, // Använd viewport som root
+              rootMargin: "0px 0px -100px 0px", // Lägg till en marginal för att trigga tidigare
+              threshold: 0.1, // Trigga om minst 10% av elementet är synligt
+          }
+      );
+      Object.values(tripRefs.current).forEach((trip) => {
+        if (trip) {
+            console.log("Observing element:", trip);
+            console.log("Data-trip-id:", trip.getAttribute("data-trip-id"));
+            observer.observe(trip);
+        }
+    });
+    
+        Object.values(tripRefs.current).forEach((trip) => {
+            if (trip) {
+                console.log("Observer added for:", trip);
+                observer.observe(trip);
+            }
+        });
+    
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [trips]);
+
     // Formaterar datum
     function formatDateToReadable(dateString: string): string {
       const date = new Date(dateString);
@@ -84,7 +122,9 @@ import { Link } from "react-router-dom";
       <>
       
         {trips.map((trip, index) => (
-          <div key={trip.trip_id + index} className="journey">
+          <div key={trip.trip_id + index} className="journey"
+          ref={(el) => (tripRefs.current[trip.trip_id || index] = el)}
+          data-trip-id={trip.trip_id || index}>
           <div className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
@@ -136,15 +176,16 @@ import { Link } from "react-router-dom";
             </div>
             <div className="trip-detail-right">
            
-            <MapWithDirections
-              start={trip.start_city}
-              destination={trip.end_city}
-              waypoints={trip.stops.map((stop: { city_name: string }) => ({
-                location: stop.city_name,
-                
-              }))}
-              mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
-            />
+            {visibleTripIds.has(trip.trip_id) && (
+                                <MapWithDirections
+                                    start={trip.start_city}
+                                    destination={trip.end_city}
+                                    waypoints={trip.stops.map((stop: { city_name: string }) => ({
+                                        location: stop.city_name,
+                                    }))}
+                                    mode={trip.travel_mode.toUpperCase() as google.maps.TravelMode}
+                                />
+                            )}
             
             <Link to={`/travel-journal/${trip.trip_id}`} 
             className="readMore"  

@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext'; // Importera AuthContext
 
+
+//inloggning för Google
 const GoogleCallbackHandler: React.FC = () => {
     const navigate = useNavigate();
     const auth = useContext(AuthContext);

@@ -13,6 +13,8 @@ interface OrderData {
     address: string;
 }
 
+
+// Skapa en order
 export const createOrderService = async (pool: Pool, orderData: OrderData) => {
   
   const { userEmail, items, address } = orderData;
@@ -71,7 +73,7 @@ export const createOrderService = async (pool: Pool, orderData: OrderData) => {
 };
 
 
-
+//SKapa och lägga i kundkorgen
 export const addToCartService = async (
     pool: Pool,
     email: string | undefined,
@@ -167,7 +169,7 @@ export const addToCartService = async (
 
 
 
-
+//Hämta kundkorgen till användaren
 export const getCartItems = async (pool: Pool, email: string | null, cartId: string | null) => {
     try {
         let query: string;

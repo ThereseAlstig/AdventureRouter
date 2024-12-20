@@ -1,4 +1,4 @@
-//
+//Hämtar id för kategorierna, inför att länka till rätt kategorisidor
 export const GetCategoryId = async (categoryOne: string, categoryTwo: string) => {
 
     const website = import.meta.env.VITE_REACT_APP_BACKEND_URL;

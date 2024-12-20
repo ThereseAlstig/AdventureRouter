@@ -8,7 +8,7 @@ import { Product } from "../types/product";
 import { SaveTrip } from "../api/saveTrips";
 import { useNavigate } from "react-router-dom";
 
-
+//Planerintgsverktyg för resa
 export const TripPlanner = () => {
 
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
@@ -85,7 +85,7 @@ const navigate = useNavigate();
       };
     }
 
-    // Lägg endast till `endWeather` om det finns
+    // Lägg endast till `endWeather` om det finns finns inte om man väljer senare datum än 10 dagar
     if (tripWeather?.destination) {
       trip.endWeather = {
         temperature: tripWeather.destination.temperature || 0,
@@ -106,7 +106,7 @@ const navigate = useNavigate();
     }
   };
 
-
+//Hämtar google maps rutt
   useEffect(() => {
     if (directions && directions.routes.length > 0) {
       const route = directions.routes[0];

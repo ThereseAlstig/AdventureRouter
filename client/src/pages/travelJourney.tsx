@@ -7,6 +7,8 @@ import { fetchTripImage } from "../api/fetchImg";
 import { ProductCarusellTips } from "../components/productCarusellTips";
 import { getFilteredProducts } from "../api/filterProductsApi";
 
+
+//Ensklida resor
 export const TragvelJourney = () => {
 
 const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR  API KEY";
@@ -19,7 +21,7 @@ const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR  API KEY"
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
 
 
- console.log(id);
+ //hämtar resan med id
     useEffect(() => {
         const fetchTripDetails = async () => {
             try {
@@ -58,6 +60,7 @@ const imageMap = { [Number(id)]: imageUrl };
         return <div>Loading...</div>;
     }
 
+    //Skapar läsbart datum
     function formatDateToReadable(dateString: string): string {
         const date = new Date(dateString);
     

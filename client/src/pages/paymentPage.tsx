@@ -4,16 +4,18 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../components/paymentForm';
 
 
-// Ersätt med din Stripe public key
+
 interface PaymentPageProps {
     items: { productId: number; quantity: number }[];
 }
 const PaymentPage: React.FC<PaymentPageProps> = ({ items }) => {
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-const stripeKey = import.meta.env.VITE_REACT_APP_STRIPE_PUBLIC_KEY;
-const stripePromise = loadStripe(`${stripeKey}`); 
+    const stripeKey = import.meta.env.VITE_REACT_APP_STRIPE_PUBLIC_KEY;
+    const stripePromise = loadStripe(`${stripeKey}`); 
 
+
+    //betaling Måste vara inloggad för att betala 
 const handleCheckout = async () => {
 
     const userToken = sessionStorage.getItem('token'); 
@@ -29,6 +31,8 @@ const handleCheckout = async () => {
         console.error('Error during checkout:', error);
     }
 };
+
+//Skapar en payment intent
 const createPaymentIntent = async (cartItems: { productId: number; quantity: number }[]): Promise<string> =>{
         try {
             const userToken = sessionStorage.getItem('token'); 
@@ -36,7 +40,7 @@ const createPaymentIntent = async (cartItems: { productId: number; quantity: num
             const response = await fetch(`${backendUrl}/payment/create-payment-intent`, {
                 method: 'POST',
                 headers: {      Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cartItems }),  // Exempel: 1000 öre = 10 SEK
+                body: JSON.stringify({ cartItems }), 
             });
 
             const data = await response.json();

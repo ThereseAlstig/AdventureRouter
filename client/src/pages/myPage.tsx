@@ -16,12 +16,14 @@ export const MyPage = () => {
 
     const navigate = useNavigate(); 
 
+
+    //Utloggning för samtliga anändare Även google och github användare
     const handleLogout = async () => {
       console.log('logout');
       try {
-        logout(); // Anropa logout från Context
+        logout(); 
         navigate('/'); 
-        console.log(isAuthenticated)// Omdirigera till startsidan efter utloggning
+        
       } catch (err) {
         console.error('Logout failed', err);
       }

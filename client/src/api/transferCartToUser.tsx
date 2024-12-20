@@ -1,4 +1,4 @@
-
+//Sparar ner kundkorgen om man har en när man loggar in
 
 const TransferCartToUser = async (cartId: string, email: string) => {
 

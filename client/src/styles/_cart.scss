@@ -1,4 +1,4 @@
-
+//Kundvagn/sidan för att se sin kundvagn
 .cart-items{
     
     gap: 20px;
@@ -14,7 +14,7 @@
     li {
         display: flex;
         align-items: center;
-        gap: 16px; /* Mellanrum mellan bild och detaljer */
+        gap: 16px; 
         border-bottom: 1px solid #ddd;
         padding-bottom: 16px;
         list-style: none;

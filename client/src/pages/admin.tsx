@@ -126,7 +126,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Name:</label>
+          <label htmlFor='name'>Name:</label>
           <input
             type="text"
             name="name"
@@ -136,7 +136,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
           />
         </div>
         <div>
-          <label>Price:</label>
+          <label htmlFor="price">Price:</label>
           <input
             type="number"
             name="price"
@@ -146,7 +146,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
           />
         </div>
         <div className='row'>
-          <label>Description:</label>
+          <label htmlFor='description'>Description:</label>
           <textarea
             name="description"
             value={productData.description}
@@ -154,7 +154,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
           ></textarea>
         </div>
         <div className='row'>
-          <label>Travel Option ID:</label>
+          <label htmlFor='traveloption'>Travel Option ID:</label>
           <select  multiple  name="travel_option_id"
     onChange={handleChange}>
         {travelOptions.map((option) => (
@@ -165,7 +165,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
       </select>
         </div>
         <div>
-          <label>Image URL:</label>
+          <label htmlFor='image'>Image URL:</label>
           <input
             type="text"
             name="image_url"
@@ -174,7 +174,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
           />
         </div>
         <div className='row'>
-          <label>
+          <label htmlFor='in_stock'>
             In Stock:
             <input
               type="checkbox"
@@ -185,7 +185,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
           </label>
         </div>
         <div className='row'>
-          <label>Categories:</label>
+          <label htmlFor='categories'>Categories:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'productCategories')}>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
@@ -195,7 +195,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
       </select>
         </div>
         <div className='row'>
-          <label>Temperatures:</label>
+          <label htmlFor='temepratures'>Temperatures:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'weather_temperature_id')}>
         {weatherTemperatures.map((temp) => (
           <option key={temp.id} value={temp.id}>
@@ -205,7 +205,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
       </select>
         </div>
         <div className='row'>
-          <label>Weathers:</label>
+          <label htmlFor='weather'>Weathers:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'weather_ids')}>
         {weatherOptions.map((weather) => (
           <option key={weather.id} value={weather.id}>

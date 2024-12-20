@@ -1,3 +1,5 @@
+//Hämtar ensklidda resor baserade på id
+
 export async function GetSingelTrips(tripId: number) {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 

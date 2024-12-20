@@ -1,3 +1,5 @@
+
+// Hämtar produkter till enskillad produkt sidan
 export const GetProduct = async (id: string) => {
 
     const website = import.meta.env.VITE_REACT_APP_BACKEND_URL;

@@ -12,16 +12,16 @@ import { Link } from "react-router-dom";
 interface ProductCarusellProps {
     products: Product[];
 }
-
+//Produktkarusell för tipps produkter
 export const ProductCarusellTips: React.FC<ProductCarusellProps> = ({ products }) => {
 
 const [isMobile, setIsMobile] = useState(false);
   const productsPerPage = 3;
-  // const sliderRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef() as MutableRefObject<HTMLDivElement | null>;
   const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
-    setCurrentIndex(0); // Återställ index till 0 vid första render
+    setCurrentIndex(0);
   }, [products]);
 
   useEffect(() => {
@@ -46,6 +46,8 @@ const [isMobile, setIsMobile] = useState(false);
   
     console.log("Product element found:", productElement);
   }, []);
+
+
   useEffect(() => {
     const handleResize = () => {
         setIsMobile(window.innerWidth < 768);
@@ -86,6 +88,8 @@ const swipeHandlers = useSwipeable({
         }
       };
  
+
+      //Lägg i kundkorgen
  const handleAddToCart = async (productId: number) => {
     const quantity = 1; // Hämta antal från state (standard till 1)
     try {
@@ -149,8 +153,8 @@ const swipeHandlers = useSwipeable({
                 className="vertical-slider"
                 style={{
                   transform: isMobile
-                    ? `translateX(-${calculateTranslateX()}px)` // Horisontellt i mobil
-                    : `translateY(-${calculateTranslateY()}px)`, // Vertikalt annars
+                    ? `translateX(-${calculateTranslateX()}px)` 
+                    : `translateY(-${calculateTranslateY()}px)`, 
                 }}
               >
                 {products.map((product) => (

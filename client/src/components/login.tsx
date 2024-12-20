@@ -11,6 +11,7 @@ interface LoginModalProps {
   
 }
 
+// Modal för inloggning och skapande av konto
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,27 +57,26 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
   // Hantera skapande av nytt konto
   const handleCreateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     if (!email || !password) {
       setError('Please provide valid credentials.');
       return;
     }
-console.log('email', email);
-console.log('password', password);
+
     try {
       // Skicka POST-begäran till backend för att skapa användare
-    const response =  await fetch('http://localhost:3000/auth/register', {
+    const response =  await fetch(`${backendUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, username }),
       });
 
-      const data = await response.json();  
+    
+     
       // Visa meddelande om att kontot skapades framgångsrikt
       if (response.ok){
       setSuccessMessage('You created an account, please login.');
-      
-console.log(data);
+
       }
       setError('');
       
@@ -84,7 +84,7 @@ console.log(data);
       setTimeout(() => {
         setIsCreatingAccount(false);
         setSuccessMessage('');
-      }, 6000);  // Vänta  sekunder innan vi byter tillbaka till login
+      }, 3000);  // Vänta  sekunder innan vi byter tillbaka till login
 
     } catch (err) {
       // Hantera fel (t.ex. om användaren redan finns)
@@ -105,7 +105,7 @@ console.log(data);
           <div>
             {isCreatingAccount && (
               <>
-              <label>Username:</label>
+              <label htmlFor="username">Username:</label>
             <input
               type="username"
               value={username}
@@ -115,7 +115,7 @@ console.log(data);
             )
               }
             
-            <label>E-mail:</label>
+            <label htmlFor='email'>E-mail:</label>
             <input
               type="email"
               value={email}
@@ -125,7 +125,7 @@ console.log(data);
             />
           </div>
           <div>
-            <label>Password:</label>
+            <label htmlFor='password'>Password:</label>
             <input
               type="password"
               aria-label="password"

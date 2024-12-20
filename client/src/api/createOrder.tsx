@@ -1,3 +1,5 @@
+//Skapa en beställning i databasen, måste vara inloggad för att kunna beställa
+
 const createOrder = async (orderData: any) => {
 
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;

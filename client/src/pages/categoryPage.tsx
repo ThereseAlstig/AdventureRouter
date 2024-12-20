@@ -12,6 +12,7 @@ export const CategoryPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
 
+    //Hämtar produkter från kategorin
     useEffect(() => {
         if (!categoryId) {
             console.warn("Category ID is undefined or not available yet");
@@ -45,7 +46,7 @@ export const CategoryPage = () => {
         };
 
       
-            fetchFilteredProducts(); // Kör GET-begäran om categoryOne finns
+            fetchFilteredProducts(); 
         
     }, [categoryId]);
 

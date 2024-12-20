@@ -1,3 +1,5 @@
+//Hämtar samtliga delade äventyr
+
 export async function GetSharedAdventures() {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     try {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
- // Din lilla GIF-fil
 
+
+ //Tack sida dit man kommer när man beställt och betaling gått igenom
 const ThankYouPage: React.FC = () => {
-   
     const [showVideo, setShowVideo] = useState(false);
 
     useEffect(() => {
@@ -17,7 +17,7 @@ const ThankYouPage: React.FC = () => {
 
     return (
         <div className="thank-you-container">
-            {/* Din GIF */}
+           
             {!showVideo && (
              <h2 className="thank-you-text">
                 Thank you for your purchase!<br />

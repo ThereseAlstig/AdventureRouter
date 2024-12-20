@@ -17,7 +17,7 @@ export const CategoryPage = () => {
             console.warn("Category ID is undefined or not available yet");
             return;
         }
-        console.log('categoir', categoryId);
+  
         const fetchFilteredProducts = async () => {
             try {
 
@@ -30,13 +30,13 @@ export const CategoryPage = () => {
                     throw new Error("Failed to fetch products");
                 }
                 const data: Product[] = await response.json();
-                console.log("Fetched products:", data);
+              
                 const uniqueProducts = data.filter(
                     (product, index, self) =>
                         index === self.findIndex((p) => p.id === product.id)
                 );
                 setProducts(uniqueProducts);
-                console.log('produkter', products)
+           
                 setLoading(false);
             } catch (err: any) {
                 setError(err.message);

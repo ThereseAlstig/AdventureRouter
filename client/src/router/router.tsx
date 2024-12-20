@@ -16,6 +16,7 @@ import ThankYouPage from '../pages/tankYouPage';
 import { AboutUs } from '../pages/aboutUs';
 import { TragvelJourney } from '../pages/travelJourney';
 import { ProductPage } from '../pages/productPage';
+import ProtectedRoute from './protectedRouter';
 
 const Router = createBrowserRouter([
 
@@ -50,7 +51,12 @@ element: <MyPage/>
 
 },{
     path: "/admin",
-    element: <Admin/>,
+    element: (
+         <ProtectedRoute requiredRole="admin">
+            <Admin />
+        </ProtectedRoute>
+    )
+       
 },
 {
     path: "/categories/:categoryId",

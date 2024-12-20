@@ -40,12 +40,15 @@ interface WeatherOption {
   const [weatherTemperatures, setWeatherTemperatures] = useState<WeatherTemperature[]>([]);
   const [weatherOptions, setWeatherOptions] = useState<WeatherOption[]>([]);
 
+const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+
+//Hämtar categories, travelOptions, weatherTemperatures och weatherOptions
   useEffect(() => {
     const fetchData = async () => {
-      const categoriesResponse = await fetch('http://localhost:3000/products/categoriesTwo');
-      const travelOptionsResponse = await fetch('http://localhost:3000/products/travel-options');
-      const weatherTemperaturesResponse = await fetch('http://localhost:3000/products/weather-temperatures');
-      const weatherOptionsResponse = await fetch('http://localhost:3000/products/weather-options');
+      const categoriesResponse = await fetch(`${backendUrl}/products/categoriesTwo`);
+      const travelOptionsResponse = await fetch(`${backendUrl}/products/travel-options`);
+      const weatherTemperaturesResponse = await fetch(`${backendUrl}/products/weather-temperatures`);
+      const weatherOptionsResponse = await fetch(`${backendUrl}/products/weather-options`);
 
       setCategories(await categoriesResponse.json());
       setTravelOptions(await travelOptionsResponse.json());
@@ -81,10 +84,12 @@ interface WeatherOption {
     }));
   };
 
+
+  //Skapa flera produkter till databasen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/products', {
+      const response = await fetch(`${backendUrl}/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +122,7 @@ interface WeatherOption {
 
   return (
   
-    <div className='center'>
+    <div className='center admin'>
     
       <form onSubmit={handleSubmit}>
         <div>
@@ -140,7 +145,7 @@ interface WeatherOption {
             required
           />
         </div>
-        <div>
+        <div className='row'>
           <label>Description:</label>
           <textarea
             name="description"
@@ -148,7 +153,7 @@ interface WeatherOption {
             onChange={handleChange}
           ></textarea>
         </div>
-        <div>
+        <div className='row'>
           <label>Travel Option ID:</label>
           <select  multiple  name="travel_option_id"
     onChange={handleChange}>
@@ -168,7 +173,7 @@ interface WeatherOption {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className='row'>
           <label>
             In Stock:
             <input
@@ -179,8 +184,8 @@ interface WeatherOption {
             />
           </label>
         </div>
-        <div>
-          <label>Categories (comma-separated):</label>
+        <div className='row'>
+          <label>Categories:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'productCategories')}>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
@@ -189,8 +194,8 @@ interface WeatherOption {
         ))}
       </select>
         </div>
-        <div>
-          <label>Temperatures (comma-separated):</label>
+        <div className='row'>
+          <label>Temperatures:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'weather_temperature_id')}>
         {weatherTemperatures.map((temp) => (
           <option key={temp.id} value={temp.id}>
@@ -199,8 +204,8 @@ interface WeatherOption {
         ))}
       </select>
         </div>
-        <div>
-          <label>Weathers (comma-separated):</label>
+        <div className='row'>
+          <label>Weathers:</label>
           <select  multiple onChange={(e) => handleSelectChange(e, 'weather_ids')}>
         {weatherOptions.map((weather) => (
           <option key={weather.id} value={weather.id}>

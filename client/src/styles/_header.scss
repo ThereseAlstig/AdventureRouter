@@ -1,3 +1,7 @@
+//Styling för headern
+
+
+//center används på fler ställen
 .center {
     display: flex;
     justify-content: center;
@@ -20,15 +24,15 @@
 
 .cart-icon {
     font-size: 2.8em;
-    color: black; /* Se till att ikonen har en färg */
+    color: black; 
     display: none; /* Dölj ikonen som standard */
 }
     .logo-img {
-        display: inline; /* Visa ikonen på små skärmar */
-        font-size: 1.5em; /* Justera storleken på ikonen */
-        position: absolute; /* Gör det möjligt att positionera ikonen absolut */
-        bottom: 20px; /* Flytta ikonen ner */
-        right: 20px; /* Flytta ikonen åt höger */
+        display: inline; 
+        font-size: 1.5em; 
+        position: absolute; 
+        bottom: 20px; 
+        right: 20px; 
     }
 
 .left, .right {
@@ -39,16 +43,15 @@
 
 .logo {
     position: absolute;
-    top: 50%;  /* Centrera vertikalt */
-    left: 50%; /* Centrera horisontellt */
-    transform: translate(-50%, -50%); /* Flytta logotypen tillbaka så den är exakt centrerad */
-
+    top: 50%;  
+    left: 50%;
+    transform: translate(-50%, -50%); 
     /* Responsiv storlek */
-    width: 45vw; /* Använd viewportbredd för att göra logotypen responsiv */
-    max-width: 250px; /* Max storlek för logotypen */
+    width: 45vw;
+    max-width: 250px; 
     height: auto;
     margin-top: 25px;
-     /* Behåll proportionerna */
+    
 }
 
 .active-link {
@@ -61,8 +64,8 @@
 /* För att säkerställa att logotypen inte växer för stor på väldigt stora skärmar */
 @media (max-width: 1200px) {
     .logo {
-        width: 250px;  /* Maximal bredd på stora skärmar */
-        height: auto;  /* Behåll proportionerna */
+        width: 250px;  
+        height: auto;  
     }
 }
 

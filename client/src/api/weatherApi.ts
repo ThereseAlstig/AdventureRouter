@@ -1,3 +1,5 @@
+
+//Hämtar vädret inför resan, start , destiantion samt en mittpunkt
 export function calculateMidpointDate(startDate: string, arrivalDate: string): string {
   const start = new Date(startDate);
   const end = new Date(arrivalDate);

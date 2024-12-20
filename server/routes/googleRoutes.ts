@@ -10,7 +10,7 @@ const callback = process.env.GOOGLE_REDIRECT_URL || 'https://adventure-router.ve
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/google/callback', passport.authenticate('google', { session: false }), (req, res) => {
-    console.log('User authenticated:', req.user);
+   
     const user = req.user as IUser;
     const token = jwt.sign(
         { id: user.id, email: user.email, username: user.username },
@@ -18,7 +18,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
         { expiresIn: '1h' }
     );
 
-    console.log(`Token:, ${callback}/google/callback?token=${token}&email=${user.email}&username=${user.username}`);
+   
     res.redirect(`${callback}/google/callback?token=${token}&email=${user.email}&username=${user.username}`);// Ändra till din frontend-URL
 });
 

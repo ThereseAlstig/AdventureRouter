@@ -1,3 +1,5 @@
+//Hämtar bilder som hör till resan
+
 export const fetchTripImage = async (tripId: number): Promise<string | null> => {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
@@ -14,8 +16,6 @@ export const fetchTripImage = async (tripId: number): Promise<string | null> => 
         const contentType = response.headers.get("Content-Type");
         if (!contentType || !contentType.startsWith("image/")) {
 
-            //denna ger en error även om det inte är en 404
-            // console.warn(`Response for trip ${tripId} does not contain valid image data.`);
             return null; // Returnera null om ingen giltig bilddata finns
         }
 

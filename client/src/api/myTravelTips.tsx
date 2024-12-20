@@ -1,5 +1,5 @@
 
-
+// Hämtar resor kopplat till användaren
 export async function MyTravelTips() {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     const email = sessionStorage.getItem('userEmail');

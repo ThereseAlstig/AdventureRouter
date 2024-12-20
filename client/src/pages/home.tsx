@@ -3,7 +3,7 @@ import { Links } from "../components/links";
 
 export const Home = () => {
 
-
+//Länkar och innehåll till intern reklam länkar
     const links = [
         {
             image: "/man.png",

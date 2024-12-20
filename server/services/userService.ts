@@ -27,6 +27,8 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
     }
   };
 
+
+  //Skapar användare
   export const createUser = async (user: Partial<IUser>): Promise<IUser> => {
     const { email, username, password, role } = user;
 
@@ -52,7 +54,7 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
 
 
 
-
+//Skapa användare med Google
 export const findOrCreateUserByGoogle = async (data: {
   email: string;
   username?: string;

@@ -1,5 +1,5 @@
 import getOrCreateCartId from "../functions/CreateCartId";
-
+//Sparar produkter i kundkorgen
 export const saveToCart = async (productId: number, quantity: number) => {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
 
@@ -9,7 +9,6 @@ export const saveToCart = async (productId: number, quantity: number) => {
         console.log('email', email);
         const cartId = email ? null : getOrCreateCartId();
 
-        // Förbered request body
         const requestBody = {
             productId,
             quantity,
@@ -44,7 +43,7 @@ export const saveToCart = async (productId: number, quantity: number) => {
 
 export const fetchCart = async () => {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-    const email = sessionStorage.getItem('userEmail'); // Hämta email från sessionStorage
+    const email = sessionStorage.getItem('userEmail'); 
     const cartId = sessionStorage.getItem('cartId');
     try {
 
@@ -55,10 +54,7 @@ export const fetchCart = async () => {
         if (email) params.append('email', email);
         if (cartId) params.append('cartId', cartId);
 
-        // Förbered request body
-       
-
-        // Skicka förfrågan till backend
+      
         const response = await fetch(`${backendUrl}/orders/fetchCart?${params.toString()}`, {
             method: "GET",
         });

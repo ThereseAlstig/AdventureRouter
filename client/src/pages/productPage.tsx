@@ -15,19 +15,20 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 const [categoryIds, setCategoryIds] = useState<{ categoryOneId: number, categoryTwoId: number } | null>(null);
 
 
-
+//Hämtar produkten
     useEffect(() => {
         const fetchProducts = async () => {
             try {
             if (id) {
                 const data = await GetProduct(id);
                 setProduct(data);
-                console.log("product", data);
+                
                 try {
-                    const categoryIds = await GetCategoryId(data.category_one_name, data.category_two_name); // Väntar på resultatet
-                    console.log("categoriessss", categoryIds); 
-                    setCategoryIds(categoryIds)// Loggar resultatet
-                    console.log("categoryIds", categoryIds);
+
+                    //hämtar kategori id
+                    const categoryIds = await GetCategoryId(data.category_one_name, data.category_two_name); 
+                    setCategoryIds(categoryIds)
+                    
                 } catch (error) {
                     console.error('Error fetching category IDs:', error);
                 }
@@ -39,12 +40,16 @@ const [categoryIds, setCategoryIds] = useState<{ categoryOneId: number, category
         }
         fetchProducts();
     }, []);
+
+    //Hantera antal i kundvagnen
     const handleQuantityChange = (productId: number, quantity: string) => {
         setQuantities((prev) => ({
             ...prev,
             [productId]: parseInt(quantity) || 1, // Standard till 1 om input är tomt
         }));
     };
+    
+    //Lägg till i kundvagnen
     const handleAddToCart = async (productId: number) => {
         const quantity = quantities[productId] || 1; // Hämta a/ Hämta antal från state (standard till 1)
         try {

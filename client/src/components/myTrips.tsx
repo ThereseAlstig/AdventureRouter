@@ -3,13 +3,12 @@ import { MyTravelTips } from "../api/myTravelTips";
 import MapWithDirections from "../api/googleMapsApi";
 import { uploadImage } from "../api/uppdateTripForm";
 import { fetchTripImage } from "../api/fetchImg";
-// import { updateTripForm } from "../api/uppdateTripForm";
 
+//Mina resor
 export const MyTrips = () => {
 const [trips, setTrips] = useState<any[]>([]);
 const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
-// const [bestExperience, setBestExperience] = useState("");
-// const [worstExperience, setWorstExperience] = useState("");
+
 
 
 function formatDateToReadable(dateString: string): string {
@@ -84,7 +83,7 @@ function formatDateToReadable(dateString: string): string {
   
 
 
-
+//Spara ner resa från formulär
     const handleSaveImage = async (tripId: number) => {
         const trip = trips.find((t) => t.trip_id === tripId);
         if (!trip || !trip.image) {
@@ -107,7 +106,7 @@ function formatDateToReadable(dateString: string): string {
     };
     
 
-
+//Sparar best och worst experience
     const handleSave = async (tripId: number) => {
         console.log("tripId", tripId);
         const tripIndex = trips.findIndex((t) => t.trip_id === tripId);
@@ -167,7 +166,7 @@ function formatDateToReadable(dateString: string): string {
                         : t
                 )
             );
-            console.log("uppdatedTrip", uppdatedTrip);
+           
         } catch (error) {
             console.error("Error updating trip:", error);
             alert("Failed to update trip.");
@@ -218,7 +217,7 @@ function formatDateToReadable(dateString: string): string {
               {!trip.best_experience && !trip.worst_experience && (
                 <div className="trip-details3">
                   <h2>Best:</h2>
-                  <label>
+                  <label htmlFor="bestExperience">
                     <input
                       type="text"
                       value={trip.bestExperience || ''}
@@ -234,7 +233,7 @@ function formatDateToReadable(dateString: string): string {
                     />
                   </label>
                   <h2>Worst:</h2>
-                  <label>
+                  <label htmlFor="worstExperience">
                     <input
                       type="text"
                       value={trip.worstExperience || ''}
@@ -264,7 +263,7 @@ function formatDateToReadable(dateString: string): string {
                   />
                 ) : (
                   <>
-                    <h2>Image:</h2>
+                    <label htmlFor="imgage">Image:</label>
                     <input
                       type="file"
                       onChange={(e) =>

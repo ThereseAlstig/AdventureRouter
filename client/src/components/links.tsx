@@ -9,6 +9,7 @@ interface LinksProps {
     links: Link[]; // Renamed to 'links' for clarity
 }
 
+//Länkar till interna reklam länkar
 export const Links: React.FC<LinksProps> = ({ links }) => {
     return (
         <div className="linksContainer">

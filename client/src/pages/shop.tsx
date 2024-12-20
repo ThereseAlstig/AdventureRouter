@@ -3,8 +3,12 @@ import { Navigation } from "../layouts/navigation"
 import '../styles/_shop.scss'
 import { Links } from "../components/links";
 
+
+//Förstasidan för produkterna
 export const Shop = () => {
 
+
+    //Länkar och innehåll till intern reklam länkar
 const links = [
     {
         image: "/adventure-1850178_1280.jpg",

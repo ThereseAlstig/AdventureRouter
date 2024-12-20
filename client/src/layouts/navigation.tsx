@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 
+
+//Navigationsmeny för produkter och kategorier
 export const Navigation = () => {
 
 

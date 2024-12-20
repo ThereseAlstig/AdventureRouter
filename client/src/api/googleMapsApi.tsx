@@ -8,11 +8,14 @@ interface MapWithDirectionsProps {
   mode: google.maps.TravelMode;
 }
 
+//Hämtar kartorna för att visa vägbeskrivning
 const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destination, waypoints, mode }) => {
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const[distance, setDistance] = useState<string | null>(null);
   const[duration, setDuration] = useState<string | null>(null);
 
+
+  //Gör om mode till google.maps.TravelMode för att passa Google MAps API
   const mapMode = (mode: string): { travelMode: google.maps.TravelMode; filterMode: string } => {
     const modeLower = mode.toLowerCase();
   
@@ -33,6 +36,8 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
         throw new Error(`Invalid mode: ${mode}`);
     }
   };
+
+
   useEffect(() => {
     const fetchDirections = async () => {
      const travelOption =  mapMode(mode);
@@ -46,6 +51,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
   };
     });
     
+    //Kollar stopp längst vägen
      const hasWaypoints = formattedWaypoints && formattedWaypoints.length > 0;
       if(travelOption.travelMode){
       const directionsService = new google.maps.DirectionsService();

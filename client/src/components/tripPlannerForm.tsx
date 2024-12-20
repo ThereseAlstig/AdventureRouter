@@ -13,6 +13,8 @@ interface FormProps {
   }) => void;
 }
 
+
+//Formulär för att planera resa
 const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
   const [start, setStart] = useState("");
   const [destination, setDestination] = useState("");
@@ -28,7 +30,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
   const [travelOptions, setTravelOptions] = useState<TravelOption[]>([]);
 
 
-  
+  //Hämtar travel options till formuläret
   useEffect(() => {
     async function fetchTravelOptions() {
       try {
@@ -42,7 +44,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
         if (response.ok) {
           const data = await response.json();
           setTravelOptions(data);
-          console.log(travelOptions);
+          
         }
       } catch (error) {
         console.error('Failed to fetch travel options:', error);
@@ -52,7 +54,7 @@ const TripPlannerForm: React.FC<FormProps> = ({ onSubmit }) => {
     fetchTravelOptions();
   }, []);
 
-  //Filterar ut vilken mode som ska användas, beroende på om de tär för google map eller filtrera produkter
+  //Filterar ut vilken mode som ska användas, beroende på om det är för google map eller filtrera produkter
   const mapMode = (mode: string): { travelMode: google.maps.TravelMode; filterMode: string } => {
     const modeLower = mode.toLowerCase();
   

@@ -8,6 +8,8 @@ interface PaymentFormProps {
     items: { productId: number; quantity: number }[];
 }
 
+
+//Betalingsformulär
 const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret, items }) => {
     const stripe = useStripe();
     const elements = useElements();
@@ -15,6 +17,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret, items }) => {
     const [address, setAddress] = useState<string>('');
     const userEmail = sessionStorage.getItem('userEmail');
     const  navigate  = useNavigate();
+
+    //Hanterar betalning
     const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
 

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import  TransferCartToUser  from '../api/transferCartToUser';
 
+
 // Skapa Context
 
 interface AuthContextType {
@@ -29,16 +30,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [username, setUsername] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
 
-  //Hämtar token från sessionStorage
-  useEffect(() => {
+  //Hämtar token från sessionStorage och uppdaterar inloggning
+  useEffect(() => { 
+    console.log('Checking for token in sessionStorage...');
     const token = sessionStorage.getItem('token');
     const storedEmail = sessionStorage.getItem('userEmail');
     const storedUsername = sessionStorage.getItem('username');
-    setIsAuthenticated(!!token); // Kontrollera om en token finns
+    const role = sessionStorage.getItem('userRole');
+    setIsAuthenticated(!!token); 
     setEmail(storedEmail);
     setUsername(storedUsername);
-    setIsAuthenticated(!!token); 
-    // Kontrollera om en token finns
+    setIsAuthenticated(!!token);
+    setUserRole(role); 
   }, []);
 
 
@@ -80,20 +83,19 @@ setUserRole(data.role);
     }
   };
 
-//inlogg för både Google och Github
+//inlogg för både Google och Github - admin kan ej logga in via github eller google
   const googleLogin = async (token: string, email: string = '', username: string = '') => {
     
     if (token) {
-           console.log('Saving token in sessionStorage...');
+          
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('userEmail', email); 
       sessionStorage.setItem('username', username);
       setIsAuthenticated(true);
       setEmail(email); 
       setUsername(username);
-
       const cartId = sessionStorage.getItem('cartId');
-    console.log('cartId', cartId);
+   
     if(cartId){
       try {
         console.log('Transferring anonymous cart...');
@@ -114,7 +116,7 @@ setUserRole(data.role);
   const logout = async () => {
     console.log('logout');
     try {
-        // Skicka en POST-begäran till backend för att logga ut användaren
+      
         const response = await fetch(`${key}/auth/logout`, {
           method: 'POST',
           headers: {
@@ -131,6 +133,7 @@ setUserRole(data.role);
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('userEmail');
         sessionStorage.removeItem('username');
+        sessionStorage.removeItem('userRole');
         setIsAuthenticated(false);
         setEmail(null);
         setUsername(null);

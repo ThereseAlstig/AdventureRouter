@@ -8,15 +8,16 @@ interface ProtectedRouteProps {
     requiredRole: 'admin'; 
 }
 
+//Skyddar admin sidan
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
     const auth = useContext(AuthContext);
- // Om användaren inte är inloggad, omdirigera till login
+ // Om användaren inte är inloggad, omdirigera till startsidan
     if (!auth?.isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 
     if (auth.userRole !== requiredRole) {
-        // Om användaren inte har rätt roll, omdirigera till en "Access Denied"-sida eller startsidan
+        // Om användaren inte har rätt roll, omdirigera till startsidan
         return <Navigate to="/" replace />;
     }
 

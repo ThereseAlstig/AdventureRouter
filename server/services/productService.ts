@@ -53,7 +53,7 @@ LEFT JOIN
     }
 };
 
-
+//hämta och filtrera produkter utifrån olika parametrar, categorie, weather, temperature, travel option
 export const getFilteredProductsBY = async (filters: {   
     categoryOne?: string | null;
     categoryTwo?: string | null;
@@ -135,7 +135,7 @@ export const getFilteredProductsBY = async (filters: {
         
 
         const [rows] = await pool.query(query, params);
-        console.log('Filtered products fetched:', rows);
+      
         return rows; // Returnera matchande produkter
     } catch (error) {
         console.error('Error in getFilteredProducts:', error);

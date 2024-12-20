@@ -80,7 +80,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRATION || "2h" }
+      { expiresIn: process.env.JWT_EXPIRATION || "4h" }
     );
 
     res.status(200).json({

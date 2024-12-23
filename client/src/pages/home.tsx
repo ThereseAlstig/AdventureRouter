@@ -27,7 +27,9 @@ export const Home = () => {
 
     return (
         <>
-            <div>Film</div>
+            <div className="movieContainer">
+                <img src="\film.png" alt="shop" className="backgroundImage" />
+            </div>
 
         <div className="homepageWords">
             <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>   

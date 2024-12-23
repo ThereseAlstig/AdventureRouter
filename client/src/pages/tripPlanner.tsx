@@ -280,11 +280,18 @@ handleFetchFilteredProducts(startWeather, modeTravel);
         </div>
       )}
       </div>
-
-      <div className= "tips_trips">
+{
+  filteredProducts.length > 0 ? (
+    <div className= "tips_trips">
+    <ProductCarusellTips products={filteredProducts} />
+    </div> 
+    
+  ) : null
+}
+      {/* <div className= "tips_trips">
         <ProductCarusellTips products={filteredProducts} />
-        </div></div>   
-         </div>
+        </div>    */}
+         </div></div>
   );
 };
 

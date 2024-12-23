@@ -1,4 +1,4 @@
-import { NavLink,  } from "react-router-dom";
+import { NavLink, useLocation} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import '../styles/_header.scss'
 import '../styles/_navigation.scss'
@@ -7,6 +7,7 @@ import { faBars, faLock, faLockOpen, faShoppingCart,faTimes } from "@fortawesome
 import { useContext, useState } from "react";
 import LoginModal from "../components/login";
 import { AuthContext } from "../context/authContext";
+import { Navigation } from "./navigation";
 
 
 //Header
@@ -14,7 +15,9 @@ export const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const auth = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
-   
+    const location = useLocation(); 
+    
+    
     if (!auth) {
       throw new Error('AuthContext must be used within an AuthProvider');
     }
@@ -39,6 +42,9 @@ export const Header = () => {
       const handleCloseMenu = () => {
         setIsOpen(false);
       };
+
+      const shouldShowNavigation =
+      location.pathname.startsWith('/shop') || location.pathname.startsWith('/categories');
     
     return (
         <header className="bg-gray-800  text-center p-4 ">
@@ -55,15 +61,13 @@ export const Header = () => {
             {isAuthenticated ? (
         // Om användaren är inloggad, visa "Min sida"-knappen
         <>
-
         <NavLink to="/my-page" className="right" aria-label="My page">
-          <FontAwesomeIcon icon={faUser} className="logo-user" />
+          <FontAwesomeIcon icon={faUser} className="logo-img" />
         </NavLink>
         </>
       ) : (
         // Om användaren inte är inloggad, visa "Logga in/skapa användare"-knappen
         <NavLink to="#" onClick={openModal} className="right" aria-label="loggin in or create account">
-          <h2 className="logo-text">Login/create account</h2>
           <FontAwesomeIcon icon={faUser} className="logo-img" aria-label="Go to youre page"/>
         </NavLink>
       )}
@@ -101,8 +105,7 @@ export const Header = () => {
     </NavLink>
 </div>
 
-            
-
-        </header>
+{shouldShowNavigation && <Navigation />}
+</header>
     );
 }

@@ -1,7 +1,7 @@
 import express from 'express';
 import {  createTrip, getImageForTrip, getSingleTripById, getUserTripsWithDetails, getWeatherProducts, trips, updateTripWithDetails, uploadImageController } from '../controllers/travelConbtrollers';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
-// import upload from '../middleware/multer';
+
 
 const router = express.Router();
 const multer = require("multer");

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Product } from "../types/product"; // Adjust the import path as necessary
 import { ProductCarusell } from "../components/productCarusell";
-import { Navigation } from "../layouts/navigation"
 import { useParams } from "react-router-dom";
 
 export const CategoryPage = () => {
@@ -50,9 +49,6 @@ export const CategoryPage = () => {
         
     }, [categoryId]);
 
-    if (loading) {
-        return <p>Loading products...</p>;
-    }
 
     if (error) {
         return <p>Error: {error}</p>;
@@ -62,14 +58,19 @@ export const CategoryPage = () => {
 
 
     return (
-
-        <>
-        <Navigation/>
-      
-        <ProductCarusell products={products}/>  
-        <div className="homepageWords">
+<>
+        {loading ? (
+            <div className="skeleton-grid">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="skeleton"></div>
+              ))}
+            </div>
+          ) : (
+            <ProductCarusell products={products} />
+          )}
+          <div className="homepageWords">
             <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>
-         </div>
+          </div>
         </>
         
     );

@@ -10,6 +10,19 @@ html, body, #root {
   font-size: 1rem; 
 }
 
+.backgroundImage{
+  height: 450px;
+  width: auto;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px
+}
+.movieContainer{
+  display: flex;
+  justify-content: center;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -61,15 +74,27 @@ font-family: 'Oswald', sans-serif;
 button:hover {
   border-color: black;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+
 
 li{
   list-style-type: none;
 }
 
+.page {
+  animation: fadeIn 0.3s ease-in-out;/* Långsam och mjuk easing */
+  will-change: opacity, transform;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px); /* Minska startens offset */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 @media (prefers-contrast: more) {
   :root {
     background-color: #ffffff; /* Ljusare bakgrund */

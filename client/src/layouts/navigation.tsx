@@ -65,7 +65,7 @@ export const Navigation = () => {
             <nav className="navigation">
                {categories.map((category) => (
                 <div key={category.id}>
-                       <h3 onClick={() => toggleSubcategories(category.id)}> 
+                       <h3 onClick={(e) => { e.preventDefault(); toggleSubcategories(category.id)}}> 
                         <NavLink to={`/categories/${category.id}`} className={({ isActive }) => (isActive ? "active" : "")}>
                             {category.name}
                         </NavLink></h3>

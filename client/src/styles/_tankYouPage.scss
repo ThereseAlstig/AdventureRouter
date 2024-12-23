@@ -29,3 +29,17 @@
 }
 
 
+@media screen and (max-width: 768px) {
+    .thank-you-text {
+        font-size: 1.5rem;
+    }
+
+    .thank-you-container {
+        width: 100%;
+        video{
+            width: 100%;
+            height: auto;
+        }
+    }
+    
+}

@@ -29,7 +29,7 @@
 }
     .logo-img {
         display: inline; 
-        font-size: 1.5em; 
+        font-size: 3.5em; 
         position: absolute; 
         bottom: 20px; 
         right: 20px; 
@@ -83,8 +83,8 @@
 }
 
 .logo-img {
-    display: none;
-    margin-right: 10px;
+   
+    margin-right: 20px;
     color: black; /* Logga visas inte på större skärmar */
 }
 
@@ -99,7 +99,7 @@
         margin-bottom: 50px;
     }
     header{
-        margin-bottom: 180px;
+        margin-bottom: 20px;
     }
 
     .cart-icon {

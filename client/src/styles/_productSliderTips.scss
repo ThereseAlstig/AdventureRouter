@@ -5,11 +5,11 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 550px;
     margin: 0 auto;
     position: relative;
     overflow: hidden;
-    margin-right: 50px;
+    margin-right: 180px;
     height: calc(3 * 350px + (3 - 1) * 20px);
 }
   
@@ -114,10 +114,14 @@
     width: 25px;
     height: 25px;
     fill: black;
-    background-color: aliceblue;
+    background-color: rgba(240, 248, 255, 0.5); 
     border-radius: 50%;
     padding: 10px;
+    transition: box-shadow 0.3s ease-in-out;
     
+  }
+  .vertical-carousel-button svg:active {
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2);/* Skugga vid klick */
   }
 
   .product-description {
@@ -161,6 +165,10 @@
     .tips_trips h1{
       font-size: x-large;
       margin-left: 20px;
+    }
+    .tips_trips h3{
+      font-size: clamp(1.5rem, 3.5vw, 4rem); 
+      margin-bottom: 50px;
     }
   
     .vertical-item {

@@ -39,7 +39,7 @@ export const MyPage = () => {
           )}
       { isAuthenticated &&(
 <>
-            <h2 className="center">Välkommen {username}!</h2>
+            <h2 className="center">Welcome {username}!</h2>
             <button className="logoutButton" onClick={handleLogout}>Log Out</button>
             <LoadScript googleMapsApiKey={apiKey}>
             <div>

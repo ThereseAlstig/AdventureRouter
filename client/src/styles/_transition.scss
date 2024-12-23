@@ -1,0 +1,26 @@
+.skeleton {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+  }
+  
+  @keyframes pulse {
+    0% {
+      background-color: #e0e0e0;
+    }
+    50% {
+      background-color: #f7f7f7;
+    }
+    100% {
+      background-color: #e0e0e0;
+    }
+  }
+  
+  .skeleton-grid {
+    flex: 1;
+  background: #e0e0e0;
+  height: 300px;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+  }
+  

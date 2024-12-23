@@ -1,5 +1,4 @@
 
-import { Navigation } from "../layouts/navigation"
 import '../styles/_shop.scss'
 import { Links } from "../components/links";
 
@@ -31,7 +30,7 @@ const links = [
 
     return (
         <>
-        <Navigation/>
+    
 
         <div className="imgContainer">
            <img src="../public/boots-4417595_1280.jpg" alt="shop" className="backgroundImage"/>

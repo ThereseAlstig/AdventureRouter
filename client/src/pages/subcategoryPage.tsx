@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Navigation } from "../layouts/navigation"
 import { Product } from "../types/product";
 import { ProductCarusell } from "../components/productCarusell";
 
@@ -52,9 +51,7 @@ export const SubcategoryPage = () => {
         
     }, [subcategoryId]);
 
-    if (loading) {
-        return <p>Loading products...</p>;
-    }
+   
 
     if (error) {
         return <p>Error: {error}</p>;
@@ -69,13 +66,18 @@ export const SubcategoryPage = () => {
 
         <>
 
-        <Navigation/>
-        <ProductCarusell products={products}/>
-        <div className="homepageWords">
-            <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>
-         </div>
-
-        </>
-        
-    );
-}
+{loading ? (
+        <div className="skeleton-grid">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="skeleton"></div>
+          ))}
+        </div>
+      ) : (
+        <ProductCarusell products={products} />
+      )}
+      <div className="homepageWords">
+        <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>
+      </div>
+    </>
+  );
+};

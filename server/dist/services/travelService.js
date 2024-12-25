@@ -48,13 +48,13 @@ const CreateTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // Skapa resan
         const [tripResult] = yield db_1.default.query('INSERT INTO Trips (title, start_date, end_date, travel_mode, start_city_id, end_city_id, start_weather_condition_id, end_weather_condition_id, user_email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             title,
-            startDate || null, // Om `startDate` är tom eller undefined, sätt till `null`
-            endDate || null, // Samma här för `endDate`
+            startDate || null,
+            endDate || null,
             travelMode,
             startCityId,
             endCityId,
-            startWeatherId || null, // Om väderdata inte finns, sätt till `null`
-            endWeatherId || null, // Samma här
+            startWeatherId || null,
+            endWeatherId || null,
             userEmail,
         ]);
         const tripId = tripResult.insertId;
@@ -78,6 +78,7 @@ const CreateTrip = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.CreateTrip = CreateTrip;
+// Hjälpfunktion för att gruppera resor med stopp
 const groupTripsWithStops = (rows) => {
     const trips = {};
     const flatRows = Array.isArray(rows[0]) ? rows[0] : rows;
@@ -120,6 +121,7 @@ const groupTripsWithStops = (rows) => {
     // Returnera en array av resor
     return Object.values(trips);
 };
+//Hämta resor med detaljer
 const getTripWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [rows] = yield db_1.default.query(`SELECT 
@@ -170,6 +172,7 @@ const getTripWithDetails = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getTripWithDetails = getTripWithDetails;
+//sparar ner bilder till skapde resor
 const saveImage = (tripId, file) => __awaiter(void 0, void 0, void 0, function* () {
     if (!file) {
         throw new Error("No file uploaded");
@@ -181,18 +184,3 @@ const saveImage = (tripId, file) => __awaiter(void 0, void 0, void 0, function* 
          VALUES (?, ?, ?, ?)`, [tripId, imageData, imageSize, mimeType]);
 });
 exports.saveImage = saveImage;
-// export const getImage = async (req: Request, res: Response) => {
-//   const { imageId } = req.params;
-//   try {
-//       const [rows] = await pool.query('SELECT image, image_type FROM TripImages WHERE id = ?', [imageId]);
-//       if (rows.length === 0) {
-//           return res.status(404).json({ message: 'Image not found' });
-//       }
-//       const { image, image_type } = rows[0];
-//       res.setHeader('Content-Type', image_type);
-//       res.send(image); // Skicka binär data till klienten
-//   } catch (error) {
-//       console.error('Error fetching image:', error);
-//       res.status(500).json({ message: 'Failed to fetch image' });
-//   }
-// };

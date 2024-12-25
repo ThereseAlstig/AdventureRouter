@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { RowDataPacket } from 'mysql2';
 import { IUser } from '../models/userModel';
 import pool from '../config/db';

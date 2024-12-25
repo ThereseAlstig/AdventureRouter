@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = exports.verifyPassword = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = __importDefault(require("../config/db"));
 // Din databasanslutning
 //verifiera lösenord 
 const verifyPassword = (inputPassword, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield bcrypt_1.default.compare(inputPassword, hashedPassword);
+    return yield bcryptjs_1.default.compare(inputPassword, hashedPassword);
 });
 exports.verifyPassword = verifyPassword;
 const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,6 +35,7 @@ const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.findUserByEmail = findUserByEmail;
+//Skapar användare
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password, role } = user;
     // Hantera lösenord
@@ -51,6 +52,7 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     return newUser;
 });
 exports.createUser = createUser;
+//Skapa användare med Google
 const findOrCreateUserByGoogle = (data) => __awaiter(void 0, void 0, void 0, function* () {
     // Kontrollera om användaren redan finns baserat på e-post
     let user = yield (0, exports.findUserByEmail)(data.email);

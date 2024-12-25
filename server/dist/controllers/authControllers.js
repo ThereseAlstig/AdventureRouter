@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProtectedResource = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userService_1 = require("../services/userService");
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,8 +33,7 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             res.status(400).json({ message: 'Password is required for this registration method' });
             return;
         }
-        const hashedPassword = yield bcrypt_1.default.hash(password.trim(), 10);
-        console.log("Hashed password:", hashedPassword);
+        const hashedPassword = yield bcryptjs_1.default.hash(password.trim(), 10);
         const user = yield (0, userService_1.createUser)({
             email,
             password: hashedPassword,
@@ -72,7 +71,7 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             res.status(401).json({ message: "User has no password set" });
             return;
         }
-        const isMatch = yield bcrypt_1.default.compare(password.trim(), user.password);
+        const isMatch = yield bcryptjs_1.default.compare(password.trim(), user.password);
         if (!isMatch) {
             res.status(401).json({ message: "Invalid credentials" });
             return;

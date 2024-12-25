@@ -1,4 +1,5 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { findUserByEmail, createUser, verifyPassword } from '../services/userService';
@@ -29,7 +30,7 @@ export const registerUser: RequestHandler = async (req, res, next) => {
       }
 
       const hashedPassword = await bcrypt.hash(password.trim(), 10);
-      console.log("Hashed password:", hashedPassword);
+      
       const user = await createUser({
           email,
           password: hashedPassword,

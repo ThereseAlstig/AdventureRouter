@@ -25,13 +25,17 @@ export const Home = () => {
         }];
 
         const url = new URL(
-            `https://www.youtube-nocookie.com/embed/RudIVsk7il7twwY0?cc_load_policy=0&cc=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`
+            `https://www.youtube-nocookie.com/embed/3Ih03cB9oJE?cc_load_policy=0&controls=1&cc=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`
           );
 
     return (
-        <> 
+
+
+        <> <h2 className="center">Adventure Awaits, instruction video</h2>
              <div className="movieContainer">
+                
              <div className="responsive-video">
+                
             <iframe
       src={url.toString()}
       title="YouTube video player"

@@ -4,14 +4,17 @@
     align-items: center;
     margin: 0 auto;
     padding: 0;
+ margin-top: 40px;
   }
   
   .responsive-video {
     position: relative;
     width: 100%;
-    max-width: 80%; /* 80% bredd för desktop */
+    max-width: 90%; 
     padding-bottom: 56.25%; /* Förhållandet 16:9 */
     height: 0;
+ 
+    overflow: hidden;
   }
   
   .responsive-video iframe {

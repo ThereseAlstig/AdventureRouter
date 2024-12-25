@@ -1,5 +1,4 @@
 
-import { url } from "inspector";
 import { Links } from "../components/links";
 
 export const Home = () => {
@@ -26,7 +25,7 @@ export const Home = () => {
         }];
 
         const url = new URL(
-            `https://www.youtube-nocookie.com/embed/WRQUMfsbMR0?cc_load_policy=0&cc=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`
+            `https://www.youtube-nocookie.com/embed/RudIVsk7il7twwY0?cc_load_policy=0&cc=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`
           );
 
     return (

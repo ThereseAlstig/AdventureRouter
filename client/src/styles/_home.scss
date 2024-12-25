@@ -1,0 +1,32 @@
+.movieContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0;
+  }
+  
+  .responsive-video {
+    position: relative;
+    width: 100%;
+    max-width: 80%; /* 80% bredd för desktop */
+    padding-bottom: 56.25%; /* Förhållandet 16:9 */
+    height: 0;
+  }
+  
+  .responsive-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Anpassa för mobil */
+  @media (max-width: 768px) {
+    .responsive-video {
+      max-width: 100%; /* 100% bredd för mobil */
+    }
+  }
+  

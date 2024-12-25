@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferAnonymousCartService = exports.clearCartByEmailService = exports.getProductsByIds = exports.getCartItems = exports.addToCartService = exports.createOrderService = void 0;
 const db_1 = __importDefault(require("../config/db"));
+// Skapa en order
 const createOrderService = (pool, orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const { userEmail, items, address } = orderData;
     // 1. Beräkna totalpris
@@ -48,6 +49,7 @@ const createOrderService = (pool, orderData) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.createOrderService = createOrderService;
+//SKapa och lägga i kundkorgen
 const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let cartIdToUse = cartId;
@@ -116,6 +118,7 @@ const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter
     }
 });
 exports.addToCartService = addToCartService;
+//Hämta kundkorgen till användaren
 const getCartItems = (pool, email, cartId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let query;

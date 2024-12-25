@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const travelConbtrollers_1 = require("../controllers/travelConbtrollers");
 const authMiddleware_1 = require("../middleware/authMiddleware");
-// import upload from '../middleware/multer';
 const router = express_1.default.Router();
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });

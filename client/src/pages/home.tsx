@@ -24,13 +24,27 @@ export const Home = () => {
             link: "/shared-adventure"
         }];
 
+        const url = new URL(
+            `https://www.youtube-nocookie.com/embed/RudIVsk7il7twwY0?cc_load_policy=0&cc=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`
+          );
 
     return (
-        <>
-            <div className="movieContainer">
-                <img src="\film.png" alt="shop" className="backgroundImage" />
-            </div>
+        <> 
+             <div className="movieContainer">
+             <div className="responsive-video">
+            <iframe
+      src={url.toString()}
+      title="YouTube video player"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      className="video__iframe"
+      allowFullScreen
+      loading="lazy"
+    ></iframe>
 
+  
+                </div>
+                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         <div className="homepageWords">
             <h2>Adventure Awaits: Discover the Gear and Guidance for Your Next Big Journey.</h2>   
         </div>

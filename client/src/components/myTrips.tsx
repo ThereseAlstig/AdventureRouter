@@ -3,6 +3,7 @@ import { MyTravelTips } from "../api/myTravelTips";
 import MapWithDirections from "../api/googleMapsApi";
 import { uploadImage } from "../api/uppdateTripForm";
 import { fetchTripImage } from "../api/fetchImg";
+import { Links } from "./links";
 
 //Mina resor
 export const MyTrips = () => {
@@ -173,7 +174,54 @@ function formatDateToReadable(dateString: string): string {
         }
     };
 
-    
+    //länkar till interna reklam länkar, som syns om man inte har några produkter i kundvagnen
+    const links1 = [
+      {
+          image: "/solar-cell-7097620_1280.jpg",
+          alt: "Looking for adventures",
+          text: "Looking for outdooor Electronics?",
+          link: "/categories/3/subcategories/8"
+      },
+      {
+          image: "/woman.png",
+          alt: "hiking",
+          text: "Plan your next adventure.",
+          link: "/journey-planner"
+      },
+      {
+          image: "/man.png",
+          alt: "hiking",
+          text: "Find your adventure essentials",
+          link: "/shop"
+      
+      }];
+
+      //Länkar till interna reklam länkar 2 
+      const links2 = [
+          {
+              image: "/adventure-1850178_1280.jpg",
+              alt: "hiking",
+              text: "Find your hiking essentials",
+              link: "/categories/1/subcategories/2"
+          },
+          {
+              image: "/bike-7365418_1280.jpg",
+              alt: "hiking",
+              text: "Top gear for cycling.",
+              link: "/categories/2/subcategories/4"
+          },
+          {
+              image: "/walk.png",
+              alt: "Looking for adventures",
+              text: "Looking for your next adventure?",
+              link: "/shared-adventure"
+           
+          }];
+
+          function capitalize(city: string) {
+            return city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+          }
+
 
     return (
         <>
@@ -183,7 +231,7 @@ function formatDateToReadable(dateString: string): string {
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
               <div className="trip-details">
-                <p>From {trip.start_city} to {trip.end_city}</p>
+                <p>From {capitalize(trip.start_city)} to {capitalize(trip.end_city)}</p>
                 {trip.stops.length > 0 && (
                   <>
                     <p>Stopping in </p>
@@ -202,12 +250,12 @@ function formatDateToReadable(dateString: string): string {
           <h2>Weather forecast:</h2>
           {trip.start_weather && (
             <div>
-          <h3>{trip.start_city}</h3>
+          <h3>{capitalize(trip.start_city)}</h3>
             <p>Temperature: {trip.start_weather.temperature}°C, Wind speed: {trip.start_weather.wind_speed}, {trip.start_weather.description}</p>
           </div>)}
           {trip.end_weather && (
             <div>
-              <h3>{trip.end_city}</h3>
+              <h3>{capitalize(trip.end_city)}</h3>
               <p>Temperature: {trip.end_weather.temperature}°C, Wind speed: {trip.end_weather.wind_speed}, {trip.end_weather.description}</p>
           <p></p>
           </div>)}
@@ -309,6 +357,20 @@ function formatDateToReadable(dateString: string): string {
           <hr className="trip-divider" />
         </div>
         ))}
+
+        {trips.length === 0 && (
+          
+          <>
+          <div className="cart-links">
+        <Links links={links1} />
+</div>
+<div className="cart-links">
+        <Links links={links2} />
+</div>
+</>
+        )
+          }
+
       </>
     
     );

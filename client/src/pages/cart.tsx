@@ -99,7 +99,7 @@ export const Cart: React.FC = () => {
           
 {products.length === 0 && 
 <>
-<h2 className="emty-cart">Your cart is empty discover our products or plan youre next adventure!</h2>
+<h2 className="emty-cart center">Your cart is empty discover our products or plan youre next adventure!</h2>
 <div className="cart-links">
   <Links links={links1} />  
 </div>

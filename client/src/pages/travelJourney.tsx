@@ -89,7 +89,16 @@ const imageMap = { [Number(id)]: imageUrl };
         const daySuffix = getDaySuffix(day);
         return `the ${day}${daySuffix} of ${month} ${year}`;
       }
-    
+      function capitalize(city: string) {
+        return city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+      }
+
+      function capitalizeName(fullName: string) {
+        return fullName
+          .split(" ")
+          .map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+          .join(" ");
+      }
 
     return (
         <div className="trip-details-container">
@@ -97,10 +106,11 @@ const imageMap = { [Number(id)]: imageUrl };
   onError={(error) => console.error("Error loading Google Maps API", error)}>
           <div className="trip-details11">
         <h1>{trip.title}</h1>
+        <p>Trip created by: {capitalizeName(trip.user_username)}</p>
 
         <div className="trip-details-singel-page1">
                 <p>
-                  From {trip.start_city} to {trip.end_city}
+                  From {capitalize(trip.start_city)} to {capitalize(trip.end_city)}
                 </p>
                 {trip.stops.length > 0 && (
                   <>
@@ -153,12 +163,12 @@ const imageMap = { [Number(id)]: imageUrl };
           <h2>Weather forecast:</h2>
           {trip.start_weather && (
             <div>
-          <h3>{trip.start_city}</h3>
+          <h3>{capitalize(trip.start_city)}</h3>
             <p>Temperature: {trip.start_weather.temperature}°C, Wind speed: {trip.start_weather.wind_speed}, {trip.start_weather.description}</p>
           </div>)}
           {trip.end_weather && (
             <div>
-              <h3>{trip.end_city}</h3>
+              <h3>{capitalize(trip.end_city)}</h3>
               <p>Temperature: {trip.end_weather.temperature}°C, Wind speed: {trip.end_weather.wind_speed}, {trip.end_weather.description}</p>
           <p></p>
           </div>)}
@@ -177,9 +187,11 @@ const imageMap = { [Number(id)]: imageUrl };
             />
        
        
-         <div className= "tips_trips">
+                <div className= "tips_trips">
                  <ProductCarusellTips products={filteredProducts} />
                  </div>
-        </div></LoadScript></div> 
+        </div>
+        </LoadScript>
+        </div> 
     );
 };

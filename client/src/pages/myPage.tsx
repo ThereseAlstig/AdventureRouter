@@ -29,7 +29,12 @@ export const MyPage = () => {
       }
     };
 
-
+    function capitalizeName(fullName: string) {
+      return fullName
+        .split(" ")
+        .map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+        .join(" ");
+    }
     return (
         <>
          { !isAuthenticated && (
@@ -39,7 +44,7 @@ export const MyPage = () => {
           )}
       { isAuthenticated &&(
 <>
-            <h2 className="center">Welcome {username}!</h2>
+            <h2 className="center">Welcome {username ? capitalizeName(username) : "User"}!</h2>
             <button className="logoutButton" onClick={handleLogout}>Log Out</button>
             <LoadScript googleMapsApiKey={apiKey}>
             <div>

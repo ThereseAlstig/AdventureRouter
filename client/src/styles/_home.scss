@@ -3,17 +3,16 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    width: 100%;
+    height: 100vh;
     padding: 0;
- margin-top: 40px;
+
   }
   
   .responsive-video {
     position: relative;
     width: 100%;
-    max-width: 90%; 
-    padding-bottom: 56.25%; /* Förhållandet 16:9 */
-    height: 0;
- 
+    height: 100%;
     overflow: hidden;
   }
   
@@ -24,12 +23,17 @@
     width: 100%;
     height: 100%;
     border: none;
+    object-fit: cover; 
   }
   
   /* Anpassa för mobil */
   @media (max-width: 768px) {
     .responsive-video {
       max-width: 100%; /* 100% bredd för mobil */
+    }
+
+    .movieContainer {
+      width: 100%;
     }
   }
   

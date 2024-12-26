@@ -31,7 +31,7 @@ export const Home = () => {
     return (
 
 
-        <> <h2 className="center">Adventure Awaits, instruction video</h2>
+        <> 
              <div className="movieContainer">
                 
              <div className="responsive-video">

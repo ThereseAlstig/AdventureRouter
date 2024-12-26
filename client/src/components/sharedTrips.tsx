@@ -118,6 +118,16 @@ const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
       return `the ${day}${daySuffix} of ${month} ${year}`;
     }
   
+    function capitalize(city: string) {
+      return city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+    }
+
+    function capitalizeName(fullName: string) {
+      return fullName
+        .split(" ")
+        .map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
+        .join(" ");
+    }
     return (
       <>
       
@@ -128,6 +138,7 @@ const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
           <div className="trip-container">
             <div className="trip-detail-left">
               <h1>{trip.title}</h1>
+              <p>Trip created by: {capitalizeName(trip.user_username)}</p>
 
             <div className="trip-details3">
                 {tripImages[trip.trip_id] && tripImages[trip.trip_id] !== "Image for trip null" ? (
@@ -144,7 +155,7 @@ const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
               
               <div className="trip-details">
                 <p>
-                  From {trip.start_city} to {trip.end_city}
+                  From {capitalize(trip.start_city)} to {capitalize(trip.end_city)}
                 </p>
                 {trip.stops.length > 0 && (
                   <>

@@ -102,12 +102,17 @@ margin-left: 80px;
           h2{
             font-size: 1.5em;
             width: 100%;
+            margin-left: 0;
         }
     }
         img{
             width: 100%;
             height: auto;
         }
+    }
+    .emty-cart{
+        margin-left: 0;
+        
     }
 }
 .payment-page{

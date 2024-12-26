@@ -40,9 +40,6 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password, role } = user;
     // Hantera lösenord
     let hashedPassword = null;
-    if (password) {
-        console.log("Password received from frontend:", password);
-    }
     // Skapa användaren i databasen
     yield db_1.default.query('INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)', [email, username || email.split('@')[0], password, role || 'user']);
     const newUser = yield (0, exports.findUserByEmail)(email);

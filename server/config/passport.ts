@@ -17,10 +17,7 @@ passport.use(
       },
           async (accessToken, refreshToken, profile, done) => {
             try {  
-              
            
-              console.log('Google profile received:', profile); // Logga hela profilen
-              console.log('Google email:', profile.emails?.[0]?.value);
       
               
               let user = await findOrCreateUserByGoogle({
@@ -28,8 +25,7 @@ passport.use(
                 username: profile.displayName,
                 
               });
-              console.log('User:', user);
-              console.log('profile:', profile);
+             
              // Logga användarens data
               done(null, user);
             } catch (error) {

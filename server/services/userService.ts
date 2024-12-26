@@ -34,9 +34,7 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
 
     // Hantera lösenord
     let hashedPassword = null;
-    if (password) {
-        console.log("Password received from frontend:", password);
-    }
+ 
 
     // Skapa användaren i databasen
     await pool.query(

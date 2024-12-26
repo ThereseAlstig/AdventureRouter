@@ -6,7 +6,7 @@ export const saveToCart = async (productId: number, quantity: number) => {
     try {
        
         const email = sessionStorage.getItem('userEmail');
-        console.log('email', email);
+       
         const cartId = email ? null : getOrCreateCartId();
 
         const requestBody = {
@@ -65,7 +65,7 @@ export const fetchCart = async () => {
         }
 
         const data = await response.json();
-        console.log('data', data);
+      
         return data.cartItems; // Returnera kundkorgen
     } catch (error) {
         if (error instanceof Error) {

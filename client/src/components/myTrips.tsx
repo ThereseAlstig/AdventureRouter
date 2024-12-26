@@ -52,7 +52,7 @@ function formatDateToReadable(dateString: string): string {
               }
              
               setTrips(myTrips);
-              console.log("uppdatedTrip", myTrips);
+             
               const images = await Promise.all(
                 myTrips.map(async (trip: any) => {
                     const imageUrl = await fetchTripImage(trip.trip_id);
@@ -109,7 +109,7 @@ function formatDateToReadable(dateString: string): string {
 
 //Sparar best och worst experience
     const handleSave = async (tripId: number) => {
-        console.log("tripId", tripId);
+      
         const tripIndex = trips.findIndex((t) => t.trip_id === tripId);
         if (tripIndex === -1) return;
     

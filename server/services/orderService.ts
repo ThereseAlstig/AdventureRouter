@@ -108,7 +108,7 @@ export const addToCartService = async (
                 // Skapa en ny kundkorg om ingen finns
                 cartIdToUse = crypto.randomUUID();
                 await pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [cartIdToUse, userId]);
-                console.log('New cart created for user:', userId, 'with cart ID:', cartIdToUse);
+                
             }
         }
 
@@ -122,13 +122,13 @@ export const addToCartService = async (
             if (cartRows.length === 0) {
                 // Skapa en ny kundvagn i databasen om ID:t inte finns
                 await pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
-                console.log('Cart ID did not exist, new cart created:', cartIdToUse);
+                
             }
         } else {
             // Skapa ett nytt cartId om inget ID finns och användaren är anonym
             cartIdToUse = crypto.randomUUID();
             await pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
-            console.log('New cart created for anonymous user with ID:', cartIdToUse);
+           
         }
 
         // Lägg till produkten i kundkorgen
@@ -143,14 +143,14 @@ export const addToCartService = async (
                 'UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?',
                 [quantity, cartIdToUse, productId]
             );
-            console.log('Product quantity updated in cart:', productId);
+            
         } else {
             // Lägg till en ny produkt i kundkorgen
             await pool.query(
                 'INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)',
                 [cartIdToUse, productId, quantity]
             );
-            console.log('Product added to cart with ID:', cartIdToUse);
+            
         }
 
         // Returnera den uppdaterade kundkorgen
@@ -230,7 +230,7 @@ export const getProductsByIds = async (productIds: number[]): Promise<{ id: numb
 
       // Kör queryn och skicka in produkt-ID:n som parameter
       const [rows]: any = await pool.query(query, [productIds]);
-console.log('Product fetched:', rows);
+
       // Returnera resultaten i önskat format
       return rows.map((row: { id: number; price: string }) => ({
         id: row.id,
@@ -262,7 +262,7 @@ export const clearCartByEmailService = async ( email: string): Promise<void> => 
 
         // Ta bort alla produker från kundkorgen
         await pool.query('DELETE FROM CartItems WHERE cart_id = ?', [cartId]);
-        console.log(`Cart cleared for user with email: ${email}`);
+       
     } catch (error) {
         throw new Error(`Failed to clear cart: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }

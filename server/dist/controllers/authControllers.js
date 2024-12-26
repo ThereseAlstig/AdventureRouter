@@ -54,6 +54,7 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.registerUser = registerUser;
+//Loggar in användare och skapar en token för att verifiera att man är inloggad, är giltig 2h sen blir man utloggad
 const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -76,7 +77,7 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             res.status(401).json({ message: "Invalid credentials" });
             return;
         }
-        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION || "4h" });
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION || "2h" });
         res.status(200).json({
             token,
             email: user.email,

@@ -45,7 +45,6 @@ LEFT JOIN
 
     try {
         const [rows] = await pool.query(query);
-        console.log('Products fetched:', rows);  // Logga resultatet för felsökning
         return rows;
     } catch (error) {
         console.error('Error fetching products:', error);  // Logga eventuella fel
@@ -166,19 +165,19 @@ await pool.query('INSERT INTO CategoryProduct (product_id, category_id) VALUES ?
         if (productData.weather_temperature_id && productData.weather_temperature_id.length > 0) {
             const tempValues = productData.weather_temperature_id.map((tempId: number) => [result.insertId, tempId]);
             await pool.query('INSERT INTO ProductWeatherTemperature (product_id, temperature_id) VALUES ?', [tempValues]);
-            console.log('Temperature conditions linked.');
+           
         }
         
         if (productData.weather_ids && productData.weather_ids.length > 0) {
-            console.log('Weather IDs provided:', productData.weather_ids);
+          
         
             const weatherValues = productData.weather_ids.map((weatherId: number) => [result.insertId, weatherId]);
-            console.log('Prepared values for ProductWeather:', weatherValues);
+           
         
             try {
                 const query = 'INSERT INTO ProductWeather (product_id, weather_id) VALUES ?';
                 await pool.query(query, [weatherValues]);
-                console.log('Weather conditions successfully linked to product.');
+               
             } catch (error) {
                 if (error instanceof Error) {
                     console.error('Error while linking weather conditions:', error.message);
@@ -223,7 +222,7 @@ export const getAllCategories = async () => {
     try {
         // Kör SQL-frågan
         const [rows]: [any[], any] = await pool.query(query);
-        console.log('All categories and subcategories fetched:', rows);  // Logga resultatet för felsökning
+  
 
         // Strukturera resultatet så att underkategorier läggs under sina huvudkategorier
         const categories = rows.reduce((acc: any, row: any) => {
@@ -325,7 +324,7 @@ export const getCategoryOneIdByName = async (name: string) => {
     `;
 
     try {
-        console.log('Fetching category with name:', name);
+        
         // Specificera att resultatet är en array av RowDataPacket
         const [rows] = await pool.query<RowDataPacket[]>(query, [name]);
         
@@ -347,7 +346,7 @@ export const getCategoryTwoIdByName = async (name: string): Promise<number | nul
     `;
 
     try {
-        console.log('Fetching category with name:', name);
+        
         const [rows] = await pool.query<RowDataPacket[]>(query, [name]);
         
         

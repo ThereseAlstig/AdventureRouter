@@ -6,7 +6,7 @@ const createOrder = async (orderData: any) => {
 const token = sessionStorage.getItem('token');
 
     try {
-        console.log('orderData:', orderData);
+     
         const response = await fetch(`${backendUrl}/orders/createOrders`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}`,

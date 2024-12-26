@@ -55,7 +55,7 @@ const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
           (entries) => {
               entries.forEach((entry) => {
                   const tripId = Number(entry.target.getAttribute("data-trip-id"));
-                  console.log(`Trip ${tripId} is intersecting:`, entry.isIntersecting);
+              
                   if (entry.isIntersecting) {
                       setVisibleTripIds((prev) => new Set(prev).add(tripId));
                   }
@@ -69,15 +69,14 @@ const tripRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
       );
       Object.values(tripRefs.current).forEach((trip) => {
         if (trip) {
-            console.log("Observing element:", trip);
-            console.log("Data-trip-id:", trip.getAttribute("data-trip-id"));
+         
             observer.observe(trip);
         }
     });
     
         Object.values(tripRefs.current).forEach((trip) => {
             if (trip) {
-                console.log("Observer added for:", trip);
+              
                 observer.observe(trip);
             }
         });

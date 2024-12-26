@@ -19,7 +19,6 @@ router.get('/github/callback', passport_1.default.authenticate('github', { sessi
         username: user.username,
         email: user.email,
     }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-    console.log(`Token:, ${callback}/github/callback?token=${token}&email=${user.email}`);
     res.redirect(`${callback}/github/callback?token=${token}&email=${user.email}&username=${user.username}`);
 });
 exports.default = router;

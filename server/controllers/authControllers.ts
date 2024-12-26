@@ -51,6 +51,8 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+
+//Loggar in användare och skapar en token för att verifiera att man är inloggad, är giltig 2h sen blir man utloggad
 export const loginUser: RequestHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -81,7 +83,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET!,
-      { expiresIn: process.env.JWT_EXPIRATION || "4h" }
+      { expiresIn: process.env.JWT_EXPIRATION || "2h" }
     );
 
     res.status(200).json({

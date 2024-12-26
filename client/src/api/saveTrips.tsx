@@ -5,7 +5,7 @@ import { Trip } from '../types/Trips';
 export async function SaveTrip(trip: Trip) {
 
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
-console.log('skickas ', trip);
+
 
     const token = sessionStorage.getItem('token');
     if (!token) {

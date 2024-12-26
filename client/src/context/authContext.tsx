@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   //Hämtar token från sessionStorage och uppdaterar inloggning
   useEffect(() => { 
-    console.log('Checking for token in sessionStorage...');
+  
     const token = sessionStorage.getItem('token');
     const storedEmail = sessionStorage.getItem('userEmail');
     const storedUsername = sessionStorage.getItem('username');
@@ -70,7 +70,7 @@ setUserRole(data.role);
     setUsername(data.username);
     
     const cartId = sessionStorage.getItem('cartId');
-    console.log('cartId', cartId);
+  
     if(cartId){
       try {
      
@@ -98,10 +98,10 @@ setUserRole(data.role);
    
     if(cartId){
       try {
-        console.log('Transferring anonymous cart...');
+      
         await TransferCartToUser(cartId, email);
         sessionStorage.removeItem('cartId'); // Rensa efter överföring
-        console.log('Anonymous cart transferred successfully.');
+       
       } catch (error: any) {
         console.error('Error transferring cart:', error.message);
       }
@@ -114,7 +114,7 @@ setUserRole(data.role);
 
   //Utloggning för användare (ALLA)
   const logout = async () => {
-    console.log('logout');
+ 
     try {
       
         const response = await fetch(`${key}/auth/logout`, {
@@ -143,6 +143,45 @@ setUserRole(data.role);
         console.error(err);
       }
     };
+
+    const verifyToken = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`${key}/auth/protected-resource`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.ok) {
+          console.log('Token is valid.');
+          return true;
+        } else {
+          console.log('Token is invalid or expired. Logging out...');
+          logout();
+          return false;
+        }
+      } catch (err) {
+        console.error(err);
+        logout();
+      }
+    }
+
+    // Verifiera token var 10:e minut så att användarens token inte går ut är giltig 2h
+    useEffect(() => {
+      const interval = setInterval(() => {
+     
+        verifyToken();
+      }, 10 * 60 * 1000); // Verifiera var 10:e minut
+    
+      return () => clearInterval(interval); // Rensa intervallen vid avmontering
+    }, []);
 
 
   return (

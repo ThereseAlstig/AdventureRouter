@@ -33,7 +33,7 @@ const links = [
     
 
         <div className="imgContainer">
-           <img src="../public/boots-4417595_1280.jpg" alt="shop" className="backgroundImage"/>
+           <img src="/boots-4417595_1280.jpg" alt="shop" className="backgroundImage"/>
            <h1 className="shop-title homepageWords">Top Gear for Every Journey</h1>
          </div>   
 

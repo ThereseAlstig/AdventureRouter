@@ -27,7 +27,7 @@ router.get('/github/callback', passport.authenticate('github', { session: false 
         process.env.JWT_SECRET || 'your_jwt_secret',
         { expiresIn: '1h' }
     );
-   console.log(`Token:, ${callback}/github/callback?token=${token}&email=${user.email}`);
+  
     res.redirect(`${callback}/github/callback?token=${token}&email=${user.email}&username=${user.username}`);
 });
 

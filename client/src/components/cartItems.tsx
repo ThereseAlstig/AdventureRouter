@@ -26,7 +26,7 @@ function calculateFullprice(items: { price: number; quantity: number }[]) {
 
 //Komponent för att visa produkter i kundvagnen
 export const CartItems = (items: CartItemsProps) => {
-console.log(items, 'items');
+
 
 // Spara scrollpositionen i localStorage för att inte hoppa längst upp efter man ändrat kvantitet
 useEffect(() => {

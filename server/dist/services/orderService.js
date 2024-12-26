@@ -73,7 +73,6 @@ const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter
                 // Skapa en ny kundkorg om ingen finns
                 cartIdToUse = crypto.randomUUID();
                 yield pool.query('INSERT INTO Carts (cart_id, user_id) VALUES (?, ?)', [cartIdToUse, userId]);
-                console.log('New cart created for user:', userId, 'with cart ID:', cartIdToUse);
             }
         }
         // Om användaren är anonym eller har ett befintligt cartId
@@ -82,26 +81,22 @@ const addToCartService = (pool, email, cartId, productId, quantity) => __awaiter
             if (cartRows.length === 0) {
                 // Skapa en ny kundvagn i databasen om ID:t inte finns
                 yield pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
-                console.log('Cart ID did not exist, new cart created:', cartIdToUse);
             }
         }
         else {
             // Skapa ett nytt cartId om inget ID finns och användaren är anonym
             cartIdToUse = crypto.randomUUID();
             yield pool.query('INSERT INTO Carts (cart_id) VALUES (?)', [cartIdToUse]);
-            console.log('New cart created for anonymous user with ID:', cartIdToUse);
         }
         // Lägg till produkten i kundkorgen
         const [existingProductRows] = yield pool.query('SELECT * FROM CartItems WHERE cart_id = ? AND product_id = ?', [cartIdToUse, productId]);
         if (existingProductRows.length > 0) {
             // Uppdatera kvantiteten om produkten redan finns
             yield pool.query('UPDATE CartItems SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?', [quantity, cartIdToUse, productId]);
-            console.log('Product quantity updated in cart:', productId);
         }
         else {
             // Lägg till en ny produkt i kundkorgen
             yield pool.query('INSERT INTO CartItems (cart_id, product_id, quantity) VALUES (?, ?, ?)', [cartIdToUse, productId, quantity]);
-            console.log('Product added to cart with ID:', cartIdToUse);
         }
         // Returnera den uppdaterade kundkorgen
         const [cartItems] = yield pool.query('SELECT * FROM CartItems WHERE cart_id = ?', [cartIdToUse]);
@@ -178,7 +173,6 @@ const getProductsByIds = (productIds) => __awaiter(void 0, void 0, void 0, funct
       `;
         // Kör queryn och skicka in produkt-ID:n som parameter
         const [rows] = yield db_1.default.query(query, [productIds]);
-        console.log('Product fetched:', rows);
         // Returnera resultaten i önskat format
         return rows.map((row) => ({
             id: row.id,
@@ -203,7 +197,6 @@ const clearCartByEmailService = (email) => __awaiter(void 0, void 0, void 0, fun
         const cartId = cart.cart_id;
         // Ta bort alla produker från kundkorgen
         yield db_1.default.query('DELETE FROM CartItems WHERE cart_id = ?', [cartId]);
-        console.log(`Cart cleared for user with email: ${email}`);
     }
     catch (error) {
         throw new Error(`Failed to clear cart: ${error instanceof Error ? error.message : 'Unknown error'}`);

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { MyTrips } from "../components/myTrips";
 import { LoadScript } from "@react-google-maps/api";
+import { Links } from "../components/links";
 
 export const MyPage = () => {
   const apiKey = import.meta.env.VITE_REACT_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY";
@@ -11,6 +12,26 @@ export const MyPage = () => {
   if (!auth) {
     throw new Error('AuthContext must be used within an AuthProvider');
   }  
+
+  const links = [
+    {
+        image: "/adventure-1850178_1280.jpg",
+        alt: "hiking",
+        text: "Find your hiking essentials",
+        link: "/categories/1/subcategories/2"
+    },
+    {
+        image: "/bike-7365418_1280.jpg",
+        alt: "hiking",
+        text: "Top gear for cycling.",
+        link: "/categories/2/subcategories/4"
+    },
+    {
+        image: "/solar-cell-7097620_1280.jpg",
+        alt: "Looking for adventures",
+        text: "Looking for outdooor Electronics?",
+        link: "/categories/3/subcategories/8"
+    }];
   
   const { logout, isAuthenticated, username } = auth;
 
@@ -38,8 +59,11 @@ export const MyPage = () => {
     return (
         <>
          { !isAuthenticated && (
-            <div className="center">
-                <h1>Log in to see your trips</h1>
+            <div className="">
+                <h1 className="center">Log in to see your trips</h1>
+                <div className="cart-links">
+            <Links links={links} />
+</div>
             </div>
           )}
       { isAuthenticated &&(

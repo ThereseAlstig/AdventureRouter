@@ -27,7 +27,7 @@ Content-Type: application/json
 
 ### Login User
 GET http://localhost:3000/auth/protected-resource
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJ0aGVyZXNlLmFsc3RpZ0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDA4NzAxNCwiZXhwIjoxNzM0MDkwNjE0fQ.zCmcVJyhw3lPtZDfkTT22BVDsbDhsQF8i_7sjn3W-Is
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTUsImVtYWlsIjoidEB0ZXN0dCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM1MjMyODM0LCJleHAiOjE3MzUyNDcyMzR9.Xm0Bl38HrLfD9H6T2xwhBC-CjTcrpnpgUdjZ7j4XCfs
 Content-Type: application/json
 
 

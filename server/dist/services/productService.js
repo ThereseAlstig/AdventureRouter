@@ -57,7 +57,6 @@ LEFT JOIN
      `;
     try {
         const [rows] = yield db_1.default.query(query);
-        console.log('Products fetched:', rows); // Logga resultatet för felsökning
         return rows;
     }
     catch (error) {
@@ -163,16 +162,12 @@ const createProduct = (productData) => __awaiter(void 0, void 0, void 0, functio
         if (productData.weather_temperature_id && productData.weather_temperature_id.length > 0) {
             const tempValues = productData.weather_temperature_id.map((tempId) => [result.insertId, tempId]);
             yield db_1.default.query('INSERT INTO ProductWeatherTemperature (product_id, temperature_id) VALUES ?', [tempValues]);
-            console.log('Temperature conditions linked.');
         }
         if (productData.weather_ids && productData.weather_ids.length > 0) {
-            console.log('Weather IDs provided:', productData.weather_ids);
             const weatherValues = productData.weather_ids.map((weatherId) => [result.insertId, weatherId]);
-            console.log('Prepared values for ProductWeather:', weatherValues);
             try {
                 const query = 'INSERT INTO ProductWeather (product_id, weather_id) VALUES ?';
                 yield db_1.default.query(query, [weatherValues]);
-                console.log('Weather conditions successfully linked to product.');
             }
             catch (error) {
                 if (error instanceof Error) {
@@ -216,7 +211,6 @@ const getAllCategories = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Kör SQL-frågan
         const [rows] = yield db_1.default.query(query);
-        console.log('All categories and subcategories fetched:', rows); // Logga resultatet för felsökning
         // Strukturera resultatet så att underkategorier läggs under sina huvudkategorier
         const categories = rows.reduce((acc, row) => {
             const { category_one_id, category_one_name, category_two_id, category_two_name } = row;
@@ -311,7 +305,6 @@ const getCategoryOneIdByName = (name) => __awaiter(void 0, void 0, void 0, funct
         WHERE name = ?;
     `;
     try {
-        console.log('Fetching category with name:', name);
         // Specificera att resultatet är en array av RowDataPacket
         const [rows] = yield db_1.default.query(query, [name]);
         return rows[0].id; // Returnera det första ID:t
@@ -330,7 +323,6 @@ const getCategoryTwoIdByName = (name) => __awaiter(void 0, void 0, void 0, funct
         WHERE name = ?;
     `;
     try {
-        console.log('Fetching category with name:', name);
         const [rows] = yield db_1.default.query(query, [name]);
         if (rows.length === 0) {
             return null;

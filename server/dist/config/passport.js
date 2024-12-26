@@ -23,16 +23,12 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     callbackURL: process.env.GOOGLE_CALLBACK_URL || '',
 }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a, _b;
     try {
-        console.log('Google profile received:', profile); // Logga hela profilen
-        console.log('Google email:', (_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value);
         let user = yield (0, userService_1.findOrCreateUserByGoogle)({
-            email: ((_d = (_c = profile.emails) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.value) || '',
+            email: ((_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value) || '',
             username: profile.displayName,
         });
-        console.log('User:', user);
-        console.log('profile:', profile);
         // Logga användarens data
         done(null, user);
     }

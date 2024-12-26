@@ -47,7 +47,7 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
       return;
     }
   
-    console.log("Product element found:", productElement);
+   
   }, []);
 
 
@@ -75,7 +75,7 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const quantity = quantities[productId] || 1; // Hämta antal från state (standard till 1)
     try {
         const updatedCart = await saveToCart(productId, quantity);
-        console.log("Uppdaterad kundkorg:", updatedCart);
+      console.log(updatedCart);
         alert("Produkten lades till i kundkorgen!");
     } catch (error) {
         if (error instanceof Error) {

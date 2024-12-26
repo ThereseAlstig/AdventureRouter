@@ -15,7 +15,7 @@ const updateCart = async (cartId: string, productId: number, quantity: number) =
         });
 
         const data = await response.json();
-        console.log('Order uppdated successfully:', data);
+      console.log('Order created successfully:', data);
     } catch (error) {
         console.error('Error creating order:', error);
     }

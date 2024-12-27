@@ -9,8 +9,8 @@ import { Links } from "./links";
 export const MyTrips = () => {
 const [trips, setTrips] = useState<any[]>([]);
 const [tripImages, setTripImages] = useState<{ [key: number]: string | null }>({});
-
-
+const [scrollPosition, setScrollPosition] = useState(0);
+const [refreshTrigger, setRefreshTrigger] = useState(false);
 
 function formatDateToReadable(dateString: string): string {
     const date = new Date(dateString);
@@ -41,6 +41,10 @@ function formatDateToReadable(dateString: string): string {
     return `the ${day}${daySuffix} of ${month} ${year}`;
   }
 
+  useEffect(() => {
+    window.scrollTo(0, scrollPosition); // Återställ scrollposition efter datahämtning
+}, [trips]); 
+
     useEffect(() => {
         try {
           const fetchTrips = async () => {
@@ -67,7 +71,7 @@ function formatDateToReadable(dateString: string): string {
             }, {} as { [key: number]: string | null });
 
             setTripImages(imageMap);
-           
+
        
             } catch (error) {
               console.error('Error fetching trips:', error);
@@ -79,9 +83,9 @@ function formatDateToReadable(dateString: string): string {
             console.error('Error fetching trips:', error);
         }
     }
-    , []);
+    , [refreshTrigger]);
 
-  
+   
 
 
 //Spara ner resa från formulär
@@ -96,8 +100,21 @@ function formatDateToReadable(dateString: string): string {
         formData.append("image", trip.image);
     
         try {
-            await uploadImage(tripId, trip.image);
-    
+
+          setScrollPosition(window.scrollY);
+          const uploadedImageUrl = await uploadImage(tripId, trip.image);
+          console.log("Uploaded Image URL:", uploadedImageUrl);
+  
+          // Uppdatera `tripImages`
+
+          
+        const updatedImageUrl = await fetchTripImage(tripId);
+
+        if (!updatedImageUrl) {
+          throw new Error(`Failed to fetch updated image for trip ${tripId}`);
+      }
+      //Uppdatera bild
+      setRefreshTrigger((prev) => !prev);
             alert("Image uploaded successfully!");
           
         } catch (error) {
@@ -137,7 +154,7 @@ function formatDateToReadable(dateString: string): string {
         const token = sessionStorage.getItem("token");
        
         try {
-           
+          const currentScrollY = window.scrollY;
             const response = await fetch(`${backendUrl}/api/trips/${tripId}`, {
                 method: "POST",
             headers: {
@@ -157,6 +174,8 @@ function formatDateToReadable(dateString: string): string {
                         : trip
                 )
             );
+
+            window.scrollTo(0, currentScrollY);
             alert("Trip updated successfully!");
     
             // Töm värden för den aktuella resan

@@ -16,6 +16,7 @@ exports.getProtectedResource = exports.logoutUser = exports.loginUser = exports.
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userService_1 = require("../services/userService");
+//registrerar användare och kollar om användaren redan finns
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
@@ -92,6 +93,7 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.loginUser = loginUser;
+//utloggning
 const logoutUser = (req, res) => {
     res.status(200).json({ message: 'User logged out' });
 };

@@ -6,7 +6,7 @@ import { findUserByEmail, createUser, verifyPassword } from '../services/userSer
 import { RequestHandler } from 'express';
 
 
-
+//registrerar användare och kollar om användaren redan finns
 export const registerUser: RequestHandler = async (req, res, next) => {
   try {
       const { email, password, username} = req.body;
@@ -99,7 +99,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-
+//utloggning
 export const logoutUser: RequestHandler = (req: Request, res: Response) => {
 
   res.status(200).json({ message: 'User logged out' });

@@ -41,9 +41,10 @@
       margin: 10px;
     }
  
-
-  }
-  
+}
+ .button-cart:hover{
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  } 
   .quantity-container{
     max-width: 120px;
     display: flex;
@@ -64,8 +65,13 @@
     img {
       width: 100%;
       height: auto;
-      max-height: 200px;
+      height: 350px;
       object-fit: cover;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+     
+    }
+    img:hover{
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); 
      
     }
   }

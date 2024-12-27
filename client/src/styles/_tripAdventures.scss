@@ -81,6 +81,16 @@ margin-right: 20px;
     
 }
 
+.readMore:hover{
+    color: #fff; 
+    background-color: #000; 
+    border-radius: 8px;
+    
+}
+.trip-details3 img{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 768px) {
 .trip-container{
     flex-direction: column;

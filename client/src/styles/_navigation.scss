@@ -17,6 +17,7 @@
     background-color: #FFF5F5; 
     padding: 10px; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease; 
 }
 
 .nav-links a {
@@ -35,6 +36,8 @@
 
 .nav-links a:hover {
     text-decoration: underline;
+    transform: scale(1.2);
+
 }
 
 .nav-links .cart-icon {
@@ -49,6 +52,15 @@
     width: 100%;
     margin: 0 auto;     
     padding: 0 20px;
+    transform-origin: center; /* Se till att skalningen utgår från mitten */
+    transition: transform 0.3s ease;
+
+    .left:hover{
+scale: 1.1;
+    }
+    .right-icons a svg:hover{
+        transform: scale(1.1);
+    }
   
 }
 
@@ -76,6 +88,9 @@
     text-decoration: underline;
   
    
+}
+.navigation a:hover {
+    text-decoration: underline;
 }
 
 .menu-toggle {

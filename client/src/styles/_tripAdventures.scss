@@ -66,6 +66,10 @@
 margin-left: 80%;
 margin-right: 20px;
 }
+
+.logoutButton:hover{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
 .trip-details2{
     text-align: center;
 }
@@ -82,12 +86,20 @@ margin-right: 20px;
 }
 
 .readMore:hover{
-    color: #fff; 
-    background-color: #000; 
-    border-radius: 8px;
+
+    border-radius: 6px;
+    font-size: 1.8rem;
     
 }
 .trip-details3 img{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.trip-details3 button:hover{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.save-image:hover{
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 

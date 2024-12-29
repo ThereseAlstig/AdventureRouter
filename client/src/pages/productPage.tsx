@@ -79,7 +79,10 @@ const [categoryIds, setCategoryIds] = useState<{ categoryOneId: number, category
                     <h1>{product?.name}</h1>
                     <p>{product?.description}</p>
                     <p>{product?.price}</p>
-                {product && (
+            
+
+                {product?.in_stock ? (
+                       <>
                   <div className="quantity-container">
                     <label htmlFor={`quantity-${product.id}`}>Antal:</label>
                     <input
@@ -90,9 +93,11 @@ const [categoryIds, setCategoryIds] = useState<{ categoryOneId: number, category
                       onChange={(e) => handleQuantityChange(product.id, e.target.value)} // Hantera antal
                     />
                   </div>
-                )}
+                
                     <button className="button-cart"
-      onClick={() => product?.id && handleAddToCart(product.id)} >PUT IN CART</button>
+      onClick={() => product?.id && handleAddToCart(product.id)} >PUT IN CART</button></>
+                   ):(<p className="out-of-sttock">Out of Stock, comming soon</p>) }
+                    
                 </div>
                 <div className="product-image">
                     <img className="product-img" src={product?.image_url} alt={product?.name} />

@@ -45,7 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategoriesId = exports.getAllWeatherOptions = exports.getAllWeatherTemperatures = exports.getAllCategoriesTwo = exports.getAllTravelOptions = exports.addProduct = exports.getCategories = exports.getFilteredProducts = exports.getProductById = exports.getProducts = void 0;
+exports.toggleInStock = exports.getCategoriesId = exports.getAllWeatherOptions = exports.getAllWeatherTemperatures = exports.getAllCategoriesTwo = exports.getAllTravelOptions = exports.addProduct = exports.getCategories = exports.getFilteredProducts = exports.searchProducts = exports.getProductById = exports.getProducts = void 0;
 const productService = __importStar(require("../services/productService"));
 const db_1 = __importDefault(require("../config/db"));
 const productService_1 = require("../services/productService");
@@ -75,6 +75,25 @@ const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getProductById = getProductById;
+//hämta produkter baserat på namn
+const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name } = req.query; // Hämta sökparametern från förfrågan
+    console.log('name:', name);
+    if (!name) {
+        res.status(400).json({ error: 'Name is missing' });
+        return;
+    }
+    try {
+        const products = yield (0, productService_1.getProductsByName)(name); // Anropa service-funktionen
+        res.status(200).json(products);
+    }
+    catch (error) {
+        console.error('Error in searchProducts:', error);
+        res.status(500).json({ error: 'Something whent wrong during fetch' });
+    }
+});
+exports.searchProducts = searchProducts;
+//Hämta filtrerade produkter baserat på väder, temperatur, kategori och resealternativ
 const getFilteredProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filters = {
@@ -183,3 +202,22 @@ const getCategoriesId = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getCategoriesId = getCategoriesId;
+//Ändra om produkten finns att beställa eller inte 
+const toggleInStock = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { in_stock, productId } = req.body;
+    const parsedInStock = in_stock === 'true' ? true : in_stock === 'false' ? false : in_stock;
+    // Kolla om in_stock är en boolean
+    if (typeof in_stock !== 'boolean') {
+        res.status(400).json({ message: '`in_stock` must be a boolean value (true or false).' });
+        return;
+    }
+    try {
+        const result = yield (0, productService_1.updateProductInStock)(productId, parsedInStock);
+        res.status(200).json(result);
+    }
+    catch (error) {
+        console.error('Error in toggleInStock controller:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.toggleInStock = toggleInStock;

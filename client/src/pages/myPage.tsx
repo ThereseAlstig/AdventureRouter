@@ -42,6 +42,7 @@ export const MyPage = () => {
     const handleLogout = async () => {
       console.log('logout');
       try {
+        console.log('logging out');
         logout(); 
         navigate('/'); 
         

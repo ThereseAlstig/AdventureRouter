@@ -36,7 +36,7 @@ export const CategoryPage = () => {
                         index === self.findIndex((p) => p.id === product.id)
                 );
                 setProducts(uniqueProducts);
-           
+          
                 setLoading(false);
             } catch (err: any) {
                 setError(err.message);

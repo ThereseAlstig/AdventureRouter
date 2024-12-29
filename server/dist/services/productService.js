@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategoryTwoIdByName = exports.getCategoryOneIdByName = exports.getProductById = exports.getAllCategories = exports.createProduct = exports.getFilteredProductsBY = exports.getAllProducts = void 0;
+exports.updateProductInStock = exports.getCategoryTwoIdByName = exports.getCategoryOneIdByName = exports.getProductById = exports.getAllCategories = exports.createProduct = exports.getFilteredProductsBY = exports.getProductsByName = exports.getAllProducts = void 0;
 const db_1 = __importDefault(require("../config/db"));
 //getting all products
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,6 +65,56 @@ LEFT JOIN
     }
 });
 exports.getAllProducts = getAllProducts;
+//Hämtq produkter baserat på namn
+const getProductsByName = (productName) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = `
+        SELECT 
+            p.id AS id,
+            p.name AS name,
+            p.price,
+            p.description,
+            p.image_url,
+            p.in_stock,
+            c1.name AS category_one_name,
+            c2.name AS category_two_name,
+            w.name AS weather_name,
+            wt.name AS weather_temperature_name,
+            t2.name AS travel_options
+        FROM 
+            Products p
+        LEFT JOIN 
+            CategoryProduct cp ON p.id = cp.product_id
+        LEFT JOIN 
+            CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
+        LEFT JOIN 
+            CategoryOne c1 ON cp.category_id = c1.id AND c1.id IS NOT NULL
+        LEFT JOIN 
+            ProductWeather pw ON p.id = pw.product_id
+        LEFT JOIN 
+            Weather w ON pw.weather_id = w.id
+        LEFT JOIN 
+            ProductWeatherTemperature pwt ON p.id = pwt.product_id
+        LEFT JOIN 
+            WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN 
+            ProductTravel pt ON p.id = pt.product_id
+        LEFT JOIN 
+            TravelOptions t2 ON pt.travel_id = t2.id
+        WHERE 
+            p.name LIKE ?; 
+    `;
+    try {
+        // Använd parameter för att skydda mot SQL-injektion
+        console.log('Executing query with:', `%${productName}%`);
+        const [rows] = yield db_1.default.query(query, [`%${productName}%`]);
+        return rows;
+    }
+    catch (error) {
+        console.error('Error fetching products by name:', error);
+        throw error;
+    }
+});
+exports.getProductsByName = getProductsByName;
 //hämta och filtrera produkter utifrån olika parametrar, categorie, weather, temperature, travel option
 const getFilteredProductsBY = (filters) => __awaiter(void 0, void 0, void 0, function* () {
     // Grundläggande SQL-fråga
@@ -335,3 +385,22 @@ const getCategoryTwoIdByName = (name) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getCategoryTwoIdByName = getCategoryTwoIdByName;
+// Function to update the in_stock status of a product
+const updateProductInStock = (productId, inStock) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const [result] = yield db_1.default.query('UPDATE Products SET in_stock = ? WHERE id = ? LIMIT 1', [inStock ? 1 : 0, productId]);
+        if (result.affectedRows === 0) {
+            throw new Error('Product not found');
+        }
+        return { success: true, message: 'Product in_stock status updated successfully.' };
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            throw new Error(`Failed to update product: ${error.message}`);
+        }
+        else {
+            throw new Error('Failed to update product: Unknown error');
+        }
+    }
+});
+exports.updateProductInStock = updateProductInStock;

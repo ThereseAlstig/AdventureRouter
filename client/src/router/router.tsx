@@ -17,6 +17,7 @@ import { AboutUs } from '../pages/aboutUs';
 import { TragvelJourney } from '../pages/travelJourney';
 import { ProductPage } from '../pages/productPage';
 import ProtectedRoute from './protectedRouter';
+import { AdminSearchPage } from '../pages/AdminSearch';
 
 const Router = createBrowserRouter([
 
@@ -57,7 +58,15 @@ element: <MyPage/>
         </ProtectedRoute>
     )
        
+},{
+    path: "/adminSearch",
+    element: (
+    <ProtectedRoute requiredRole='admin'>
+        <AdminSearchPage/>
+        </ProtectedRoute>
+    )
 },
+        
 {
     path: "/categories/:categoryId",
     element: <CategoryPage />,

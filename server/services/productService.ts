@@ -52,6 +52,57 @@ LEFT JOIN
     }
 };
 
+//Hämtq produkter baserat på namn
+
+export const getProductsByName = async (productName: string) => {
+    const query = `
+        SELECT 
+            p.id AS id,
+            p.name AS name,
+            p.price,
+            p.description,
+            p.image_url,
+            p.in_stock,
+            c1.name AS category_one_name,
+            c2.name AS category_two_name,
+            w.name AS weather_name,
+            wt.name AS weather_temperature_name,
+            t2.name AS travel_options
+        FROM 
+            Products p
+        LEFT JOIN 
+            CategoryProduct cp ON p.id = cp.product_id
+        LEFT JOIN 
+            CategoryTwo c2 ON cp.category_id = c2.id AND c2.id IS NOT NULL
+        LEFT JOIN 
+            CategoryOne c1 ON cp.category_id = c1.id AND c1.id IS NOT NULL
+        LEFT JOIN 
+            ProductWeather pw ON p.id = pw.product_id
+        LEFT JOIN 
+            Weather w ON pw.weather_id = w.id
+        LEFT JOIN 
+            ProductWeatherTemperature pwt ON p.id = pwt.product_id
+        LEFT JOIN 
+            WeatherTemperature wt ON pwt.temperature_id = wt.id
+        LEFT JOIN 
+            ProductTravel pt ON p.id = pt.product_id
+        LEFT JOIN 
+            TravelOptions t2 ON pt.travel_id = t2.id
+        WHERE 
+            p.name LIKE ?; 
+    `;
+
+    try {
+        // Använd parameter för att skydda mot SQL-injektion
+        console.log('Executing query with:', `%${productName}%`);
+        const [rows] = await pool.query(query, [`%${productName}%`]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching products by name:', error);
+        throw error;
+    }
+};
+
 //hämta och filtrera produkter utifrån olika parametrar, categorie, weather, temperature, travel option
 export const getFilteredProductsBY = async (filters: {   
     categoryOne?: string | null;
@@ -360,3 +411,25 @@ export const getCategoryTwoIdByName = async (name: string): Promise<number | nul
         throw error; 
     }
 };
+
+// Function to update the in_stock status of a product
+export const updateProductInStock = async (productId: string, inStock: boolean) => {
+    try {
+      const [result] = await pool.query(
+        'UPDATE Products SET in_stock = ? WHERE id = ? LIMIT 1',
+        [inStock ? 1 : 0, productId]
+      );
+  
+      if ((result as any).affectedRows === 0) {
+        throw new Error('Product not found');
+      }
+  
+      return { success: true, message: 'Product in_stock status updated successfully.' };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to update product: ${error.message}`);
+      } else {
+        throw new Error('Failed to update product: Unknown error');
+      }
+    }
+  };

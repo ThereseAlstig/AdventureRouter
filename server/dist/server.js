@@ -42,6 +42,10 @@ app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use((0, cookie_parser_1.default)());
 app.use((0, compression_1.default)());
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    next();
+});
 // Test av databasanslutning
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {

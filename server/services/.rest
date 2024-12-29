@@ -12,7 +12,9 @@ Content-Type: application/json
     "in_stock": true
 }
 ###
-GET http://localhost:3000/products/filtered?temperature=Very+cold&weather=reign&travelOption=car
+GET http://localhost:3000/products/search?name=Cycling Protective Glasses
+
+
 ###
 POST http://localhost:3000/auth/register HTTP/1.1
 Content-Type: application/json
@@ -53,7 +55,7 @@ GET http://localhost:3000/products/
 
 
 
-GET http://localhost:3000/products/categori
+GET http://localhost:3000/products/search?name=Cycling Protective Glasses
 ###
 GET http://localhost:3000/products/54
 

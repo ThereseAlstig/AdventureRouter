@@ -1,5 +1,18 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
+
+interface User {
+  role: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 import jwt from 'jsonwebtoken';
+import { IUser } from '../models/userModel';
 
 
 
@@ -46,4 +59,20 @@ export const verifyToken: RequestHandler = (req, res, next) => {
   } catch (err) {
     res.status(401).json({ message: 'Invalid or Expired Token' });
   }
+};
+
+export const verifyAdmin: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as IUser;
+
+  if (!user) {
+   res.status(401).json({ message: 'Du är inte inloggad.' }); 
+   return 
+  }
+
+  if (user.role !== 'admin') {
+    res.status(403).json({ message: 'Endast admin har behörighet.' });
+    return 
+  }
+
+  next(); // Fortsätt till nästa middleware eller route-handler
 };

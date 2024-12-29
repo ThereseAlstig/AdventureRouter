@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 
 export const Admin = () => {
@@ -88,11 +89,19 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
   //Skapa flera produkter till databasen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const token = sessionStorage.getItem('token');
+    console.log(token);
+
+    if (!token) {
+      alert('You must be logged in to perform this action.');
+      return;
+    }
     try {
       const response = await fetch(`${backendUrl}/products`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, 
         },
         body: JSON.stringify(productData),
       });
@@ -123,7 +132,9 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
   return (
   
     <div className='center admin'>
-    
+    <Link  className="button" to="/adminSearch">To search product</Link>
+
+    <h2>Create Product:</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='name'>Name:</label>
@@ -217,7 +228,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
         <button type="submit">Add Product</button>
       </form>
 
-      
+   
     </div>
   );
 };

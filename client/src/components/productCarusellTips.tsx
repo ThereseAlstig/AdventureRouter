@@ -171,8 +171,12 @@ const swipeHandlers = useSwipeable({
                     <h3>{product.name}</h3>
                 
                     <p>{product.price} kr</p>
-                    <button className="button-cart"
-      onClick={() => handleAddToCart(product.id)} >PUT IN CART</button>
+                    {product.in_stock ? (
+                     <button className="button-cart"
+      onClick={() => handleAddToCart(product.id)} >PUT IN CART</button>):(
+        <p className="out-of-stock">Out of stock</p>
+      ) }
+                    
                  </div> </div>
                 ))}
               </div>

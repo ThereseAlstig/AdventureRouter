@@ -91,7 +91,20 @@ margin-left: 80px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
     }
+
+    .out-of-stock{
+        margin-left: 80px;
+        font-family: 'poppins', sans-serif;
+        font-size: large;
+        margin-top: 50px;
+       
+    }
 @media (max-width: 768px){
+
+    .youre-cart{
+        
+        margin-top: 80px;
+    }
     .cart-items{
         margin-left: 0;
         padding: 0;

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = exports.ensureAuthenticated = void 0;
+exports.verifyAdmin = exports.verifyToken = exports.ensureAuthenticated = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const ensureAuthenticated = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -49,3 +49,16 @@ const verifyToken = (req, res, next) => {
     }
 };
 exports.verifyToken = verifyToken;
+const verifyAdmin = (req, res, next) => {
+    const user = req.user;
+    if (!user) {
+        res.status(401).json({ message: 'Du är inte inloggad.' });
+        return;
+    }
+    if (user.role !== 'admin') {
+        res.status(403).json({ message: 'Endast admin har behörighet.' });
+        return;
+    }
+    next(); // Fortsätt till nästa middleware eller route-handler
+};
+exports.verifyAdmin = verifyAdmin;

@@ -77,7 +77,12 @@
         .tripPlanerForm {
             width: 100%;
             margin: 0 auto;
+            margin-top: 60px;
             flex: none; 
+            h2{
+                font-size: 1.5em;
+                text-align: center;
+            }
           }
           .tripPlanerForm__row label {
             width: auto;

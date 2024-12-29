@@ -50,7 +50,7 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
    
   }, []);
 
-
+//För att uppdatera om mobil eller inte
   useEffect(() => {
     const handleResize = () => {
         setIsMobile(window.innerWidth < 768);
@@ -204,7 +204,10 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
                 <h3>{product.name}</h3>
                 <p>{product.description}</p>
                 <p>{product.price} kr</p>
-                <div className="quantity-container">
+              
+                {product.in_stock ? (
+                  <>
+                    <div className="quantity-container">
                   <label htmlFor={`quantity-${product.id}`}>Antal:</label>
                   <input
                     id={`quantity-${product.id}`}
@@ -219,7 +222,12 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
                   onClick={() => handleAddToCart(product.id)}
                 >
                   PUT IN CART
-                </button>
+                </button></>
+                ) : (
+                  <p className="out-of-stock">Out of stock</p>
+                )
+                }
+               
               </div>
             ))}
           </div>

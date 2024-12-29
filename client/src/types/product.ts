@@ -8,6 +8,7 @@ export interface Product {
     subcategoryId: number;
     category_one_name: string;
     category_two_name: string;
+    in_stock: boolean;
 
 }
 

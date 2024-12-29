@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import * as productService from '../services/productService';
 import pool from '../config/db';
-import { createProduct, getCategoryOneIdByName, getCategoryTwoIdByName } from '../services/productService';
+import { createProduct, getCategoryOneIdByName, getCategoryTwoIdByName, getProductsByName, updateProductInStock } from '../services/productService';
+import { parse } from 'path';
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
@@ -14,6 +15,7 @@ export const getProducts = async (req: Request, res: Response) => {
 
 //Hämta produkter baserat på ID
 export const getProductById = async (req: Request, res: Response) => {
+ 
   const { id } = req.params; // Hämta ID från request-parametrarna
   try {
       const product = await productService.getProductById(Number(id)); 
@@ -26,6 +28,28 @@ export const getProductById = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Failed to fetch product' });
   }
 };
+
+//hämta produkter baserat på namn
+export const searchProducts = async (req: Request, res: Response) => {
+
+  const { name } = req.query; // Hämta sökparametern från förfrågan
+console.log('name:', name);
+  if (!name) {
+     res.status(400).json({ error: 'Name is missing' }); 
+     return 
+  }
+
+  try {
+
+      const products = await getProductsByName(name as string); // Anropa service-funktionen
+      res.status(200).json(products);
+  } catch (error) {
+      console.error('Error in searchProducts:', error);
+      res.status(500).json({ error: 'Something whent wrong during fetch' });
+  }
+};
+
+//Hämta filtrerade produkter baserat på väder, temperatur, kategori och resealternativ
 
 export const getFilteredProducts = async (req: Request, res: Response) => {
 try {
@@ -136,3 +160,24 @@ export const getAllTravelOptions = async (req: Request, res: Response) => {
 }
 };
   
+//Ändra om produkten finns att beställa eller inte 
+
+export const toggleInStock = async (req: Request, res: Response) => {
+
+  const { in_stock, productId } = req.body;
+  const parsedInStock = in_stock === 'true' ? true : in_stock === 'false' ? false : in_stock;
+  // Kolla om in_stock är en boolean
+
+  if (typeof in_stock !== 'boolean') {
+    res.status(400).json({ message: '`in_stock` must be a boolean value (true or false).' });
+  return;
+  }
+
+  try {
+    const result = await updateProductInStock(productId, parsedInStock);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error in toggleInStock controller:', error);
+    res.status(500).json({ message: (error as Error).message });
+  }
+};

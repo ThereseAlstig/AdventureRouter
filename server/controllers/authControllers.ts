@@ -150,7 +150,8 @@ export const resetPassword = async (req: Request, res: Response) => {
   console.log("userId:", userId);
 
   if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: "Unauthorized" });
+      return 
   }
   try {
      

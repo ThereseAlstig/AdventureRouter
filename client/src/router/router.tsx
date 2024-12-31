@@ -18,6 +18,8 @@ import { TragvelJourney } from '../pages/travelJourney';
 import { ProductPage } from '../pages/productPage';
 import ProtectedRoute from './protectedRouter';
 import { AdminSearchPage } from '../pages/AdminSearch';
+import ResetPassword from '../pages/resetPassword';
+import RequestPasswordReset from '../pages/resetPasswordReset';
 
 const Router = createBrowserRouter([
 
@@ -65,6 +67,13 @@ element: <MyPage/>
         <AdminSearchPage/>
         </ProtectedRoute>
     )
+},{
+    path: "/reset-password/:token",
+    element: <ResetPassword/>
+},
+{
+    path: "/reset-password",
+     element: <RequestPasswordReset /> 
 },
         
 {

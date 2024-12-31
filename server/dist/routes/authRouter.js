@@ -19,4 +19,6 @@ router.get('/protected-resource', authMiddleware_1.verifyToken, (req, res) => {
         user: req.user,
     });
 });
+router.post('/password-reset', authControllers_1.requestPasswordReset);
+router.post('/password-reset/confirm', authMiddleware_1.verifyToken, authControllers_1.resetPassword);
 exports.default = router;

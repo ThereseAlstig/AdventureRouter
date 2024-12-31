@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, logoutUser, getProtectedResource  } from '../controllers/authControllers';
+import { registerUser, loginUser, logoutUser, getProtectedResource, requestPasswordReset, resetPassword  } from '../controllers/authControllers';
 import { ensureAuthenticated, verifyToken} from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -16,5 +16,7 @@ router.get('/protected-resource', verifyToken, (req, res) => {
     user: req.user, 
   });
 });
+router.post('/password-reset', requestPasswordReset)
 
+router.post('/password-reset/confirm',verifyToken, resetPassword);
 export default router;

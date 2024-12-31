@@ -45,9 +45,9 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     };
 
     return (
-        <div>
+        <div className='center reset-password'>
             <h1>Reset Password</h1>
-            {token ? <p>Token: {token}</p> : <p>Ingen token hittades.</p>}
+        
             <form onSubmit={handleSubmit}>
                 <input
                     type="password"

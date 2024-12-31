@@ -5,6 +5,7 @@ import '../styles/_loginModal.scss';
 import { AuthContext } from '../context/authContext';
 
 
+
 interface LoginModalProps {
   isOpen: boolean;
   closeModal: () => void;
@@ -52,6 +53,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
     } catch (err: any) {
       setError(err.message || 'Invalid credentials. Please try again.');
     }
+  };
+
+
+//Till resett password 
+  const ResetPassword = () => {
+    navigate('/reset-password');
+    closeModal();
   };
 
   // Hantera skapande av nytt konto
@@ -147,6 +155,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, closeModal}) => {
 
         {/* Stäng knappen */}
         <button onClick={closeModal}>Close</button>
+        <button onClick={ResetPassword}>Reset Password</button>
       </div>
     </div>
   );

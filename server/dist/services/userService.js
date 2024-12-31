@@ -12,9 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = exports.verifyPassword = void 0;
+exports.sendEmail = exports.updateUserPassword = exports.findOrCreateUserByGithub = exports.findOrCreateUserByGoogle = exports.createUser = exports.findUserByEmail = exports.verifyPassword = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const db_1 = __importDefault(require("../config/db"));
+const mailgun_js_1 = __importDefault(require("mailgun-js"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 // Din databasanslutning
 //verifiera lösenord 
 const verifyPassword = (inputPassword, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,3 +81,34 @@ const findOrCreateUserByGithub = (data) => __awaiter(void 0, void 0, void 0, fun
     return user;
 });
 exports.findOrCreateUserByGithub = findOrCreateUserByGithub;
+//Uppdaatera lösenordet
+const updateUserPassword = (userId, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("userId:", userId);
+    yield db_1.default.query("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, userId]);
+});
+exports.updateUserPassword = updateUserPassword;
+//Mailgun Skicka mail
+const sendEmail = (to, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
+    const mg = (0, mailgun_js_1.default)({
+        apiKey: process.env.MAILGUN_API_KEY,
+        domain: process.env.MAILGUN_DOMAIN,
+    });
+    const DOMAIN = process.env.MAILGUN_DOMAIN;
+    const data = {
+        from: `<no-reply@${DOMAIN}>`, // Avsändaradress
+        to,
+        subject,
+        html,
+    };
+    try {
+        console.log("Skickar e-post...");
+        // Skicka e-post via Mailgun
+        yield mg.messages().send(data);
+        console.log("E-post skickad!");
+    }
+    catch (error) {
+        console.error("Fel vid e-postskick:", error);
+        throw new Error("Kunde inte skicka e-post");
+    }
+});
+exports.sendEmail = sendEmail;

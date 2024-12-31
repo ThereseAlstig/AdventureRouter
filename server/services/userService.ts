@@ -2,6 +2,11 @@ import bcrypt from 'bcryptjs';
 import { RowDataPacket } from 'mysql2';
 import { IUser } from '../models/userModel';
 import pool from '../config/db';
+import mailgun from "mailgun-js";
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+
+dotenv.config();
 // Din databasanslutning
 
 //verifiera lösenord 
@@ -91,3 +96,42 @@ export const findOrCreateUserByGithub = async (data: {
   
   
 };
+
+//Uppdaatera lösenordet
+
+export const updateUserPassword = async (userId: number, hashedPassword: string) => {
+  console.log("userId:", userId);
+  await pool.query(
+      "UPDATE users SET password = ? WHERE id = ?",
+      [hashedPassword, userId]
+  );
+};
+
+//Mailgun Skicka mail
+
+
+export const sendEmail = async (to: string, subject: string, html: string) => {
+  const mg = mailgun({
+  apiKey: process.env.MAILGUN_API_KEY!,
+  domain: process.env.MAILGUN_DOMAIN!,
+});
+const DOMAIN = process.env.MAILGUN_DOMAIN;
+
+  const data = {
+      from: `<no-reply@${DOMAIN}>`, // Avsändaradress
+      to, 
+      subject, 
+      html, 
+  };
+
+  try {
+    console.log("Skickar e-post...");
+      // Skicka e-post via Mailgun
+      await mg.messages().send(data);
+      console.log("E-post skickad!");
+  } catch (error) {
+      console.error("Fel vid e-postskick:", error);
+      throw new Error("Kunde inte skicka e-post");
+  }
+};
+

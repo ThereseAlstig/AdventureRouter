@@ -1,9 +1,9 @@
-import bcrypt from 'bcryptjs';
-
+import bcrypt, { hash } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { findUserByEmail, createUser, verifyPassword } from '../services/userService';
+import { findUserByEmail, createUser, verifyPassword, sendEmail, updateUserPassword } from '../services/userService';
 import { RequestHandler } from 'express';
+import { IUser } from '../models/userModel';
 
 
 //registrerar användare och kollar om användaren redan finns
@@ -108,3 +108,59 @@ export const logoutUser: RequestHandler = (req: Request, res: Response) => {
 export const getProtectedResource: RequestHandler = (req: Request, res: Response) => {
     res.json({ message: 'This is a protected resource', user: req.user });
   };
+
+  // Begära nytt lösenord reset
+
+  export const requestPasswordReset = async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    // Hitta användare baserat på e-post
+    const user = await findUserByEmail(email);
+    if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return 
+    }
+
+    // Skapa token för lösenordsåterställning
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET!,
+      { expiresIn: process.env.JWT_EXPIRATION || "2h" }
+    );
+
+    const frontendUrl = process.env.GOOGLE_REDIRECT_URL|| 'http://localhost:3000';
+    // Skicka e-post med återställningslänk
+    const resetLink = `${frontendUrl}/reset-password/${token}`;
+    await sendEmail(
+        user.email,
+        "Password Reset",
+        `<p>Click the link below to reset your password:</p>
+         <a href="${resetLink}">${resetLink}</a>`
+    );
+
+    res.json({ message: "Password reset email sent" });
+};
+
+
+// Återställa lösenord
+export const resetPassword = async (req: Request, res: Response) => {
+  const {newPassword} = req.body;
+  const user = req.user as IUser;
+  const userId = user?.id;
+  console.log("userId:", userId);
+
+  if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+     
+
+      // Hashera och uppdatera lösenord
+      const hashedPassword = await hash(newPassword, 10);
+      await updateUserPassword(userId, hashedPassword);
+
+      res.json({ message: 'Password reset successful' });
+  } catch (err) {
+      res.status(401).json({ message: 'Invalid or expired token' });
+  }
+};

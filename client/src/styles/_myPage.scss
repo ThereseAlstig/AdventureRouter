@@ -15,13 +15,19 @@
     align-items: center;
     margin-top: 20px;
     text-align: center;
-    input{
-        width: 290px;
+  textarea{
+  width: 290px;
         height: 90px;
         margin-left: 5px;
-    }
+        white-space: pre-wrap;
+        background-color: #F1FEED;
+        font-family: 'Poppins, sans-serif';
+
+  }
     
 }
+ 
+
 
 .weather-forecast{
   

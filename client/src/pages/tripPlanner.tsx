@@ -183,11 +183,18 @@ handleFetchFilteredProducts(startWeather, modeTravel);
         (result, status) => {
           if (status === "OK") {
             setDirections(result);
-      if (result && result.routes.length > 0 && result.routes[0].legs.length > 0) {
-        const leg = result.routes[0].legs[0];
-        setDistance(leg.distance ? leg.distance.text : "N/A");
-        setDuration(leg.duration ? leg.duration.text : "N/A");
-      } else {
+            if (result && result.routes.length > 0) {
+              const totalDistance = result.routes[0].legs.reduce((sum, leg) => sum + (leg.distance?.value || 0), 0);
+              const totalDuration = result.routes[0].legs.reduce((sum, leg) => sum + (leg.duration?.value || 0), 0);
+            
+              const hours = Math.floor(totalDuration / 3600);
+              const minutes = Math.floor((totalDuration % 3600) / 60);
+            
+              setDistance(`${(totalDistance / 1000).toFixed(1)} km`);
+              setDuration(
+                `${hours > 0 ? `${hours} hours` : ""} ${minutes > 0 ? `${minutes} minutes` : ""}`.trim()
+              );
+            } else {
         alert("No routes found.");
       }
           } else {

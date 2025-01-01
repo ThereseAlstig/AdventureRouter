@@ -161,7 +161,8 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const userId = user === null || user === void 0 ? void 0 : user.id;
     console.log("userId:", userId);
     if (!userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: "Unauthorized" });
+        return;
     }
     try {
         // Hashera och uppdatera lösenord

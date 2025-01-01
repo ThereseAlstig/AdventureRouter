@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
+import { GoogleMap, DirectionsRenderer} from "@react-google-maps/api";
 
 interface MapWithDirectionsProps {
   start: google.maps.LatLng | string;
@@ -13,6 +13,8 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const[distance, setDistance] = useState<string | null>(null);
   const[duration, setDuration] = useState<string | null>(null);
+  // const [map, setMap] = useState<google.maps.Map | null>(null);
+  // const [hotels, setHotels] = useState<google.maps.places.PlaceResult[]>([]);
 
 
   //Gör om mode till google.maps.TravelMode för att passa Google MAps API
@@ -67,11 +69,19 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
           if (status === "OK") {
        
             setDirections(result);
-      if (result && result.routes.length > 0 && result.routes[0].legs.length > 0) {
-        const leg = result.routes[0].legs[0];
-        setDistance(leg.distance ? leg.distance.text : "No distance available");
-        setDuration(leg.duration ? leg.duration.text : "No duration available");
-          } else {
+            if (result && result.routes.length > 0) {
+              const totalDistance = result.routes[0].legs.reduce((sum, leg) => sum + (leg.distance?.value || 0), 0);
+              const totalDuration = result.routes[0].legs.reduce((sum, leg) => sum + (leg.duration?.value || 0), 0);
+            
+              // Konvertera till timmar och minuter
+              const hours = Math.floor(totalDuration / 3600);
+              const minutes = Math.floor((totalDuration % 3600) / 60);
+            
+              setDistance(`${(totalDistance / 1000).toFixed(1)} km`);
+              setDuration(
+                `${hours > 0 ? `${hours} hours` : ""} ${minutes > 0 ? `${minutes} minutes` : ""}`.trim()
+              ); // Formatera text
+            } else {
             console.error("Directions request failed:", status);
           }
         }
@@ -82,6 +92,9 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
     fetchDirections();
   }, [start, destination, waypoints, mode]);
 
+  
+
+
   return (
    <div className="google-container">
    
@@ -89,8 +102,11 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
         mapContainerStyle={{ width: "100%", height: "500px" }}
         center={{ lat: 59.3293, lng: 18.0686 }}
         zoom={8}
+       
       >
         {directions && <DirectionsRenderer directions={directions} />}
+        
+       
       </GoogleMap>
   
      {distance && duration && (

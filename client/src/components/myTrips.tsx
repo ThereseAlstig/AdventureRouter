@@ -285,8 +285,9 @@ function formatDateToReadable(dateString: string): string {
                 <div className="trip-details3">
                   <h2>Best:</h2>
                   <label htmlFor="bestExperience">
-                    <input
-                      type="text"
+                    <textarea
+                    className="bestExperience"
+                    rows={5} cols={50}
                       value={trip.bestExperience || ''}
                       onChange={(e) =>
                         setTrips((prevTrips) =>
@@ -301,8 +302,9 @@ function formatDateToReadable(dateString: string): string {
                   </label>
                   <h2>Worst:</h2>
                   <label htmlFor="worstExperience">
-                    <input
-                      type="text"
+                    <textarea
+                      className="worstWxperience"
+                      rows={5} cols={50}
                       value={trip.worstExperience || ''}
                       onChange={(e) =>
                         setTrips((prevTrips) =>

@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/authContext'; 
 import { useNavigate } from 'react-router-dom';
+
+
 //Till inloggning för Github
 const GitHubCallbackHandler: React.FC = () => {
     

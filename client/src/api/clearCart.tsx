@@ -1,5 +1,5 @@
 
-//Tömma kundvagnen, görs efter genomflört köp
+//Tömma kundvagnen, görs efter genomfört köp
 const ClearCart = async () => {
 
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;

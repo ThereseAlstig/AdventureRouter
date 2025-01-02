@@ -44,9 +44,11 @@ export async function getWeather(city: string, targetDate: string) {
           description: "No forecast available",
           temperature: null,
           windSpeed: null,
-          
+          iconUrl: null,
         };
       }
+      const iconCode = forecastForDate.weather.icon;
+      const iconUrl = `https://www.weatherbit.io/static/img/icons/${iconCode}.png`;
   
       return {
         cityName: weatherData.city_name,
@@ -54,6 +56,7 @@ export async function getWeather(city: string, targetDate: string) {
         description: forecastForDate.weather.description,
         temperature: forecastForDate.temp,
         windSpeed: forecastForDate.wind_spd,
+        iconUrl,
       };
     } catch (error) {
       if (error instanceof Error) {

@@ -1,5 +1,6 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import pool from '../config/db';
+import * as crypto from 'crypto';
 
 interface OrderItem {
   productId: number;

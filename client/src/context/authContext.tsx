@@ -95,6 +95,8 @@ setUserRole(data.role);
       setEmail(email); 
       setUsername(username);
       const cartId = sessionStorage.getItem('cartId');
+    console.log(cartId);
+    console.log(email);
    
     if(cartId){
       try {

@@ -13,8 +13,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const[distance, setDistance] = useState<string | null>(null);
   const[duration, setDuration] = useState<string | null>(null);
-  // const [map, setMap] = useState<google.maps.Map | null>(null);
-  // const [hotels, setHotels] = useState<google.maps.places.PlaceResult[]>([]);
+
 
 
   //Gör om mode till google.maps.TravelMode för att passa Google MAps API
@@ -45,7 +44,7 @@ const MapWithDirections: React.FC<MapWithDirectionsProps> = ({ start, destinatio
      const travelOption =  mapMode(mode);
 
      const formattedWaypoints = waypoints.map((wp) => {
-      // Korrigera extra kapsling om det finns
+      // Korrigera extra stop om det finns
       const location = typeof wp.location === "string" ? wp.location : wp.location;
   return {
     location,

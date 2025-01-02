@@ -165,6 +165,7 @@ const navigate = useNavigate();
         destination: destinationWeather,
         midpoint: midpointWeather,
       });
+      console.log('startWeather', startWeather)
 
 if (startWeather || modeTravelOptions) {
 handleFetchFilteredProducts(startWeather, modeTravel);
@@ -262,6 +263,7 @@ handleFetchFilteredProducts(startWeather, modeTravel);
         <div>
           <h2>Weather Forecast:</h2>
           <h3>{tripWeather.start?.cityName || "N/A"}</h3>
+          {tripWeather.start.iconUrl && <img src={tripWeather.start.iconUrl} alt={tripWeather.start} className="trip-weather"/>}
           <p>Departure temperature: {tripWeather.start?.temperature || "N/A"}C</p>
           <p>{tripWeather.start?.description || "N/A"}</p>
           <p>Wind: {tripWeather.start?.windSpeed || "N/A"}m/s</p>
@@ -269,12 +271,14 @@ handleFetchFilteredProducts(startWeather, modeTravel);
           {tripWeather.midpoint && 
           <>
             <h3>{tripWeather.midpoint?.cityName}</h3>
+            {tripWeather.midpoint.iconUrl && <img src={tripWeather.midpoint.iconUrl} alt={tripWeather.midpoint} className="trip-weather"/>}
             <p>{tripWeather.midpoint?.date} temperature {tripWeather.midpoint?.temperature || ""}C</p>
             <p>{tripWeather.midpoint?.description || "N/A"}</p>
             <p>Wind: {tripWeather.midpoint?.windSpeed || "N/A"}m/s</p>
           </>
           } 
           <h3>{tripWeather.destination?.cityName || "N/A"}</h3>
+          {tripWeather.destination.iconUrl && <img src={tripWeather.destination.iconUrl} alt={tripWeather.destination} className="trip-weather"/>}
           <p>Arrival temperature: {tripWeather.destination?.temperature || "N/A"}C</p>
           <p>{tripWeather.destination?.description || "N/A"}</p>
           <p>Wind: {tripWeather.destination?.windSpeed || "N/A"}m/s</p>

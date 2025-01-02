@@ -1,4 +1,6 @@
 import getOrCreateCartId from "../functions/CreateCartId";
+
+
 //Sparar produkter i kundkorgen
 export const saveToCart = async (productId: number, quantity: number) => {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -41,6 +43,7 @@ export const saveToCart = async (productId: number, quantity: number) => {
     }
 };
 
+//Hämtar kundkorgen
 export const fetchCart = async () => {
     const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL;
     const email = sessionStorage.getItem('userEmail'); 

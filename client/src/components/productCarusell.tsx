@@ -202,7 +202,7 @@ const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
                  
                 <img src={product.image_url} alt={product.name} /></Link>
                 <h3>{product.name}</h3>
-                <p>{product.description}</p>
+            
                 <p>{product.price} kr</p>
               
                 {product.in_stock ? (
